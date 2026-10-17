@@ -1,0 +1,80 @@
+name: 'RippleCI Release Intelligence'
+description: 'Graph-native blast radius analysis, ML test prioritization, and bounded verification for pull requests.'
+author: 'Shikhyy'
+branding:
+  icon: 'git-commit'
+  color: 'blue'
+
+inputs:
+  base-ref:
+    description: 'Git base revision e.g. origin/main'
+    required: false
+    default: 'origin/main'
+  head-ref:
+    description: 'Git head revision e.g. HEAD'
+    required: false
+    default: 'HEAD'
+  budget:
+    description: 'Test execution budget in seconds'
+    required: false
+    default: '300'
+  mutation-verify:
+    description: 'Whether to run mutation verification on modified files'
+    required: false
+    default: 'true'
+  falkordb-url:
+    description: 'FalkorDB connection URL'
+    required: false
+    default: 'redis://localhost:6379'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install RippleCI Core Toolkit
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ${{ github.action_path }}/packages/python
+
+    - name: Index Repository Dependency Graph
+      shell: bash
+      env:
+        FALKORDB_URL: ${{ inputs.falkordb-url }}
+      run: |
+        ripple index
+
+    - name: Trace Change Blast Radius
+      shell: bash
+      env:
+        FALKORDB_URL: ${{ inputs.falkordb-url }}
+      run: |
+        ripple impact --base "${{ inputs.base-ref }}" --head "${{ inputs.head-ref }}"
+
+    - name: Generate ML-Prioritized Test Plan
+      shell: bash
+      env:
+        FALKORDB_URL: ${{ inputs.falkordb-url }}
+      run: |
+        ripple plan --range "${{ inputs.base-ref }}..${{ inputs.head-ref }}" --budget ${{ inputs.budget }}
+
+    - name: Run Bounded Mutation Verification
+      if: ${{ inputs.mutation-verify == 'true' }}
+      shell: bash
+      env:
+        FALKORDB_URL: ${{ inputs.falkordb-url }}
+      run: |
+        ripple verify --range "${{ inputs.base-ref }}..${{ inputs.head-ref }}" --mutations 3
+
+    - name: Publish Step Summary
+      shell: bash
+      env:
+        FALKORDB_URL: ${{ inputs.falkordb-url }}
+      run: |
+        if [ -n "$GITHUB_STEP_SUMMARY" ]; then
+          ripple report --range "${{ inputs.base-ref }}..${{ inputs.head-ref }}" --format markdown >> "$GITHUB_STEP_SUMMARY"
+        fi
