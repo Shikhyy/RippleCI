@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rippleci"
+version = "0.1.0"
+description = "Graph-native release intelligence toolkit: change impact analysis, learned test prioritization, and verification."
+readme = "README.md"
+authors = [
+    { name = "RippleCI Contributors" }
+]
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+dependencies = [
+    "falkordb>=1.0.0",
+    "redis>=5.0.0",
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "pyyaml>=6.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+    "networkx>=3.0",
+    "scikit-learn>=1.3.0",
+    "numpy>=1.24.0",
+    "httpx>=0.24.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+]
+
+[project.scripts]
+ripple = "rippleci.cli.main:app"
+
+[tool.setuptools.packages.find]
+where = ["packages/python"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
