@@ -145,6 +145,72 @@ Execute selected tests and bounded mutations:
 ripple verify --mutations 5
 ```
 
+### 9. Graph Agent Investigation & Explanations
+
+Run autonomous, tool-directed graph investigations to discover callers and blind spots:
+
+```bash
+# Agent-orchestrated investigation across multi-hop FalkorDB calls
+ripple investigate origin/main..HEAD
+
+# Inspect exact evidence paths and selection reasons for a test
+ripple explain test_process_payment_success
+```
+
+### 10. Run Test Selection Benchmark
+
+Compare 4 regression selection strategies across selection ratio, runtime, and fault recall:
+
+```bash
+ripple benchmark
+```
+
+---
+
+## Web Companion Interface
+
+Explore interactive dependency graphs, review blast radius traces, and inspect mutation evidence in real time:
+
+```bash
+# Start FastAPI backend (port 8000)
+ripple serve
+
+# Start Web Companion (port 3000)
+cd apps/web && pnpm dev
+```
+
+---
+
+## GitHub Actions Integration
+
+Add RippleCI to your pull request workflows via the reusable action:
+
+```yaml
+name: RippleCI Release Intelligence
+on: [pull_request]
+
+jobs:
+  rippleci:
+    runs-on: ubuntu-latest
+    services:
+      falkordb:
+        image: falkordb/falkordb:latest
+        ports:
+          - 6379:6379
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run RippleCI Intelligence
+        uses: Shikhyy/RippleCI@main
+        with:
+          base-ref: ${{ github.base_ref }}
+          head-ref: ${{ github.sha }}
+          budget: 300
+          mutation-verify: true
+```
+
 ---
 
 ## Python SDK Example
@@ -155,20 +221,25 @@ from rippleci import RippleProject
 # Open project from current directory
 project = RippleProject.open(".")
 
-# Index codebase into FalkorDB
+# 1. Index codebase into FalkorDB
 index_summary = project.indexer.index()
 print(f"Indexed {index_summary.symbols_count} symbols and {index_summary.test_cases_count} tests")
 
-# Analyze blast radius of changes
+# 2. Analyze blast radius of changes
 impact = project.analyzer.analyze(base="origin/main", head="HEAD")
 print(f"Impacted symbols: {len(impact.impacted_symbols)}")
 
-# Rank and select tests within a 300-second budget
+# 3. Rank and select tests within a 300-second budget
 plan = project.planner.plan(impact=impact, budget_seconds=300)
 for test in plan.selected_tests:
     print(f"Rank {test.rank}: {test.test_id} (score: {test.rank_score:.2f})")
 
-# Run verification
+# 4. Agent tool-directed investigation
+investigation = project.agent.investigate_change(base_ref="origin/main", head_ref="HEAD")
+print(f"Verdict: {investigation.verdict}")
+print(investigation.evidence_summary)
+
+# 5. Run mutation verification
 verification = project.verifier.verify(plan=plan, max_mutations=5)
 print(f"Tests passed: {verification.all_passed}, Killed mutants: {verification.killed_mutations_count}")
 ```
