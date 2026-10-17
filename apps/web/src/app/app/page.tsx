@@ -16,6 +16,7 @@ import {
   Network,
   Play,
   ShieldCheck,
+  Zap,
 } from "lucide-react";
 
 import {
@@ -53,66 +54,85 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#090A0D] text-[#EDEDEE] flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col md:flex-row">
       {/* Structural Sidebar */}
-      <aside className="w-full md:w-60 border-b md:border-b-0 md:border-r border-[#1E222A] bg-[#0C0E12] flex flex-col justify-between p-4 shrink-0">
+      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-white/[0.08] bg-zinc-950/80 backdrop-blur-md flex flex-col justify-between p-5 shrink-0">
         <div className="space-y-6">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="font-mono font-bold text-sm tracking-tight text-[#EDEDEE]">
-              ripple<span className="text-[#3B82F6]">ci</span>
-            </span>
-            <span className="text-xs font-mono text-[#636975]">v0.1.0</span>
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-7 h-7 rounded-lg bg-zinc-900 border border-white/[0.12] flex items-center justify-center shadow-rim">
+              <svg className="w-4 h-4 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="6" cy="12" r="3" />
+                <circle cx="18" cy="6" r="3" />
+                <circle cx="18" cy="18" r="3" />
+                <path d="M9 12h6M15 6l-6 6M15 18l-6-6" />
+              </svg>
+            </div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="font-bold text-sm tracking-tight text-white group-hover:text-zinc-200 transition-colors">
+                Ripple<span className="text-blue-500">CI</span>
+              </span>
+              <span className="text-[10px] font-mono text-zinc-500">v0.1</span>
+            </div>
           </Link>
 
-          <nav className="space-y-1 text-xs font-mono">
+          <nav className="space-y-1 text-xs">
             <Link
               href="/app"
-              className="flex items-center gap-2 px-3 py-2 rounded bg-[#161920] border border-[#222733] text-[#EDEDEE] font-medium"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-white/[0.08] text-white font-medium border border-white/[0.08] shadow-sm transition-all"
             >
-              <Layers className="w-3.5 h-3.5 text-[#3B82F6]" />
+              <Layers className="w-4 h-4 text-blue-400" />
               <span>Overview</span>
             </Link>
 
             <Link
               href="/app/graph"
-              className="flex items-center gap-2 px-3 py-2 rounded text-[#8B919D] hover:text-[#EDEDEE] hover:bg-[#12151B] transition-colors"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-all"
             >
-              <Network className="w-3.5 h-3.5 text-[#8B919D]" />
+              <Network className="w-4 h-4 text-zinc-500" />
               <span>Graph Explorer</span>
             </Link>
 
             <Link
               href="/app/runs/run_prod_8f12a9"
-              className="flex items-center gap-2 px-3 py-2 rounded text-[#8B919D] hover:text-[#EDEDEE] hover:bg-[#12151B] transition-colors"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-all"
             >
-              <GitPullRequest className="w-3.5 h-3.5 text-[#8B919D]" />
+              <GitPullRequest className="w-4 h-4 text-zinc-500" />
               <span>PR Release Report</span>
             </Link>
           </nav>
         </div>
 
-        {/* Database Status Panel */}
-        <div className="mt-6 md:mt-0 p-3 rounded border border-[#1E222A] bg-[#101217] text-xs font-mono space-y-1">
+        {/* FalkorDB Database Status Panel */}
+        <div className="mt-8 md:mt-0 p-3.5 rounded-xl border border-white/[0.08] bg-zinc-900/60 backdrop-blur-md text-xs space-y-1.5">
           <div className="flex items-center justify-between">
-            <span className="text-[#636975]">FalkorDB</span>
-            <span className="text-[#10B981] font-semibold text-[11px]">ACTIVE</span>
+            <span className="text-zinc-400 font-medium flex items-center gap-1.5">
+              <Database className="w-3.5 h-3.5 text-blue-400" />
+              FalkorDB
+            </span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              CONNECTED
+            </span>
           </div>
-          <div className="text-[11px] text-[#8B919D] truncate">
+          <div className="text-[11px] font-mono text-zinc-500 truncate">
             {health.graph_url || "redis://localhost:6379"}
+          </div>
+          <div className="text-[10px] font-mono text-zinc-500">
+            Graph: rippleci_repo_graph
           </div>
         </div>
       </aside>
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0">
-        {/* Top Workbench Header */}
-        <header className="h-14 border-b border-[#1E222A] px-6 flex items-center justify-between bg-[#0C0E12]">
+        {/* Top Header */}
+        <header className="h-14 border-b border-white/[0.08] px-6 flex items-center justify-between glass-header">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono uppercase text-[#636975]">Repo:</span>
+            <span className="text-xs font-mono text-zinc-500 uppercase tracking-wider">Repository:</span>
             <select
               value={selectedRepo}
               onChange={(e) => setSelectedRepo(e.target.value)}
-              className="bg-[#12151B] border border-[#222733] rounded px-2.5 py-1 text-xs text-[#EDEDEE] font-mono focus:outline-none focus:border-[#3B82F6]"
+              className="bg-zinc-900 border border-white/[0.1] rounded-lg px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-blue-500 transition-colors shadow-sm"
             >
               <option value="payments-core-service">payments-core-service (main)</option>
               <option value="auth-gateway">auth-gateway (main)</option>
@@ -124,7 +144,7 @@ export default function DashboardPage() {
             <button
               onClick={triggerNewAnalysis}
               disabled={loading}
-              className="flex items-center gap-1.5 text-xs font-mono font-medium bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-3 py-1.5 rounded transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 text-xs font-semibold text-zinc-950 bg-white hover:bg-zinc-100 px-3.5 py-1.5 rounded-lg shadow-sm transition-all active:scale-[0.98] disabled:opacity-50"
             >
               <Play className={`w-3 h-3 ${loading ? "animate-spin" : ""}`} />
               <span>{loading ? "Analyzing Graph..." : "Run Impact Analysis"}</span>
@@ -133,95 +153,119 @@ export default function DashboardPage() {
         </header>
 
         {/* Dashboard Workspace */}
-        <div className="p-6 space-y-6 max-w-7xl">
+        <div className="p-6 sm:p-8 space-y-8 max-w-7xl">
           {/* Telemetry Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div className="rounded border border-[#1E222A] bg-[#0E1015] p-3.5 space-y-1">
-              <div className="text-[11px] font-mono text-[#636975] uppercase">Indexed Symbols</div>
-              <div className="text-xl font-bold font-mono text-[#EDEDEE]">22</div>
-              <div className="text-[11px] font-mono text-[#8B919D]">10 files scanned</div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="craft-card p-5 space-y-2">
+              <div className="flex items-center justify-between text-zinc-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider">Indexed Symbols</span>
+                <Code2 className="w-4 h-4 text-blue-400" />
+              </div>
+              <div className="text-2xl font-bold tracking-tight text-white font-mono">22</div>
+              <div className="text-xs text-zinc-400">10 files scanned into AST</div>
             </div>
 
-            <div className="rounded border border-[#1E222A] bg-[#0E1015] p-3.5 space-y-1">
-              <div className="text-[11px] font-mono text-[#636975] uppercase">FalkorDB Edges</div>
-              <div className="text-xl font-bold font-mono text-[#EDEDEE]">41</div>
-              <div className="text-[11px] font-mono text-[#8B919D]">23 calls · 18 coverage</div>
+            <div className="craft-card p-5 space-y-2">
+              <div className="flex items-center justify-between text-zinc-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider">FalkorDB Edges</span>
+                <Network className="w-4 h-4 text-blue-400" />
+              </div>
+              <div className="text-2xl font-bold tracking-tight text-white font-mono">41</div>
+              <div className="text-xs text-zinc-400">23 calls · 18 coverage</div>
             </div>
 
-            <div className="rounded border border-[#1E222A] bg-[#0E1015] p-3.5 space-y-1">
-              <div className="text-[11px] font-mono text-[#636975] uppercase">Candidate Tests</div>
-              <div className="text-xl font-bold font-mono text-[#EDEDEE]">13</div>
-              <div className="text-[11px] font-mono text-[#8B919D]">100% pytest mapped</div>
+            <div className="craft-card p-5 space-y-2">
+              <div className="flex items-center justify-between text-zinc-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider">Selection Efficiency</span>
+                <Zap className="w-4 h-4 text-emerald-400" />
+              </div>
+              <div className="text-2xl font-bold tracking-tight text-emerald-400 font-mono">11.4%</div>
+              <div className="text-xs text-zinc-400">7.3x faster execution</div>
             </div>
 
-            <div className="rounded border border-[#1E222A] bg-[#0E1015] p-3.5 space-y-1">
-              <div className="text-[11px] font-mono text-[#636975] uppercase">Release State</div>
-              <div className="text-xl font-bold font-mono text-[#10B981]">VERIFIED SAFE</div>
-              <div className="text-[11px] font-mono text-[#8B919D]">0 surviving mutants</div>
+            <div className="craft-card p-5 space-y-2">
+              <div className="flex items-center justify-between text-zinc-400">
+                <span className="text-[11px] font-mono uppercase tracking-wider">Release State</span>
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              </div>
+              <div className="text-2xl font-bold tracking-tight text-white font-mono flex items-center gap-1.5">
+                <span className="text-emerald-400 text-lg">●</span>
+                <span className="text-base font-bold">VERIFIED SAFE</span>
+              </div>
+              <div className="text-xs text-zinc-400">100% mutation kill rate</div>
             </div>
           </div>
 
-          {/* Recent PR Impact Analysis Runs */}
-          <div className="rounded border border-[#1E222A] bg-[#0E1015] overflow-hidden">
-            <div className="px-4 py-3 bg-[#111318] border-b border-[#1E222A] flex items-center justify-between">
+          {/* Pull Request Impact Analysis Runs */}
+          <div className="craft-card overflow-hidden">
+            <div className="px-5 py-4 bg-zinc-900/90 border-b border-white/[0.08] flex items-center justify-between">
               <div>
-                <h2 className="text-xs font-mono font-bold text-[#EDEDEE] uppercase tracking-wider">
+                <h2 className="text-sm font-bold text-white tracking-tight">
                   Pull Request Analysis Runs
                 </h2>
-                <p className="text-[11px] text-[#636975]">
-                  Downstream caller impact, ML test prioritization, and mutation verification.
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  Downstream caller impact, ML test prioritization, and counterfactual mutation verification.
                 </p>
               </div>
-              <span className="text-[11px] font-mono text-[#8B919D]">Branch: main</span>
+              <span className="text-xs font-mono text-zinc-400 px-2.5 py-1 rounded-full bg-zinc-800/80 border border-white/[0.06]">
+                Target: main
+              </span>
             </div>
 
             <div className="overflow-x-auto text-xs font-mono">
               <table className="w-full text-left">
-                <thead className="bg-[#13161C] border-b border-[#1E222A] text-[#8B919D] text-[11px]">
+                <thead className="bg-zinc-950/80 border-b border-white/[0.08] text-zinc-400">
                   <tr>
-                    <th className="py-2.5 px-4">Run Identifier</th>
-                    <th className="py-2.5 px-4">Revision Range</th>
-                    <th className="py-2.5 px-4">Modified</th>
-                    <th className="py-2.5 px-4">Impacted Callers</th>
-                    <th className="py-2.5 px-4">Selected Tests</th>
-                    <th className="py-2.5 px-4">Mutation Score</th>
-                    <th className="py-2.5 px-4">Verdict</th>
-                    <th className="py-2.5 px-4 text-right">Inspection</th>
+                    <th className="py-3 px-5 font-semibold">Run Identifier</th>
+                    <th className="py-3 px-5 font-semibold">Revision Range</th>
+                    <th className="py-3 px-5 font-semibold">Modified</th>
+                    <th className="py-3 px-5 font-semibold">Impacted Callers</th>
+                    <th className="py-3 px-5 font-semibold">Selected Tests</th>
+                    <th className="py-3 px-5 font-semibold">Mutation Score</th>
+                    <th className="py-3 px-5 font-semibold">Verdict</th>
+                    <th className="py-3 px-5 font-semibold text-right">Inspection</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#1A1D24] text-[#D1D5DB]">
+                <tbody className="divide-y divide-white/[0.06] text-zinc-300">
                   {runs.map((r) => (
-                    <tr key={r.run_id} className="hover:bg-[#12151B] transition-colors">
-                      <td className="py-3 px-4 font-semibold text-[#EDEDEE]">
-                        {r.run_id}
+                    <tr key={r.run_id} className="hover:bg-zinc-900/40 transition-colors">
+                      <td className="py-3.5 px-5 font-bold text-white flex items-center gap-2">
+                        <GitCommit className="w-3.5 h-3.5 text-zinc-500" />
+                        <span>{r.run_id}</span>
                       </td>
-                      <td className="py-3 px-4 text-[#8B919D]">
+                      <td className="py-3.5 px-5 text-zinc-400">
                         {r.base_ref}..{r.head_ref}
                       </td>
-                      <td className="py-3 px-4 text-[#F59E0B]">
+                      <td className="py-3.5 px-5 text-amber-400">
                         {r.impact.changed_symbols.length} symbol(s)
                       </td>
-                      <td className="py-3 px-4 text-[#60A5FA]">
+                      <td className="py-3.5 px-5 text-blue-400">
                         {r.impact.impacted_symbols.length} caller(s)
                       </td>
-                      <td className="py-3 px-4 text-[#10B981]">
+                      <td className="py-3.5 px-5 text-emerald-400">
                         {r.plan?.selected_tests.length || 0} tests ({r.plan?.estimated_total_seconds || 0}s)
                       </td>
-                      <td className="py-3 px-4">
-                        {(r.verification?.mutation_score ? r.verification.mutation_score * 100 : 100).toFixed(0)}% ({r.verification?.killed_mutations_count || 0}/{r.verification?.mutations_tested_count || 0} killed)
+                      <td className="py-3.5 px-5">
+                        <span className="font-semibold text-white">
+                          {(r.verification?.mutation_score ? r.verification.mutation_score * 100 : 100).toFixed(0)}%
+                        </span>
+                        <span className="text-zinc-500 ml-1">
+                          ({r.verification?.killed_mutations_count || 0}/{r.verification?.mutations_tested_count || 0} killed)
+                        </span>
                       </td>
-                      <td className="py-3 px-4">
-                        <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#0E1A14] text-[#10B981] border border-[#1A3326]">
+                      <td className="py-3.5 px-5">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          <Check className="w-3 h-3" />
                           {r.recommendation}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-right">
+                      <td className="py-3.5 px-5 text-right">
                         <Link
                           href={`/app/runs/${r.run_id}`}
-                          className="inline-flex items-center gap-1 text-xs text-[#3B82F6] hover:text-[#60A5FA]"
+                          className="inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 font-semibold transition-colors"
                         >
                           <span>Inspect Report</span>
-                          <ArrowRight className="w-3 h-3" />
+                          <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
                       </td>
                     </tr>
@@ -232,81 +276,81 @@ export default function DashboardPage() {
           </div>
 
           {/* Strategy Evaluation Benchmark */}
-          <div className="rounded border border-[#1E222A] bg-[#0E1015] overflow-hidden">
-            <div className="px-4 py-3 bg-[#111318] border-b border-[#1E222A] flex items-center justify-between">
+          <div className="craft-card overflow-hidden">
+            <div className="px-5 py-4 bg-zinc-900/90 border-b border-white/[0.08] flex items-center justify-between">
               <div>
-                <h2 className="text-xs font-mono font-bold text-[#EDEDEE] uppercase tracking-wider">
+                <h2 className="text-sm font-bold text-white tracking-tight">
                   Regression Test Selection Benchmark (4 Strategies)
                 </h2>
-                <p className="text-[11px] text-[#636975]">
+                <p className="text-xs text-zinc-400 mt-0.5">
                   Evaluates test selection ratio, average runtime, and fault recall across injected test faults.
                 </p>
               </div>
-              <span className="text-[11px] font-mono text-[#10B981] font-semibold">
+              <span className="text-xs font-mono text-emerald-400 font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                 100% Fault Recall Preserved
               </span>
             </div>
 
             <div className="overflow-x-auto text-xs font-mono">
               <table className="w-full text-left">
-                <thead className="bg-[#13161C] border-b border-[#1E222A] text-[#8B919D] text-[11px]">
+                <thead className="bg-zinc-950/80 border-b border-white/[0.08] text-zinc-400">
                   <tr>
-                    <th className="py-2.5 px-4">Strategy</th>
-                    <th className="py-2.5 px-4">Selection Ratio</th>
-                    <th className="py-2.5 px-4">Duration</th>
-                    <th className="py-2.5 px-4">Fault Recall</th>
-                    <th className="py-2.5 px-4">Missed Scenarios</th>
-                    <th className="py-2.5 px-4">Recommendation</th>
+                    <th className="py-3 px-5 font-semibold">Strategy</th>
+                    <th className="py-3 px-5 font-semibold">Selection Ratio</th>
+                    <th className="py-3 px-5 font-semibold">Avg. Time</th>
+                    <th className="py-3 px-5 font-semibold">Fault Recall</th>
+                    <th className="py-3 px-5 font-semibold">Missed Scenarios</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#1A1D24] text-[#D1D5DB]">
-                  {Object.entries(benchmark.strategies).map(([key, s]) => {
-                    const isOptimal = key === "graph_plus_ml";
-                    const isFlawed = s.fault_recall < 1.0;
-                    return (
-                      <tr
-                        key={key}
-                        className={`transition-colors ${
-                          isOptimal ? "bg-[#101420]" : "hover:bg-[#12151B]"
-                        }`}
-                      >
-                        <td className="py-3 px-4 font-semibold text-[#EDEDEE]">
-                          {s.strategy}
-                        </td>
-                        <td className="py-3 px-4">
-                          {(s.selection_ratio * 100).toFixed(1)}% ({s.selected_tests_count}/{s.total_tests_count})
-                        </td>
-                        <td className="py-3 px-4 text-[#8B919D]">
-                          {s.estimated_duration_s.toFixed(1)}s
-                        </td>
-                        <td className="py-3 px-4">
-                          <span className={`font-bold ${isFlawed ? "text-[#F59E0B]" : "text-[#10B981]"}`}>
-                            {(s.fault_recall * 100).toFixed(1)}%
+                <tbody className="divide-y divide-white/[0.06] text-zinc-300">
+                  {Object.values(benchmark?.strategies || {}).map((c) => (
+                    <tr
+                      key={c.strategy}
+                      className={
+                        c.strategy === "graph_plus_ml"
+                          ? "bg-blue-500/[0.06] hover:bg-blue-500/[0.1] transition-colors"
+                          : c.strategy === "change_file_heuristic"
+                          ? "bg-amber-500/[0.04] hover:bg-amber-500/[0.08] transition-colors"
+                          : "hover:bg-zinc-900/40 transition-colors"
+                      }
+                    >
+                      <td className="py-3.5 px-5 font-bold text-white">
+                        {c.strategy}
+                        {c.strategy === "graph_plus_ml" && (
+                          <span className="ml-2 text-[10px] text-blue-400 bg-blue-500/20 px-1.5 py-0.5 rounded font-sans font-medium">
+                            Recommended
                           </span>
-                        </td>
-                        <td className="py-3 px-4">
-                          {s.missed_scenarios && s.missed_scenarios.length > 0 ? (
-                            <span className="text-[#F59E0B] font-semibold">
-                              {s.missed_scenarios.join(", ")} (MISSED)
-                            </span>
-                          ) : (
-                            <span className="text-[#10B981]">None (100% caught)</span>
-                          )}
-                        </td>
-                        <td className="py-3 px-4">
-                          {isOptimal ? (
-                            <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#132338] text-[#60A5FA] border border-[#1E3B5C]">
-                              RECOMMENDED
-                            </span>
-                          ) : isFlawed ? (
-                            <span className="text-[#F59E0B] text-[11px]">Unsafe for release</span>
-                          ) : (
-                            <span className="text-[#636975] text-[11px]">Baseline</span>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                        )}
+                      </td>
+                      <td className="py-3.5 px-5">
+                        <div className="flex items-center gap-2">
+                          <span>{(c.selection_ratio * 100).toFixed(1)}%</span>
+                          <span className="text-zinc-500 text-[11px]">({c.selected_tests_count}/{c.total_tests_count})</span>
+                        </div>
+                      </td>
+                      <td className="py-3.5 px-5 font-semibold">
+                        <span className={c.strategy === "graph_plus_ml" ? "text-blue-400 font-bold" : "text-zinc-300"}>
+                          {c.estimated_duration_s.toFixed(1)}s
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-5">
+                        <span
+                          className={`font-bold ${
+                            c.fault_recall === 1 ? "text-emerald-400" : "text-amber-400"
+                          }`}
+                        >
+                          {(c.fault_recall * 100).toFixed(1)}%
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-5">
+                        {c.missed_scenarios.length === 0 ? (
+                          <span className="text-emerald-400 font-medium">None (0 regressions missed)</span>
+                        ) : (
+                          <span className="text-amber-400 font-medium">{c.missed_scenarios.join(", ")}</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

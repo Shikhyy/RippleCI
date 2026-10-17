@@ -1,19 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, Terminal as TerminalIcon } from "lucide-react";
 
 interface CommandTab {
   id: string;
   command: string;
   output: string;
   label: string;
+  badge: string;
 }
 
 const COMMAND_TABS: CommandTab[] = [
   {
     id: "impact",
-    label: "1. ripple impact",
+    label: "ripple impact",
+    badge: "Graph Traversal",
     command: "ripple impact origin/main..HEAD",
     output: `RippleCI Impact Analysis  |  payments-core-service  |  origin/main..HEAD
 Changed Files: 1  |  Modified Symbols: 1  |  Downstream Callers: 2  |  Candidate Tests: 4
@@ -37,7 +39,8 @@ Next: ripple plan --budget 300`,
   },
   {
     id: "plan",
-    label: "2. ripple plan",
+    label: "ripple plan",
+    badge: "ML Prioritization",
     command: "ripple plan --budget 300",
     output: `Selected Test Plan (GBDT Ranker | Budget: 300.0s)
 ┌──────┬───────────────────────────────┬───────┬──────────┬────────────────────────────────────────────┐
@@ -52,7 +55,8 @@ Selected 4 tests  |  Estimated runtime: 4.8s  |  Omitted: 9 tests (budget preser
   },
   {
     id: "investigate",
-    label: "3. ripple investigate",
+    label: "ripple investigate",
+    badge: "Agent Reasoning",
     command: "ripple investigate origin/main..HEAD",
     output: `Autonomous Graph Reasoning Agent Execution Trace:
   [tool:analyze_change]           -> 1 modified symbol (verify_token in src/auth.py)
@@ -66,7 +70,8 @@ Recommendation: All modified symbols have verified coverage in the dependency gr
   },
   {
     id: "verify",
-    label: "4. ripple verify",
+    label: "ripple verify",
+    badge: "Mutation Testing",
     command: "ripple verify --mutations 5",
     output: `Executing selected test plan with bounded mutation verification...
 
@@ -90,7 +95,8 @@ Verification Summary:
   },
   {
     id: "benchmark",
-    label: "5. ripple benchmark",
+    label: "ripple benchmark",
+    badge: "Empirical Grounding",
     command: "ripple benchmark",
     output: `Regression Test Selection Benchmark (4 Strategies | 3 Fault Injection Scenarios)
 ┌───────────────────────┬─────────────────┬───────────┬──────────────┬──────────────────────────────────┐
@@ -118,42 +124,54 @@ export function TerminalBlock() {
   };
 
   return (
-    <div className="rounded-lg border border-[#222733] bg-[#0E1015] overflow-hidden text-xs">
+    <div className="craft-card overflow-hidden">
       {/* Workbench Header */}
-      <div className="flex flex-wrap items-center justify-between px-3 py-2 bg-[#13161C] border-b border-[#222733] gap-2">
-        <div className="flex items-center gap-1 overflow-x-auto">
+      <div className="flex flex-wrap items-center justify-between px-3.5 py-2.5 bg-zinc-900/90 border-b border-white/[0.08] gap-2">
+        <div className="flex items-center gap-1.5 p-1 bg-zinc-950/80 rounded-lg border border-white/[0.06] overflow-x-auto">
           {COMMAND_TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-2.5 py-1 rounded text-xs font-mono transition-colors ${
+              className={`px-3 py-1.5 rounded-md text-xs font-mono transition-all flex items-center gap-2 ${
                 activeTab === tab.id
-                  ? "bg-[#1C212B] text-[#EDEDEE] font-semibold border border-[#2A3140]"
-                  : "text-[#8B919D] hover:text-[#EDEDEE] hover:bg-[#161920]"
+                  ? "bg-zinc-800 text-white font-medium shadow-sm border border-white/[0.08]"
+                  : "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]"
               }`}
             >
-              {tab.label}
+              <span>{tab.label}</span>
+              <span
+                className={`text-[10px] px-1.5 py-0.2 rounded ${
+                  activeTab === tab.id
+                    ? "bg-blue-500/20 text-blue-300 font-sans"
+                    : "text-zinc-500 font-sans"
+                }`}
+              >
+                {tab.badge}
+              </span>
             </button>
           ))}
         </div>
 
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-[#262B35] bg-[#161920] hover:bg-[#1E232E] text-[#9096A2] hover:text-[#EDEDEE] font-mono text-xs transition-colors shrink-0"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] hover:border-white/[0.16] bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white font-mono text-xs transition-all shrink-0 active:scale-[0.98]"
         >
-          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
           <span>{copied ? "Copied" : "Copy Command"}</span>
         </button>
       </div>
 
       {/* Command Prompt Line */}
-      <div className="px-4 py-2.5 bg-[#0A0C0F] border-b border-[#1C202B] font-mono text-xs flex items-center gap-2">
-        <span className="text-[#3B82F6] select-none font-bold">$</span>
-        <span className="text-[#EDEDEE]">{current.command}</span>
+      <div className="px-4 py-3 bg-zinc-950/90 border-b border-white/[0.06] font-mono text-xs flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="text-emerald-400 select-none font-bold">$</span>
+          <span className="text-white font-medium">{current.command}</span>
+        </div>
+        <span className="text-[11px] font-mono text-zinc-500">exit 0 · deterministic</span>
       </div>
 
       {/* Output Console View */}
-      <div className="p-4 font-mono text-xs text-[#9CA3AF] leading-relaxed overflow-x-auto max-h-[380px] bg-[#0E1015]">
+      <div className="p-4 sm:p-5 font-mono text-xs text-zinc-300 leading-relaxed overflow-x-auto max-h-[380px] bg-[#09090b]">
         <pre className="whitespace-pre">{current.output}</pre>
       </div>
     </div>

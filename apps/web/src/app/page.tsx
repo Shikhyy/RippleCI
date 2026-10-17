@@ -1,6 +1,23 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Check, Code, GitCommit, GitPullRequest, Layers, ShieldCheck } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  Code2,
+  Copy,
+  Cpu,
+  Database,
+  GitBranch,
+  GitCommit,
+  GitPullRequest,
+  Layers,
+  Network,
+  ShieldCheck,
+  Zap,
+} from "lucide-react";
 
 import { GraphCanvas } from "@/components/GraphCanvas";
 import { Navbar } from "@/components/Navbar";
@@ -8,33 +25,44 @@ import { TerminalBlock } from "@/components/TerminalBlock";
 import { DEMO_GRAPH_DATA } from "@/lib/api";
 
 export default function LandingPage() {
+  const [copiedPip, setCopiedPip] = useState(false);
+
+  const handleCopyPip = () => {
+    navigator.clipboard.writeText("pip install rippleci");
+    setCopiedPip(true);
+    setTimeout(() => setCopiedPip(false), 2000);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#090A0D] text-[#EDEDEE]">
+    <div className="min-h-screen flex flex-col bg-[#09090b] text-zinc-100">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-16 pb-14 md:pt-24 md:pb-20 border-b border-[#1E222A]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="relative pt-20 pb-16 md:pt-28 md:pb-24 border-b border-white/[0.08] overflow-hidden">
+        {/* Subtle ambient lighting */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-96 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/10 via-indigo-500/5 to-transparent pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
           <div className="max-w-3xl">
             {/* Header Tag */}
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded border border-[#262B35] bg-[#12141A] text-[#8B919D] text-xs font-mono mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
-              <span>FalkorDB Connected-Data Architecture</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/[0.08] bg-zinc-900/60 backdrop-blur-md text-zinc-300 text-xs font-medium mb-6 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              <span>FalkorDB Graph-Native Release Intelligence</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#EDEDEE] leading-[1.12]">
-              Graph-native release intelligence for modern test suites.
+            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
+              Never merge untested blast radius again.
             </h1>
 
-            <p className="mt-5 text-sm sm:text-base text-[#8B919D] leading-relaxed max-w-2xl">
-              RippleCI indexes repository AST call graphs into FalkorDB, traces multi-hop downstream consequences of pull request changes, prioritizes tests with learned ranking models under execution budgets, and verifies plans using bounded mutation testing.
+            <p className="mt-6 text-base sm:text-lg text-zinc-400 leading-relaxed max-w-2xl font-normal">
+              RippleCI indexes repository AST call graphs into FalkorDB, traces multi-hop downstream consequences of pull requests, prioritizes regression tests with learned ranking under tight budgets, and counterfactually verifies releases with bounded mutation testing.
             </p>
 
             {/* CTAs */}
-            <div className="mt-8 flex flex-wrap items-center gap-3 font-mono text-xs">
+            <div className="mt-8 flex flex-wrap items-center gap-3 text-xs">
               <Link
                 href="/app"
-                className="flex items-center gap-1.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-medium px-4 py-2.5 rounded transition-colors"
+                className="flex items-center gap-2 bg-white hover:bg-zinc-100 text-zinc-950 font-semibold px-5 py-2.5 rounded-lg shadow-sm transition-all active:scale-[0.98]"
               >
                 <span>Launch Web Workbench</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -42,33 +70,62 @@ export default function LandingPage() {
 
               <Link
                 href="/app/graph"
-                className="flex items-center gap-1.5 bg-[#12141A] hover:bg-[#181B22] text-[#EDEDEE] border border-[#222733] font-medium px-4 py-2.5 rounded transition-colors"
+                className="flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-white/[0.08] hover:border-white/[0.16] font-medium px-4 py-2.5 rounded-lg transition-all active:scale-[0.98]"
               >
-                <span>Graph Explorer</span>
+                <Network className="w-3.5 h-3.5 text-blue-400" />
+                <span>Explore FalkorDB Graph</span>
               </Link>
 
-              <div className="flex items-center gap-2 px-3 py-2 rounded border border-[#1E222A] bg-[#0E1015] text-[#8B919D]">
+              <button
+                onClick={handleCopyPip}
+                className="flex items-center gap-2 px-3.5 py-2.5 rounded-lg border border-white/[0.08] hover:border-white/[0.16] bg-zinc-900/80 hover:bg-zinc-800 text-zinc-300 font-mono transition-all text-xs active:scale-[0.98]"
+              >
                 <span>pip install rippleci</span>
+                {copiedPip ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5 text-zinc-500" />
+                )}
+              </button>
+            </div>
+
+            {/* Quick Metrics Strip */}
+            <div className="mt-12 pt-8 border-t border-white/[0.08] grid grid-cols-2 sm:grid-cols-4 gap-6">
+              <div>
+                <div className="text-2xl font-bold tracking-tight text-white">7.3x</div>
+                <div className="text-xs text-zinc-400 mt-0.5">Faster CI execution</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold tracking-tight text-emerald-400">100.0%</div>
+                <div className="text-xs text-zinc-400 mt-0.5">Benchmark fault recall</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold tracking-tight text-blue-400">&lt; 2ms</div>
+                <div className="text-xs text-zinc-400 mt-0.5">FalkorDB Cypher latency</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold tracking-tight text-amber-400">0</div>
+                <div className="text-xs text-zinc-400 mt-0.5">Verification blind spots</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CLI Workbench Section */}
-      <section className="py-14 border-b border-[#1E222A] bg-[#0B0C10]">
+      {/* CLI Developer Workflow Section */}
+      <section className="py-16 md:py-20 border-b border-white/[0.08] bg-zinc-950/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-[#3B82F6] font-semibold">
+              <div className="text-xs font-mono uppercase tracking-wider text-blue-400 font-semibold">
                 CLI Developer Workflow
-              </span>
-              <h2 className="mt-1 text-xl sm:text-2xl font-bold text-[#EDEDEE]">
+              </div>
+              <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold text-white tracking-tight">
                 Autonomous terminal execution
               </h2>
             </div>
-            <p className="text-xs text-[#8B919D] font-mono">
-              Deterministic outputs · Machine-readable JSON · GitHub Step Summary
+            <p className="text-xs text-zinc-400 font-mono">
+              Deterministic outputs · Machine-readable JSON · Reusable GitHub Action
             </p>
           </div>
 
@@ -77,26 +134,26 @@ export default function LandingPage() {
       </section>
 
       {/* FalkorDB Graph Canvas Section */}
-      <section className="py-14 border-b border-[#1E222A] bg-[#090A0D]">
+      <section className="py-16 md:py-20 border-b border-white/[0.08] bg-[#09090b]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+          <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-[#3B82F6] font-semibold">
+              <div className="text-xs font-mono uppercase tracking-wider text-blue-400 font-semibold">
                 FalkorDB Subgraph
-              </span>
-              <h2 className="mt-1 text-xl sm:text-2xl font-bold text-[#EDEDEE]">
+              </div>
+              <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold text-white tracking-tight">
                 Downstream blast radius visualization
               </h2>
-              <p className="text-xs text-[#8B919D] mt-1">
-                Click any symbol or test to inspect exact line coordinates and caller dependencies.
+              <p className="text-xs text-zinc-400 mt-1">
+                Click any symbol or test to inspect caller coordinates, graph hops, and Cypher traversal paths.
               </p>
             </div>
             <Link
               href="/app/graph"
-              className="text-xs font-mono text-[#3B82F6] hover:text-[#60A5FA] flex items-center gap-1"
+              className="text-xs font-medium text-blue-400 hover:text-blue-300 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-500/20 bg-blue-500/10 transition-colors"
             >
               <span>Full Screen Graph Explorer</span>
-              <ArrowRight className="w-3 h-3" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
@@ -105,128 +162,166 @@ export default function LandingPage() {
       </section>
 
       {/* 4-Step Technical Architecture */}
-      <section className="py-14 border-b border-[#1E222A] bg-[#0B0C10]">
+      <section className="py-16 md:py-20 border-b border-white/[0.08] bg-zinc-950/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl mb-10">
-            <span className="text-xs font-mono uppercase tracking-wider text-[#3B82F6] font-semibold">
+          <div className="max-w-2xl mb-12">
+            <div className="text-xs font-mono uppercase tracking-wider text-blue-400 font-semibold">
               Pipeline Architecture
-            </span>
-            <h2 className="mt-1 text-xl sm:text-2xl font-bold text-[#EDEDEE]">
+            </div>
+            <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold text-white tracking-tight">
               From code modification to evidence-backed release
             </h2>
+            <p className="mt-2 text-sm text-zinc-400">
+              Four complementary stages combining static AST indexing, graph database traversals, learned ranking, and mutation testing.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="p-4 rounded border border-[#222733] bg-[#0E1015] space-y-2">
-              <div className="text-xs font-mono text-[#3B82F6] font-semibold">01. INDEX</div>
-              <h3 className="text-sm font-bold text-[#EDEDEE]">AST & Symbol Parsing</h3>
-              <p className="text-xs text-[#8B919D] leading-relaxed">
-                Parses Python ASTs, resolves internal import targets, and registers function and test case nodes with stable hashes into FalkorDB.
-              </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="craft-card p-6 flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-mono text-xs font-bold">
+                  01
+                </div>
+                <h3 className="text-sm font-bold text-white tracking-tight">AST & Symbol Parsing</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Parses Python ASTs, resolves internal import targets, and registers function and test case nodes with deterministic hashes into FalkorDB.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-zinc-500">
+                ripple index
+              </div>
             </div>
 
-            <div className="p-4 rounded border border-[#222733] bg-[#0E1015] space-y-2">
-              <div className="text-xs font-mono text-[#3B82F6] font-semibold">02. TRAVERSE</div>
-              <h3 className="text-sm font-bold text-[#EDEDEE]">FalkorDB Graph Traversal</h3>
-              <p className="text-xs text-[#8B919D] leading-relaxed">
-                Executes parameterized Cypher queries across incoming CALLS edges to discover indirect, multi-hop callers impacted by the change.
-              </p>
+            <div className="craft-card p-6 flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-mono text-xs font-bold">
+                  02
+                </div>
+                <h3 className="text-sm font-bold text-white tracking-tight">FalkorDB Graph Traversal</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Executes parameterized Cypher queries across incoming CALLS edges to discover indirect, multi-hop callers impacted by the change.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-zinc-500">
+                ripple impact
+              </div>
             </div>
 
-            <div className="p-4 rounded border border-[#222733] bg-[#0E1015] space-y-2">
-              <div className="text-xs font-mono text-[#3B82F6] font-semibold">03. RANK</div>
-              <h3 className="text-sm font-bold text-[#EDEDEE]">Learned Prioritization</h3>
-              <p className="text-xs text-[#8B919D] leading-relaxed">
-                Gradient boosted decision trees rank candidate tests by graph proximity, churn, coverage overlap, and failure probability under budget.
-              </p>
+            <div className="craft-card p-6 flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-mono text-xs font-bold">
+                  03
+                </div>
+                <h3 className="text-sm font-bold text-white tracking-tight">Learned Prioritization</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Gradient boosted decision trees rank candidate tests by graph proximity, churn, coverage overlap, and failure probability under budget.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-zinc-500">
+                ripple plan --budget 300
+              </div>
             </div>
 
-            <div className="p-4 rounded border border-[#222733] bg-[#0E1015] space-y-2">
-              <div className="text-xs font-mono text-[#3B82F6] font-semibold">04. VERIFY</div>
-              <h3 className="text-sm font-bold text-[#EDEDEE]">Counterfactual Verification</h3>
-              <p className="text-xs text-[#8B919D] leading-relaxed">
-                Injects transient AST mutations into modified lines to verify the selected test plan catches injected faults before release approval.
-              </p>
+            <div className="craft-card p-6 flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-mono text-xs font-bold">
+                  04
+                </div>
+                <h3 className="text-sm font-bold text-white tracking-tight">Counterfactual Verification</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Injects transient AST mutations into modified lines to verify the selected test plan catches injected faults before release approval.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-zinc-500">
+                ripple verify --mutations 5
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Benchmark Matrix */}
-      <section className="py-14 border-b border-[#1E222A] bg-[#090A0D]">
+      <section className="py-16 md:py-20 border-b border-white/[0.08] bg-[#09090b]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl mb-6">
-            <span className="text-xs font-mono uppercase tracking-wider text-[#3B82F6] font-semibold">
+          <div className="max-w-2xl mb-8">
+            <div className="text-xs font-mono uppercase tracking-wider text-blue-400 font-semibold">
               Evaluation & Benchmarks
-            </span>
-            <h2 className="mt-1 text-xl sm:text-2xl font-bold text-[#EDEDEE]">
+            </div>
+            <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold text-white tracking-tight">
               Comparing 4 regression selection strategies
             </h2>
-            <p className="mt-1 text-xs text-[#8B919D]">
+            <p className="mt-2 text-xs text-zinc-400">
               Evaluated across fault injection scenarios on real multi-hop services.
             </p>
           </div>
 
-          <div className="rounded border border-[#222733] bg-[#0E1015] overflow-hidden text-xs font-mono">
-            <table className="w-full text-left">
-              <thead className="bg-[#13161C] border-b border-[#222733] text-[#8B919D]">
-                <tr>
-                  <th className="py-3 px-4 font-semibold">Strategy</th>
-                  <th className="py-3 px-4 font-semibold">Selection Ratio</th>
-                  <th className="py-3 px-4 font-semibold">Avg. Duration</th>
-                  <th className="py-3 px-4 font-semibold">Fault Recall</th>
-                  <th className="py-3 px-4 font-semibold">Missed Scenarios</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#1C202B] text-[#D1D5DB]">
-                <tr>
-                  <td className="py-3 px-4 font-bold text-white">full_suite</td>
-                  <td className="py-3 px-4">100.0% (41/41)</td>
-                  <td className="py-3 px-4 text-[#8B919D]">41.0s</td>
-                  <td className="py-3 px-4 text-[#10B981] font-bold">100.0%</td>
-                  <td className="py-3 px-4 text-[#10B981]">None (baseline)</td>
-                </tr>
-                <tr className="bg-[#1A140F]">
-                  <td className="py-3 px-4 font-bold text-[#F59E0B]">change_file_heuristic</td>
-                  <td className="py-3 px-4">8.9% (4/41)</td>
-                  <td className="py-3 px-4 text-[#8B919D]">3.7s</td>
-                  <td className="py-3 px-4 text-[#F59E0B] font-bold">66.7%</td>
-                  <td className="py-3 px-4 text-[#F59E0B]">auth_token_verification_bug (MISSED)</td>
-                </tr>
-                <tr>
-                  <td className="py-3 px-4 font-bold text-white">graph_only</td>
-                  <td className="py-3 px-4">11.4% (5/41)</td>
-                  <td className="py-3 px-4 text-[#8B919D]">5.6s</td>
-                  <td className="py-3 px-4 text-[#10B981] font-bold">100.0%</td>
-                  <td className="py-3 px-4 text-[#10B981]">None (100% caught)</td>
-                </tr>
-                <tr className="bg-[#101524]">
-                  <td className="py-3 px-4 font-bold text-[#60A5FA]">graph_plus_ml [Recommended]</td>
-                  <td className="py-3 px-4 font-bold text-white">11.4% (5/41)</td>
-                  <td className="py-3 px-4 text-[#60A5FA] font-bold">5.6s (7.3x faster)</td>
-                  <td className="py-3 px-4 text-[#10B981] font-bold">100.0%</td>
-                  <td className="py-3 px-4 text-[#10B981]">None (100% caught)</td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="craft-card overflow-hidden text-xs font-mono">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead className="bg-zinc-900/90 border-b border-white/[0.08] text-zinc-400">
+                  <tr>
+                    <th className="py-3 px-5 font-semibold">Strategy</th>
+                    <th className="py-3 px-5 font-semibold">Selection Ratio</th>
+                    <th className="py-3 px-5 font-semibold">Avg. Duration</th>
+                    <th className="py-3 px-5 font-semibold">Fault Recall</th>
+                    <th className="py-3 px-5 font-semibold">Missed Scenarios</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/[0.06] text-zinc-300">
+                  <tr className="hover:bg-zinc-900/30 transition-colors">
+                    <td className="py-3.5 px-5 font-bold text-white">full_suite</td>
+                    <td className="py-3.5 px-5">100.0% (41/41)</td>
+                    <td className="py-3.5 px-5 text-zinc-400">41.0s</td>
+                    <td className="py-3.5 px-5 text-emerald-400 font-bold">100.0%</td>
+                    <td className="py-3.5 px-5 text-emerald-400">None (baseline)</td>
+                  </tr>
+                  <tr className="bg-amber-500/[0.04] hover:bg-amber-500/[0.08] transition-colors">
+                    <td className="py-3.5 px-5 font-bold text-amber-400">change_file_heuristic</td>
+                    <td className="py-3.5 px-5">8.9% (4/41)</td>
+                    <td className="py-3.5 px-5 text-zinc-400">3.7s</td>
+                    <td className="py-3.5 px-5 text-amber-400 font-bold">66.7%</td>
+                    <td className="py-3.5 px-5 text-amber-400">auth_token_verification_bug (MISSED)</td>
+                  </tr>
+                  <tr className="hover:bg-zinc-900/30 transition-colors">
+                    <td className="py-3.5 px-5 font-bold text-white">graph_only</td>
+                    <td className="py-3.5 px-5">11.4% (5/41)</td>
+                    <td className="py-3.5 px-5 text-zinc-400">5.6s</td>
+                    <td className="py-3.5 px-5 text-emerald-400 font-bold">100.0%</td>
+                    <td className="py-3.5 px-5 text-emerald-400">None (100% caught)</td>
+                  </tr>
+                  <tr className="bg-blue-500/[0.06] hover:bg-blue-500/[0.1] transition-colors">
+                    <td className="py-3.5 px-5 font-bold text-blue-400">graph_plus_ml [Recommended]</td>
+                    <td className="py-3.5 px-5 font-bold text-white">11.4% (5/41)</td>
+                    <td className="py-3.5 px-5 text-blue-400 font-bold">5.6s (7.3x faster)</td>
+                    <td className="py-3.5 px-5 text-emerald-400 font-bold">100.0%</td>
+                    <td className="py-3.5 px-5 text-emerald-400 font-bold">None (100% caught)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-[#1E222A] bg-[#07080A] py-8 text-xs font-mono text-[#636975]">
+      <footer className="mt-auto border-t border-white/[0.08] bg-zinc-950 py-10 text-xs font-mono text-zinc-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="text-[#EDEDEE] font-bold">RippleCI</span>
+            <span className="text-white font-bold">RippleCI</span>
             <span>·</span>
             <span>Apache-2.0 License</span>
             <span>·</span>
-            <a href="https://github.com/Shikhyy/RippleCI.git" target="_blank" rel="noreferrer" className="text-[#8B919D] hover:text-[#EDEDEE]">
+            <a
+              href="https://github.com/Shikhyy/RippleCI.git"
+              target="_blank"
+              rel="noreferrer"
+              className="text-zinc-400 hover:text-white transition-colors"
+            >
               GitHub
             </a>
           </div>
 
-          <div className="flex items-center gap-4 text-[#636975]">
+          <div className="flex items-center gap-4 text-zinc-500">
             <span>FalkorDB Hackathon 2026</span>
             <span>·</span>
             <span>v0.1.0</span>

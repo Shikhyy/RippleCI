@@ -12,7 +12,7 @@ import {
   useEdgesState,
   useNodesState,
 } from "@xyflow/react";
-import { ArrowRight, X } from "lucide-react";
+import { ArrowRight, Code, Database, FileCode, Layers, ShieldCheck, X } from "lucide-react";
 import { GraphData, GraphNode } from "@/lib/api";
 
 interface GraphCanvasProps {
@@ -30,39 +30,70 @@ export function GraphCanvas({ initialData }: GraphCanvasProps) {
 
       if (n.kind === "changed") {
         x = 360;
-        y = 260;
+        y = 240;
       } else if (n.kind === "impacted") {
         const hops = n.data?.hops || 1;
-        x = 360 + (hops === 1 ? -220 : -440);
-        y = 160 + (i % 3) * 110;
+        x = 360 + (hops === 1 ? -240 : -480);
+        y = 150 + (i % 3) * 120;
       } else if (n.kind === "test") {
-        x = 680;
-        y = 120 + (i % 5) * 85;
+        x = 700;
+        y = 100 + (i % 5) * 95;
       } else {
-        x = 120 + (i % 3) * 180;
-        y = 100 + Math.floor(i / 3) * 100;
+        x = 120 + (i % 3) * 200;
+        y = 100 + Math.floor(i / 3) * 110;
       }
 
       const isChanged = n.kind === "changed";
       const isImpacted = n.kind === "impacted";
       const isTest = n.kind === "test";
 
+      const borderClass = isChanged
+        ? "border-amber-500/40 bg-amber-950/20 text-amber-200 hover:border-amber-400"
+        : isImpacted
+        ? "border-blue-500/40 bg-blue-950/20 text-blue-200 hover:border-blue-400"
+        : isTest
+        ? "border-emerald-500/40 bg-emerald-950/20 text-emerald-200 hover:border-emerald-400"
+        : "border-white/[0.08] bg-zinc-900/80 text-zinc-300 hover:border-white/[0.2]";
+
       return {
         id: n.id,
         position: { x, y },
         data: {
-          label: n.label,
+          label: (
+            <div className="space-y-1.5 text-left select-none">
+              <div className="flex items-center justify-between gap-2">
+                <span
+                  className={`text-[9px] font-mono uppercase px-1.5 py-0.5 rounded font-bold tracking-wider ${
+                    isChanged
+                      ? "bg-amber-500/20 text-amber-300"
+                      : isImpacted
+                      ? "bg-blue-500/20 text-blue-300"
+                      : isTest
+                      ? "bg-emerald-500/20 text-emerald-300"
+                      : "bg-zinc-800 text-zinc-400"
+                  }`}
+                >
+                  {isChanged ? "Modified" : isImpacted ? "Caller" : isTest ? "Test Case" : "Symbol"}
+                </span>
+                {n.data?.hops !== undefined && (
+                  <span className="text-[10px] font-mono text-zinc-500">
+                    {n.data.hops === 0 ? "0-hop" : `${n.data.hops}h`}
+                  </span>
+                )}
+              </div>
+              <div className="font-mono text-xs font-semibold text-white tracking-tight truncate max-w-[180px]">
+                {n.label}
+              </div>
+              {n.data?.file_path && (
+                <div className="text-[10px] font-mono text-zinc-400 truncate max-w-[180px]">
+                  {n.data.file_path}
+                </div>
+              )}
+            </div>
+          ),
           raw: n,
         },
-        className: `rounded border cursor-pointer select-none transition-all duration-150 p-2.5 text-xs font-mono min-w-[170px] ${
-          isChanged
-            ? "bg-[#18140D] border-[#D97706] text-[#FDE68A]"
-            : isImpacted
-            ? "bg-[#10141D] border-[#2563EB] text-[#BFDBFE]"
-            : isTest
-            ? "bg-[#0E1713] border-[#10B981] text-[#A7F3D0]"
-            : "bg-[#13161C] border-[#262B35] text-[#D1D5DB] hover:border-[#3E4554]"
-        }`,
+        className: `rounded-xl border backdrop-blur-md cursor-pointer transition-all duration-200 p-3 text-xs shadow-lg shadow-black/40 min-w-[190px] ${borderClass}`,
       };
     });
   }, [initialData]);
@@ -77,15 +108,15 @@ export function GraphCanvas({ initialData }: GraphCanvasProps) {
         target: e.target,
         animated: isCovers,
         label: e.data?.label || e.type.toUpperCase(),
-        labelStyle: { fill: isCovers ? "#34D399" : "#60A5FA", fontSize: 10, fontFamily: "monospace" },
-        labelBgStyle: { fill: "#111317", fillOpacity: 0.95 },
+        labelStyle: { fill: isCovers ? "#34d399" : "#60a5fa", fontSize: 10, fontFamily: "monospace", fontWeight: 600 },
+        labelBgStyle: { fill: "#09090b", fillOpacity: 0.95 },
         style: {
-          stroke: isCovers ? "#059669" : "#2563EB",
-          strokeWidth: isCovers ? 1.5 : 1.2,
+          stroke: isCovers ? "#059669" : "#2563eb",
+          strokeWidth: isCovers ? 1.75 : 1.25,
         },
         markerEnd: {
           type: MarkerType.ArrowClosed,
-          color: isCovers ? "#059669" : "#2563EB",
+          color: isCovers ? "#059669" : "#2563eb",
           width: 14,
           height: 14,
         },
@@ -101,7 +132,7 @@ export function GraphCanvas({ initialData }: GraphCanvasProps) {
   }, []);
 
   return (
-    <div className="relative w-full h-[580px] rounded-lg border border-[#222733] bg-[#090A0D] overflow-hidden">
+    <div className="relative w-full h-[600px] rounded-xl border border-white/[0.08] bg-[#09090b] overflow-hidden shadow-card">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -112,93 +143,96 @@ export function GraphCanvas({ initialData }: GraphCanvasProps) {
         minZoom={0.3}
         maxZoom={1.5}
       >
-        <Background color="#1C202B" gap={20} size={1} />
-        <Controls className="!bg-[#13161C] !border-[#262B35] !text-[#EDEDEE] !rounded fill-white" />
+        <Background color="rgba(255, 255, 255, 0.05)" gap={24} size={1} />
+        <Controls className="!bg-zinc-900 !border-white/[0.08] !text-zinc-300 !rounded-lg fill-white shadow-lg" />
         <MiniMap
           nodeColor={(node) => {
             const raw = node.data?.raw as GraphNode;
-            if (raw?.kind === "changed") return "#D97706";
-            if (raw?.kind === "impacted") return "#2563EB";
-            if (raw?.kind === "test") return "#10B981";
-            return "#374151";
+            if (raw?.kind === "changed") return "#f59e0b";
+            if (raw?.kind === "impacted") return "#3b82f6";
+            if (raw?.kind === "test") return "#10b981";
+            return "#71717a";
           }}
-          maskColor="rgba(9, 10, 13, 0.85)"
-          className="!bg-[#0E1015] !border-[#222733] !rounded"
+          maskColor="rgba(9, 9, 11, 0.88)"
+          className="!bg-zinc-950 !border-white/[0.08] !rounded-lg"
         />
       </ReactFlow>
 
       {/* Selected Node Inspector Drawer */}
       {selectedNode && (
-        <aside className="absolute right-3 top-3 bottom-3 w-80 rounded border border-[#2A303D] bg-[#111318]/95 backdrop-blur-md p-4 flex flex-col justify-between text-xs z-10 shadow-xl">
+        <aside className="absolute right-4 top-4 bottom-4 w-84 rounded-xl border border-white/[0.12] bg-zinc-950/95 backdrop-blur-xl p-5 flex flex-col justify-between text-xs z-10 shadow-2xl">
           <div className="space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-[#222733]">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
                 <span
                   className={`w-2 h-2 rounded-full ${
                     selectedNode.kind === "changed"
-                      ? "bg-[#D97706]"
+                      ? "bg-amber-400"
                       : selectedNode.kind === "impacted"
-                      ? "bg-[#2563EB]"
+                      ? "bg-blue-400"
                       : selectedNode.kind === "test"
-                      ? "bg-[#10B981]"
-                      : "bg-[#6B7280]"
+                      ? "bg-emerald-400"
+                      : "bg-zinc-500"
                   }`}
                 />
-                <span className="font-mono font-semibold uppercase text-xs tracking-wider text-[#EDEDEE]">
+                <span className="font-mono font-semibold uppercase text-xs tracking-wider text-white">
                   {selectedNode.kind} Node
                 </span>
               </div>
               <button
                 onClick={() => setSelectedNode(null)}
-                className="text-[#8B919D] hover:text-[#EDEDEE] p-1 rounded hover:bg-[#1C2029]"
+                className="text-zinc-400 hover:text-white p-1 rounded-md hover:bg-white/[0.08] transition-colors"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
 
             <div>
-              <div className="text-[11px] font-mono text-[#636975] uppercase">Symbol / Test Identifier</div>
-              <div className="font-mono text-xs font-bold text-[#EDEDEE] break-all mt-0.5">
+              <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">Symbol Identifier</div>
+              <div className="font-mono text-xs font-bold text-white break-all mt-1">
                 {selectedNode.id}
               </div>
             </div>
 
             {selectedNode.data?.file_path && (
               <div>
-                <div className="text-[11px] font-mono text-[#636975] uppercase">Source Location</div>
-                <div className="font-mono text-xs text-[#9CA3AF] mt-0.5">
-                  {selectedNode.data.file_path}
-                  {selectedNode.data.lines && <span className="text-[#3B82F6]">:{selectedNode.data.lines}</span>}
+                <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">Source Location</div>
+                <div className="font-mono text-xs text-zinc-300 mt-1 flex items-center gap-1.5">
+                  <FileCode className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                  <span className="truncate">{selectedNode.data.file_path}</span>
+                  {selectedNode.data.lines && (
+                    <span className="text-blue-400 font-semibold shrink-0">:{selectedNode.data.lines}</span>
+                  )}
                 </div>
               </div>
             )}
 
             {selectedNode.data?.hops !== undefined && (
               <div>
-                <div className="text-[11px] font-mono text-[#636975] uppercase">Graph Distance</div>
-                <div className="font-mono text-xs text-[#60A5FA] mt-0.5">
-                  {selectedNode.data.hops} hop(s) from modified symbol
+                <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">Graph Proximity</div>
+                <div className="font-mono text-xs text-blue-400 font-semibold mt-1">
+                  {selectedNode.data.hops === 0 ? "Directly modified symbol" : `${selectedNode.data.hops} hop(s) downstream via CALLS edges`}
                 </div>
               </div>
             )}
 
             {selectedNode.data?.score !== undefined && (
               <div>
-                <div className="text-[11px] font-mono text-[#636975] uppercase">ML Prioritization Score</div>
-                <div className="font-mono text-xs text-[#34D399] font-bold mt-0.5">
-                  {selectedNode.data.score.toFixed(3)}
+                <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">ML Prioritization Score</div>
+                <div className="font-mono text-xs text-emerald-400 font-bold mt-1">
+                  {selectedNode.data.score.toFixed(3)} / 1.000
                 </div>
               </div>
             )}
 
-            <div className="p-2.5 rounded border border-[#222733] bg-[#0E1015] font-mono text-[11px] text-[#8B919D] leading-relaxed">
-              Indexed in FalkorDB with deterministic AST hash. Used for bounded regression testing.
+            <div className="p-3 rounded-lg border border-white/[0.06] bg-zinc-900/60 font-mono text-[11px] text-zinc-400 leading-relaxed">
+              <span className="text-blue-400 font-semibold">Cypher:</span> MATCH (t:Test)-[:COVERS]-&gt;(c)-[:CALLS*0..3]-&gt;(s) WHERE s.name = &apos;{selectedNode.label}&apos;
             </div>
           </div>
 
-          <div className="pt-3 border-t border-[#222733] flex justify-between items-center text-[11px] text-[#8B919D]">
-            <span>FalkorDB Node</span>
-            <span className="font-mono text-[#EDEDEE]">{selectedNode.kind.toUpperCase()}</span>
+          <div className="pt-3 border-t border-white/[0.08] flex justify-between items-center text-[11px] text-zinc-400">
+            <span>FalkorDB Subgraph</span>
+            <span className="font-mono text-white uppercase">{selectedNode.kind}</span>
           </div>
         </aside>
       )}
