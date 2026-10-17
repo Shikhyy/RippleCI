@@ -61,3 +61,22 @@ def test_cli_report_json():
     report_data = json.loads(res.stdout)
     assert "impact" in report_data
     assert "plan" in report_data
+
+
+def test_cli_benchmark():
+    res = runner.invoke(app, ["benchmark", "--format", "json"])
+    assert res.exit_code == 0
+    data = json.loads(res.stdout)
+    assert "strategies" in data
+    assert "graph_plus_ml" in data["strategies"]
+
+
+def test_cli_investigate_and_explain():
+    res_inv = runner.invoke(app, ["investigate"])
+    assert res_inv.exit_code == 0
+    assert "Agent Investigation Summary" in res_inv.stdout
+
+    res_exp = runner.invoke(app, ["explain", "test_verify_valid_token"])
+    assert res_exp.exit_code == 0
+    # Either explains or reports not selected depending on git range
+    assert "Test Selection Explanation" in res_exp.stdout or "not selected" in res_exp.stdout

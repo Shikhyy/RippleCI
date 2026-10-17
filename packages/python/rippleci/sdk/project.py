@@ -1,8 +1,7 @@
-"""High-level Python SDK exposing the RippleCI core engine."""
-
 from pathlib import Path
 from typing import Optional, Union
 
+from rippleci.agent.orchestrator import InvestigationOrchestrator
 from rippleci.core.config import RippleConfig
 from rippleci.graph.factory import create_graph_store
 from rippleci.graph.store import GraphStore
@@ -31,6 +30,7 @@ class RippleProject:
         self.planner = TestPlanner(self.config)
         self.verifier = VerificationEngine(self.root, self.config, self.graph)
         self.reporter = ReportBuilder()
+        self.agent = InvestigationOrchestrator(self.root, self.config, self.graph)
 
     @classmethod
     def open(

@@ -373,6 +373,119 @@ def report_cmd(
             sys.stdout.write(project.reporter.to_markdown(report) + "\n")
     except Exception as e:
         err_console.print(f"[bold red]Error generating report:[/bold red] {e}")
+@app.command("explain")
+def explain_cmd(
+    test_id: str = typer.Argument(..., help="Test name or node ID to explain."),
+    ref_range: str = typer.Option("HEAD~1..HEAD", "--range", "-r", help="Git revision range e.g. origin/main..HEAD"),
+    budget: float = typer.Option(300.0, "--budget", "-b", help="Test execution budget in seconds."),
+):
+    """Explain why a specific test was selected using graph paths and model features."""
+    try:
+        project = RippleProject.open(".")
+        project.indexer.index()
+
+        parts = ref_range.split("..")
+        base = parts[0] if len(parts) > 1 else "HEAD~1"
+        head = parts[1] if len(parts) > 1 else ref_range
+
+        impact = project.analyzer.analyze(base=base, head=head)
+        plan = project.planner.plan(impact=impact, budget_seconds=budget)
+
+        explanation = project.agent.explain_test(test_id, plan)
+        if not explanation:
+            console.print(f"[yellow]Test '{test_id}' was not selected in the test plan for {ref_range}.[/yellow]")
+            return
+
+        table = Table(title=f"Test Selection Explanation: {explanation.test_name}", border_style="cyan")
+        table.add_column("Property", style="bold")
+        table.add_column("Value")
+
+        table.add_row("Test Identifier", explanation.test_id)
+        table.add_row("Plan Rank", f"#{explanation.rank}")
+        table.add_row("ML Relevance Score", f"{explanation.rank_score:.4f}")
+        table.add_row("Direct Coverage", "[green]YES[/green]" if explanation.is_direct else "[yellow]INDIRECT[/yellow]")
+        table.add_row("Selection Reasons", "; ".join(explanation.reasons))
+        table.add_row("Summary", explanation.summary)
+
+        console.print(table)
+    except Exception as e:
+        err_console.print(f"[bold red]Error explaining test:[/bold red] {e}")
+        raise typer.Exit(code=1)
+
+
+@app.command("investigate")
+def investigate_cmd(
+    ref_range: str = typer.Argument("HEAD~1..HEAD", help="Git revision range e.g. origin/main..HEAD"),
+    budget: float = typer.Option(300.0, "--budget", "-b", help="Test budget in seconds."),
+):
+    """Run agent tool-directed investigation and summarize blast radius and test decisions."""
+    try:
+        project = RippleProject.open(".")
+        project.indexer.index()
+
+        parts = ref_range.split("..")
+        base = parts[0] if len(parts) > 1 else "HEAD~1"
+        head = parts[1] if len(parts) > 1 else ref_range
+
+        with console.status("[bold cyan]Agent executing graph tools...[/bold cyan]"):
+            result = project.agent.investigate_change(base_ref=base, head_ref=head, budget_seconds=budget)
+
+        console.print(Panel(
+            f"[bold cyan]Agent Investigation Summary[/bold cyan]  |  {base}..{head}\n"
+            f"Verdict: [bold green]{result.verdict}[/bold green]  |  "
+            f"Modified Symbols: {result.changed_symbols_count}  |  "
+            f"Impacted Callers: {result.impacted_callers_count}  |  "
+            f"Selected Tests: {result.selected_tests_count} ({result.estimated_duration_seconds:.1f}s)",
+            border_style="cyan",
+        ))
+
+        console.print("\n[bold]Tool Execution Trace:[/bold]")
+        for step in result.tool_trace:
+            console.print(f"  → [cyan]{step}[/cyan]")
+
+        console.print("\n" + result.evidence_summary)
+    except Exception as e:
+        err_console.print(f"[bold red]Error during investigation:[/bold red] {e}")
+        raise typer.Exit(code=1)
+
+
+@app.command("benchmark")
+def benchmark_cmd(
+    format: str = typer.Option("table", "--format", "-f", help="Output format: table | json"),
+    output: Optional[Path] = typer.Option(None, "--output", "-o", help="Optional output path for JSON results."),
+):
+    """Run regression test selection benchmark comparing full-suite, file-heuristic, graph, and ML."""
+    try:
+        from rippleci.ranking.evaluation import run_benchmark_evaluation
+        project = RippleProject.open(".")
+        with console.status("[bold cyan]Running 4-strategy regression benchmark...[/bold cyan]"):
+            results = run_benchmark_evaluation(project.root, output_path=output)
+
+        if format == "json":
+            sys.stdout.write(json.dumps(results.to_dict(), indent=2) + "\n")
+            return
+
+        table = Table(title="Regression Test Selection Benchmark (4 Strategies)", border_style="cyan")
+        table.add_column("Strategy", style="bold")
+        table.add_column("Selection Ratio", justify="right")
+        table.add_column("Avg. Duration", justify="right")
+        table.add_column("Fault Recall", justify="right")
+        table.add_column("Missed Scenarios")
+
+        for s_name, m in results.strategies.items():
+            recall_text = f"[bold green]{m.fault_recall * 100:.1f}%[/bold green]" if m.fault_recall == 1.0 else f"[yellow]{m.fault_recall * 100:.1f}%[/yellow]"
+            missed_text = ", ".join(m.missed_scenarios) if m.missed_scenarios else "[green]None[/green]"
+            table.add_row(
+                s_name,
+                f"{m.selection_ratio * 100:.1f}%",
+                f"{m.estimated_duration_s:.1f}s",
+                recall_text,
+                missed_text,
+            )
+
+        console.print(table)
+    except Exception as e:
+        err_console.print(f"[bold red]Error running benchmark:[/bold red] {e}")
         raise typer.Exit(code=1)
 
 
