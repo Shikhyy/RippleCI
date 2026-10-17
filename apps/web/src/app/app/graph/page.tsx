@@ -25,7 +25,7 @@ export default function GraphExplorerPage() {
   return (
     <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col font-sans">
       {/* Top Header */}
-      <header className="h-14 border-b border-white/[0.08] px-6 flex items-center justify-between glass-header">
+      <header className="h-14 border-b border-[#6A4BFF]/20 px-6 flex items-center justify-between glass-header">
         <div className="flex items-center gap-3">
           <Link
             href="/app"
@@ -39,7 +39,7 @@ export default function GraphExplorerPage() {
 
           <div className="flex items-center gap-2">
             <span className="font-semibold text-xs text-white">FalkorDB Graph Explorer</span>
-            <span className="text-[10px] font-mono text-zinc-500 px-2 py-0.5 rounded bg-zinc-900 border border-white/[0.08]">
+            <span className="text-[10px] font-mono text-[#E4DBFF] px-2 py-0.5 rounded bg-[#151322] border border-[#6A4BFF]/30">
               Cypher Visualizer
             </span>
           </div>
@@ -49,9 +49,9 @@ export default function GraphExplorerPage() {
           <button
             onClick={reloadGraph}
             disabled={loading}
-            className="flex items-center gap-1.5 text-xs text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-white/[0.08] hover:border-white/[0.16] px-3 py-1.5 rounded-lg transition-all shadow-sm active:scale-[0.98]"
+            className="flex items-center gap-1.5 text-xs text-[#E4DBFF] hover:text-white bg-[#0f0e17] hover:bg-[#151322] border border-[#6A4BFF]/30 hover:border-[#6A4BFF]/60 px-3 py-1.5 rounded-lg transition-all shadow-sm active:scale-[0.98]"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-blue-400" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#6A4BFF]" : ""}`} />
             <span>Refresh Subgraph</span>
           </button>
         </div>
@@ -59,12 +59,12 @@ export default function GraphExplorerPage() {
 
       {/* Main Canvas View */}
       <main className="flex-1 p-6 md:p-8 flex flex-col space-y-4 max-w-7xl mx-auto w-full">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-zinc-400 gap-3 p-4 rounded-xl border border-white/[0.08] bg-zinc-900/40 backdrop-blur-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-zinc-400 gap-3 p-4 rounded-xl border border-[#6A4BFF]/25 bg-[#0f0e17]/80 backdrop-blur-md">
           <div className="flex items-center gap-2">
-            <Database className="w-3.5 h-3.5 text-blue-400" />
+            <Database className="w-3.5 h-3.5 text-[#6A4BFF]" />
             <span>Repository Subgraph:</span>
             <span className="text-white font-bold">payments-core-service</span>
-            <span className="text-zinc-500">(22 symbols · 41 edges)</span>
+            <span className="text-[#E4DBFF]/70">(22 symbols · 41 edges)</span>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-[11px]">
             <span className="flex items-center gap-1.5">
@@ -72,8 +72,8 @@ export default function GraphExplorerPage() {
               <span>Directly Modified</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-blue-400" />
-              <span>Downstream Caller</span>
+              <span className="w-2 h-2 rounded-full bg-[#6A4BFF]" />
+              <span className="text-[#E4DBFF]">Downstream Caller</span>
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400" />

@@ -126,7 +126,7 @@ export function TerminalBlock() {
   return (
     <div className="craft-card overflow-hidden">
       {/* Workbench Header */}
-      <div className="flex flex-wrap items-center justify-between px-3.5 py-2.5 bg-zinc-900/90 border-b border-white/[0.08] gap-2">
+      <div className="flex flex-wrap items-center justify-between px-3.5 py-2.5 bg-[#0f0e17]/95 border-b border-[#6A4BFF]/20 gap-2">
         <div className="flex items-center gap-1.5 p-1 bg-zinc-950/80 rounded-lg border border-white/[0.06] overflow-x-auto">
           {COMMAND_TABS.map((tab) => (
             <button
@@ -134,15 +134,15 @@ export function TerminalBlock() {
               onClick={() => setActiveTab(tab.id)}
               className={`px-3 py-1.5 rounded-md text-xs font-mono transition-all flex items-center gap-2 ${
                 activeTab === tab.id
-                  ? "bg-zinc-800 text-white font-medium shadow-sm border border-white/[0.08]"
-                  : "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]"
+                  ? "bg-[#6A4BFF]/20 text-[#E4DBFF] font-semibold shadow-sm border border-[#6A4BFF]/40"
+                  : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
               }`}
             >
               <span>{tab.label}</span>
               <span
                 className={`text-[10px] px-1.5 py-0.2 rounded ${
                   activeTab === tab.id
-                    ? "bg-blue-500/20 text-blue-300 font-sans"
+                    ? "bg-[#6A4BFF]/30 text-[#E4DBFF] font-sans font-semibold"
                     : "text-zinc-500 font-sans"
                 }`}
               >
@@ -154,20 +154,20 @@ export function TerminalBlock() {
 
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] hover:border-white/[0.16] bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white font-mono text-xs transition-all shrink-0 active:scale-[0.98]"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#6A4BFF]/25 hover:border-[#6A4BFF]/50 bg-[#151322] hover:bg-[#1a172c] text-[#E4DBFF] font-mono text-xs transition-all shrink-0 active:scale-[0.98]"
         >
-          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
+          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-[#E4DBFF]/70" />}
           <span>{copied ? "Copied" : "Copy Command"}</span>
         </button>
       </div>
 
       {/* Command Prompt Line */}
-      <div className="px-4 py-3 bg-zinc-950/90 border-b border-white/[0.06] font-mono text-xs flex items-center justify-between gap-2">
+      <div className="px-4 py-3 bg-[#0a0a0c] border-b border-white/[0.06] font-mono text-xs flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-emerald-400 select-none font-bold">$</span>
+          <span className="text-[#6A4BFF] select-none font-bold">$</span>
           <span className="text-white font-medium">{current.command}</span>
         </div>
-        <span className="text-[11px] font-mono text-zinc-500">exit 0 · deterministic</span>
+        <span className="text-[11px] font-mono text-[#E4DBFF]/60">exit 0 · deterministic</span>
       </div>
 
       {/* Output Console View */}
