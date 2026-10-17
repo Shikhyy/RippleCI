@@ -32,6 +32,7 @@ class SymbolNode(BaseModel):
 
 
 class TestCaseNode(BaseModel):
+    __test__ = False
     id: str
     repo_id: str
     node_id: str
