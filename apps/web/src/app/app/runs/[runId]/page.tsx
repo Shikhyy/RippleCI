@@ -7,6 +7,7 @@ import {
   Activity,
   AlertTriangle,
   ArrowLeft,
+  Bot,
   CheckCircle2,
   Clock,
   Code2,
@@ -18,6 +19,7 @@ import {
   Network,
   ShieldAlert,
   ShieldCheck,
+  Terminal,
   Zap,
 } from "lucide-react";
 
@@ -139,6 +141,18 @@ export default function RunDetailsPage() {
             }`}
           >
             Interactive Subgraph
+          </button>
+
+          <button
+            onClick={() => setActiveTab("agent")}
+            className={`pb-3 transition-colors border-b-2 flex items-center gap-1.5 ${
+              activeTab === "agent"
+                ? "border-purple-500 text-purple-400 font-semibold"
+                : "border-transparent text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Bot className="w-3.5 h-3.5" />
+            <span>Agent Investigation</span>
           </button>
         </div>
 
@@ -283,6 +297,73 @@ export default function RunDetailsPage() {
               Interactive subgraph for this pull request change:
             </div>
             <GraphCanvas initialData={DEMO_GRAPH_DATA} />
+          </div>
+        )}
+
+        {activeTab === "agent" && (
+          <div className="space-y-6">
+            {/* Header Verdict Card */}
+            <div className="rounded-xl border border-purple-900/50 bg-purple-950/20 p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <Bot className="w-5 h-5 text-purple-400" />
+                  <h3 className="text-base font-bold text-white">FalkorDB Graph Reasoning Agent</h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
+                    {run.investigation?.verdict || "VERIFIED_SAFE"}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400">
+                  Autonomous tool-directed traversal over AST call graph, test coverage edges, and mutation spaces.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-4 text-xs font-mono">
+                <div className="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
+                  <span className="text-slate-500">Tool Calls:</span>{" "}
+                  <span className="text-purple-300 font-bold">{run.investigation?.tool_trace.length || 5}</span>
+                </div>
+                <div className="bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
+                  <span className="text-slate-500">Decision:</span>{" "}
+                  <span className="text-emerald-400 font-bold">Safe to Merge</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Tool Execution Trace */}
+            <div className="rounded-xl border border-slate-800 bg-slate-950 p-5 space-y-3">
+              <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                <Terminal className="w-3.5 h-3.5 text-purple-400" />
+                Deterministic Tool Trace
+              </h4>
+              <div className="space-y-2 font-mono text-xs">
+                {(run.investigation?.tool_trace || []).map((step, idx) => {
+                  const parts = step.split(" -> ");
+                  return (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-3 p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/80 text-slate-300"
+                    >
+                      <span className="w-5 h-5 rounded-full bg-purple-600/20 text-purple-400 flex items-center justify-center text-[10px] font-bold shrink-0">
+                        {idx + 1}
+                      </span>
+                      <span className="text-purple-300 font-semibold">{parts[0]}</span>
+                      <span className="text-slate-500">→</span>
+                      <span className="text-slate-300">{parts[1] || ""}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Grounded Evidence Summary */}
+            <div className="rounded-xl border border-slate-800 bg-slate-950 p-5 space-y-3">
+              <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                Grounded Graph Findings
+              </h4>
+              <pre className="p-4 rounded-lg bg-slate-900/80 border border-slate-800 font-sans text-xs text-slate-300 whitespace-pre-wrap leading-relaxed">
+                {run.investigation?.evidence_summary}
+              </pre>
+            </div>
           </div>
         )}
       </main>

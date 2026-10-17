@@ -54,6 +54,13 @@ class VerificationRequest(BaseModel):
     max_mutations: int = 5
 
 
+class InvestigateRequest(BaseModel):
+    base_ref: str = "origin/main"
+    head_ref: str = "HEAD"
+    budget_seconds: float = 300.0
+    file_diffs: Optional[List[Dict[str, Any]]] = None
+
+
 @app.get("/api/v1/health")
 def get_health():
     project = RippleProject.open(".")
@@ -167,3 +174,59 @@ def get_run_graph(run_id: str) -> GraphData:
     # Fallback to current graph sample
     counts = project.graph.get_graph_counts()
     return project.graph.get_subgraph(symbol_ids=[], test_ids=[])
+
+
+@app.post("/api/v1/investigate")
+def investigate_change(req: InvestigateRequest):
+    project = RippleProject.open(".")
+    result = project.agent.investigate_change(
+        base_ref=req.base_ref,
+        head_ref=req.head_ref,
+        budget_seconds=req.budget_seconds,
+        file_diffs=req.file_diffs,
+    )
+    return {
+        "base_ref": result.base_ref,
+        "head_ref": result.head_ref,
+        "changed_symbols_count": result.changed_symbols_count,
+        "impacted_callers_count": result.impacted_callers_count,
+        "candidate_tests_count": result.candidate_tests_count,
+        "selected_tests_count": result.selected_tests_count,
+        "estimated_duration_seconds": result.estimated_duration_seconds,
+        "verdict": result.verdict,
+        "evidence_summary": result.evidence_summary,
+        "tool_trace": result.tool_trace,
+    }
+
+
+@app.get("/api/v1/benchmark")
+def get_benchmark():
+    from rippleci.ranking.evaluation import run_benchmark_evaluation
+    project = RippleProject.open(".")
+    results = run_benchmark_evaluation(project.root)
+    return results.to_dict()
+
+
+@app.get("/api/v1/explain/{test_id}")
+def explain_test(test_id: str, range: str = "HEAD~1..HEAD", budget: float = 300.0):
+    project = RippleProject.open(".")
+    parts = range.split("..")
+    base = parts[0] if len(parts) > 1 else "HEAD~1"
+    head = parts[1] if len(parts) > 1 else range
+
+    impact = project.analyzer.analyze(base=base, head=head)
+    plan = project.planner.plan(impact=impact, budget_seconds=budget)
+    explanation = project.agent.explain_test(test_id, plan)
+    if not explanation:
+        raise HTTPException(status_code=404, detail=f"Test '{test_id}' not found in current plan.")
+
+    return {
+        "test_id": explanation.test_id,
+        "test_name": explanation.test_name,
+        "rank": explanation.rank,
+        "rank_score": explanation.rank_score,
+        "reasons": explanation.reasons,
+        "evidence_paths": explanation.evidence_paths,
+        "is_direct": explanation.is_direct,
+        "summary": explanation.summary,
+    }

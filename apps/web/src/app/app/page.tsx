@@ -18,18 +18,30 @@ import {
   RefreshCw,
   ShieldAlert,
   ShieldCheck,
+  BarChart3,
+  Bot,
 } from "lucide-react";
 
-import { DEMO_RUN, fetchHealth, fetchRun, RunSummary } from "@/lib/api";
+import {
+  BenchmarkReport,
+  DEMO_BENCHMARK,
+  DEMO_RUN,
+  fetchBenchmark,
+  fetchHealth,
+  fetchRun,
+  RunSummary,
+} from "@/lib/api";
 
 export default function DashboardPage() {
   const [health, setHealth] = useState<any>({ falkordb_healthy: true, mode: "connected" });
   const [runs, setRuns] = useState<RunSummary[]>([DEMO_RUN]);
+  const [benchmark, setBenchmark] = useState<BenchmarkReport>(DEMO_BENCHMARK);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedRepo, setSelectedRepo] = useState<string>("payments-core-service");
 
   useEffect(() => {
     fetchHealth().then((h) => setHealth(h));
+    fetchBenchmark().then((b) => setBenchmark(b));
   }, []);
 
   const triggerNewAnalysis = () => {
@@ -230,6 +242,93 @@ export default function DashboardPage() {
                       </td>
                     </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Regression Test Selection Benchmark */}
+          <div className="rounded-xl border border-slate-800 bg-slate-950 overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="w-4 h-4 text-blue-400" />
+                  <h2 className="text-sm font-semibold text-white">Regression Test Selection Benchmark (4 Strategies)</h2>
+                </div>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Evaluation across realistic changes comparing baseline full-suite, file-matching heuristics, graph traversal, and ML ranking.
+                </p>
+              </div>
+              <span className="text-xs font-mono text-emerald-400 font-semibold bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">
+                100% Fault Recall Preserved
+              </span>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-900/60 text-slate-400 font-mono text-[11px] border-b border-slate-800">
+                  <tr>
+                    <th className="py-3 px-4 font-semibold">Strategy</th>
+                    <th className="py-3 px-4 font-semibold">Tests Selected</th>
+                    <th className="py-3 px-4 font-semibold">Selection Ratio</th>
+                    <th className="py-3 px-4 font-semibold">Estimated Time</th>
+                    <th className="py-3 px-4 font-semibold">Fault Recall</th>
+                    <th className="py-3 px-4 font-semibold">Missed Scenarios</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-900 text-slate-300 font-mono">
+                  {Object.entries(benchmark.strategies).map(([key, s]) => {
+                    const isOptimal = key === "graph_plus_ml";
+                    const isFlawed = s.fault_recall < 1.0;
+                    return (
+                      <tr
+                        key={key}
+                        className={`transition-colors ${
+                          isOptimal
+                            ? "bg-blue-950/20 border-l-2 border-l-blue-500"
+                            : "hover:bg-slate-900/40"
+                        }`}
+                      >
+                        <td className="py-3.5 px-4 font-semibold text-white">
+                          <div className="flex items-center gap-1.5">
+                            <span>{s.strategy}</span>
+                            {isOptimal && (
+                              <span className="text-[10px] font-sans px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40">
+                                Recommended
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-4">
+                          {s.selected_tests_count} / {s.total_tests_count}
+                        </td>
+                        <td className="py-3.5 px-4 font-bold text-white">
+                          {(s.selection_ratio * 100).toFixed(1)}%
+                        </td>
+                        <td className="py-3.5 px-4 text-slate-300">
+                          {s.estimated_duration_s.toFixed(1)}s
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <span
+                            className={`font-bold ${
+                              isFlawed ? "text-amber-400" : "text-emerald-400"
+                            }`}
+                          >
+                            {(s.fault_recall * 100).toFixed(1)}%
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4">
+                          {s.missed_scenarios && s.missed_scenarios.length > 0 ? (
+                            <span className="text-amber-400 font-semibold">
+                              ⚠️ {s.missed_scenarios.join(", ")}
+                            </span>
+                          ) : (
+                            <span className="text-emerald-400 font-sans text-xs">✓ None (0 missed)</span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

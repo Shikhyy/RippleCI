@@ -56,3 +56,24 @@ def test_api_impact_and_plan_flow():
     graph_data = res_graph.json()
     assert "nodes" in graph_data
     assert "edges" in graph_data
+
+
+def test_api_investigate_and_benchmark():
+    # 1. Investigate endpoint
+    res_inv = client.post(
+        "/api/v1/investigate",
+        json={"base_ref": "HEAD~1", "head_ref": "HEAD", "budget_seconds": 150.0},
+    )
+    assert res_inv.status_code == 200
+    inv_data = res_inv.json()
+    assert "verdict" in inv_data
+    assert "tool_trace" in inv_data
+    assert len(inv_data["tool_trace"]) == 5
+
+    # 2. Benchmark endpoint
+    res_bench = client.get("/api/v1/benchmark")
+    assert res_bench.status_code == 200
+    bench_data = res_bench.json()
+    assert "strategies" in bench_data
+    assert "full_suite" in bench_data["strategies"]
+    assert "graph_plus_ml" in bench_data["strategies"]
