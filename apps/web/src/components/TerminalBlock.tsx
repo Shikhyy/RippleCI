@@ -1,88 +1,107 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, Copy, Terminal } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 
 interface CommandTab {
   id: string;
   command: string;
   output: string;
-  tag: string;
+  label: string;
 }
 
 const COMMAND_TABS: CommandTab[] = [
   {
     id: "impact",
+    label: "1. ripple impact",
     command: "ripple impact origin/main..HEAD",
-    tag: "Blast Radius",
-    output: `RippleCI Impact Analysis  |  sample-python-service  |  origin/main..HEAD
+    output: `RippleCI Impact Analysis  |  payments-core-service  |  origin/main..HEAD
 Changed Files: 1  |  Modified Symbols: 1  |  Downstream Callers: 2  |  Candidate Tests: 4
 
-Directly Changed Symbols
-  - verify_token (src/auth.py:9-16)
+Directly Modified Symbols:
+  [MODIFIED] verify_token (src/auth.py:9-16)
 
-Impacted Callers (FalkorDB Traversal)
-  - process_payment (1 hop)  [process_payment -> verify_token]
-  - place_order     (2 hops) [place_order -> process_payment -> verify_token]
+Downstream Callers (FalkorDB Multi-Hop Traversal):
+  [CALLER]   process_payment  (1 hop)   [src/payments.py:13]
+             Path: process_payment -> verify_token
+  [CALLER]   place_order      (2 hops)  [src/order_service.py:7]
+             Path: place_order -> process_payment -> verify_token
 
-Candidate Tests Connected Via Graph
-  ✓ test_verify_valid_token        (Direct coverage | 1 hop)
-  ✓ test_verify_expired_token      (Direct coverage | 1 hop)
-  ✓ test_process_payment_success   (Indirect caller | 2 hops)
-  ✓ test_place_order_success       (Indirect caller | 3 hops)
+Candidate Tests Connected via Graph:
+  [DIRECT]   test_verify_valid_token       (1 hop  | tests/test_auth.py:5)
+  [DIRECT]   test_verify_expired_token     (1 hop  | tests/test_auth.py:12)
+  [INDIRECT] test_process_payment_success  (2 hops | tests/test_payments.py:8)
+  [INDIRECT] test_place_order_success      (3 hops | tests/test_orders.py:10)
 
 Next: ripple plan --budget 300`,
   },
   {
     id: "plan",
+    label: "2. ripple plan",
     command: "ripple plan --budget 300",
-    tag: "ML Ranking",
-    output: `Selected Test Plan (MLRanker | Budget: 300s)
-┏━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ Rank ┃ Test Case                   ┃ Score ┃ Duration  ┃ Reasons                                ┃
-┡━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│    1 │ test_verify_valid_token     │  0.96 │ 1.1s      │ Direct coverage; immediate neighbor    │
-│    2 │ test_verify_expired_token   │  0.92 │ 1.0s      │ Direct coverage; boundary check        │
-│    3 │ test_process_payment_success│  0.85 │ 1.4s      │ 2-hop caller; covers payments path     │
-│    4 │ test_place_order_success    │  0.78 │ 1.3s      │ 3-hop caller; covers fulfillment path  │
-└──────┴─────────────────────────────┴───────┴───────────┴────────────────────────────────────────┘
-Selected 4 tests | Estimated duration: 4.8s | Omitted: 0`,
+    output: `Selected Test Plan (GBDT Ranker | Budget: 300.0s)
+┌──────┬───────────────────────────────┬───────┬──────────┬────────────────────────────────────────────┐
+│ Rank │ Test Case                     │ Score │ Duration │ Graph Evidence & Feature Attribution       │
+├──────┼───────────────────────────────┼───────┼──────────┼────────────────────────────────────────────┤
+│    1 │ test_verify_valid_token       │  0.96 │ 1.1s     │ Direct AST coverage; immediate neighbor    │
+│    2 │ test_verify_expired_token     │  0.92 │ 1.0s     │ Direct AST coverage; boundary condition    │
+│    3 │ test_process_payment_success  │  0.85 │ 1.4s     │ 1-hop caller; covers payment gateway path  │
+│    4 │ test_place_order_success      │  0.78 │ 1.3s     │ 2-hop caller; covers order checkout flow   │
+└──────┴───────────────────────────────┴───────┴──────────┴────────────────────────────────────────────┘
+Selected 4 tests  |  Estimated runtime: 4.8s  |  Omitted: 9 tests (budget preserved)`,
+  },
+  {
+    id: "investigate",
+    label: "3. ripple investigate",
+    command: "ripple investigate origin/main..HEAD",
+    output: `Autonomous Graph Reasoning Agent Execution Trace:
+  [tool:analyze_change]           -> 1 modified symbol (verify_token in src/auth.py)
+  [tool:trace_impact]             -> 2 downstream callers located via CALLS edges
+  [tool:retrieve_test_candidates] -> 4 tests mapped across AST & pytest nodes
+  [tool:rank_test_candidates]     -> 4 tests selected under 300s budget (4.8s est.)
+  [tool:check_verification_gaps]  -> coverage_sufficient (0 blind spots detected)
+
+Agent Verdict: VERIFIED_SAFE
+Recommendation: All modified symbols have verified coverage in the dependency graph.`,
   },
   {
     id: "verify",
+    label: "4. ripple verify",
     command: "ripple verify --mutations 5",
-    tag: "Verification",
-    output: `Executing selected tests and bounded mutations...
+    output: `Executing selected test plan with bounded mutation verification...
 
-Verification Results
-┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ Metric                 ┃ Result                                  ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│ All Tests Passed       │ YES                                     │
-│ Tests Executed         │ 4/4 passed                              │
-│ Mutations Tested       │ 5                                       │
-│ Mutations Killed       │ 5 (100.0%)                              │
-│ Surviving Mutants      │ 0                                       │
-│ Wall Time              │ 4.85s                                   │
-│ Release Recommendation │ RELEASE_SAFE                            │
-└────────────────────────┴─────────────────────────────────────────┘
-Verdict: High-confidence release evidence verified.`,
+Test Suite Execution:
+  ✓ tests/test_auth.py::test_verify_valid_token       PASSED  (1.08s)
+  ✓ tests/test_auth.py::test_verify_expired_token     PASSED  (0.98s)
+  ✓ tests/test_payments.py::test_process_payment_ok   PASSED  (1.36s)
+  ✓ tests/test_orders.py::test_place_order_ok         PASSED  (1.24s)
+
+Bounded AST Mutation Verification:
+  [MUTANT 1] src/auth.py:12 (Compare: == -> !=)       KILLED by test_verify_valid_token
+  [MUTANT 2] src/auth.py:14 (UnaryOp: not -> identity) KILLED by test_verify_expired_token
+  [MUTANT 3] src/auth.py:15 (Constant: True -> False)  KILLED by test_verify_valid_token
+  [MUTANT 4] src/payments.py:18 (BinaryOp: + -> -)     KILLED by test_process_payment_ok
+  [MUTANT 5] src/order_service.py:12 (Return None)     KILLED by test_place_order_ok
+
+Verification Summary:
+  Mutations Tested: 5  |  Killed: 5  |  Survived: 0
+  Mutation Score:   100.0%
+  Verdict:          RELEASE_SAFE`,
   },
   {
-    id: "doctor",
-    command: "ripple doctor",
-    tag: "Diagnostics",
-    output: `RippleCI Diagnostics
-┏━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ Component      ┃ Status                       ┃ Details                      ┃
-┡━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│ Python Runtime │ OK                           │ Python 3.12.5                │
-│ Git Repository │ OK                           │ Git repo detected (branch:   │
-│                │                              │ main)                        │
-│ Configuration  │ OK                           │ File: .ripple.yml            │
-│ FalkorDB Graph │ CONNECTED                    │ Reachable at redis://localhost:6379
-│ Test Runner    │ OK                           │ pytest 9.0.2                 │
-└────────────────┴──────────────────────────────┴──────────────────────────────┘`,
+    id: "benchmark",
+    label: "5. ripple benchmark",
+    command: "ripple benchmark",
+    output: `Regression Test Selection Benchmark (4 Strategies | 3 Fault Injection Scenarios)
+┌───────────────────────┬─────────────────┬───────────┬──────────────┬──────────────────────────────────┐
+│ Strategy              │ Selection Ratio │ Avg. Time │ Fault Recall │ Missed Scenarios                 │
+├───────────────────────┼─────────────────┼───────────┼──────────────┼──────────────────────────────────┤
+│ full_suite            │ 100.0% (41/41)  │ 41.0s     │ 100.0%       │ None (baseline full execution)   │
+│ change_file_heuristic │   8.9% (4/41)   │  3.7s     │  66.7%       │ auth_token_verification_bug (FAIL│
+│ graph_only            │  11.4% (5/41)   │  5.6s     │ 100.0%       │ None (FalkorDB traversed callers)│
+│ graph_plus_ml         │  11.4% (5/41)   │  5.6s     │ 100.0%       │ None (optimal risk-ordered plan) │
+└───────────────────────┴─────────────────┴───────────┴──────────────┴──────────────────────────────────┘
+Result: graph_plus_ml achieves 7.3x speedup while preserving 100% fault recall.`,
   },
 ];
 
@@ -99,57 +118,44 @@ export function TerminalBlock() {
   };
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-[#0B0F1A] shadow-2xl overflow-hidden font-mono text-xs">
-      {/* Top Bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900/80 border-b border-slate-800">
-        <div className="flex items-center gap-2">
-          <div className="flex gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-red-500/80" />
-            <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-            <span className="w-3 h-3 rounded-full bg-green-500/80" />
-          </div>
-          <span className="ml-3 text-slate-400 font-sans text-xs flex items-center gap-1.5">
-            <Terminal className="w-3.5 h-3.5 text-blue-400" /> terminal — bash
-          </span>
-        </div>
-
-        {/* Tab pills */}
-        <div className="flex gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+    <div className="rounded-lg border border-[#222733] bg-[#0E1015] overflow-hidden text-xs">
+      {/* Workbench Header */}
+      <div className="flex flex-wrap items-center justify-between px-3 py-2 bg-[#13161C] border-b border-[#222733] gap-2">
+        <div className="flex items-center gap-1 overflow-x-auto">
           {COMMAND_TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-sans transition-colors ${
+              className={`px-2.5 py-1 rounded text-xs font-mono transition-colors ${
                 activeTab === tab.id
-                  ? "bg-blue-600 text-white font-medium"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-[#1C212B] text-[#EDEDEE] font-semibold border border-[#2A3140]"
+                  : "text-[#8B919D] hover:text-[#EDEDEE] hover:bg-[#161920]"
               }`}
             >
-              {tab.tag}
+              {tab.label}
             </button>
           ))}
         </div>
-      </div>
 
-      {/* Command prompt & copy */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-950/60 border-b border-slate-900 text-slate-200">
-        <div className="flex items-center gap-2">
-          <span className="text-emerald-400 font-bold">$</span>
-          <span className="text-blue-300 font-semibold">{current.command}</span>
-        </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1 text-[11px] font-sans text-slate-400 hover:text-slate-200 bg-slate-900 hover:bg-slate-800 px-2 py-1 rounded border border-slate-800"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-[#262B35] bg-[#161920] hover:bg-[#1E232E] text-[#9096A2] hover:text-[#EDEDEE] font-mono text-xs transition-colors shrink-0"
         >
-          {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-          {copied ? "Copied" : "Copy"}
+          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+          <span>{copied ? "Copied" : "Copy Command"}</span>
         </button>
       </div>
 
-      {/* Command output */}
-      <pre className="p-4 text-slate-300 leading-relaxed overflow-x-auto whitespace-pre font-mono text-[11px]">
-        {current.output}
-      </pre>
+      {/* Command Prompt Line */}
+      <div className="px-4 py-2.5 bg-[#0A0C0F] border-b border-[#1C202B] font-mono text-xs flex items-center gap-2">
+        <span className="text-[#3B82F6] select-none font-bold">$</span>
+        <span className="text-[#EDEDEE]">{current.command}</span>
+      </div>
+
+      {/* Output Console View */}
+      <div className="p-4 font-mono text-xs text-[#9CA3AF] leading-relaxed overflow-x-auto max-h-[380px] bg-[#0E1015]">
+        <pre className="whitespace-pre">{current.output}</pre>
+      </div>
     </div>
   );
 }

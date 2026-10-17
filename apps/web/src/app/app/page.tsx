@@ -3,23 +3,19 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  Activity,
   ArrowRight,
+  BarChart3,
+  Check,
   CheckCircle2,
   Code2,
   Database,
-  ExternalLink,
   GitBranch,
   GitCommit,
   GitPullRequest,
   Layers,
   Network,
   Play,
-  RefreshCw,
-  ShieldAlert,
   ShieldCheck,
-  BarChart3,
-  Bot,
 } from "lucide-react";
 
 import {
@@ -28,12 +24,11 @@ import {
   DEMO_RUN,
   fetchBenchmark,
   fetchHealth,
-  fetchRun,
   RunSummary,
 } from "@/lib/api";
 
 export default function DashboardPage() {
-  const [health, setHealth] = useState<any>({ falkordb_healthy: true, mode: "connected" });
+  const [health, setHealth] = useState<any>({ falkordb_healthy: true, graph_url: "redis://localhost:6379" });
   const [runs, setRuns] = useState<RunSummary[]>([DEMO_RUN]);
   const [benchmark, setBenchmark] = useState<BenchmarkReport>(DEMO_BENCHMARK);
   const [loading, setLoading] = useState<boolean>(false);
@@ -54,59 +49,55 @@ export default function DashboardPage() {
         created_at: new Date().toISOString(),
       };
       setRuns([newRun, ...runs]);
-    }, 1200);
+    }, 900);
   };
 
   return (
-    <div className="min-h-screen bg-[#090D16] text-[#F3F4F6] flex">
-      {/* Sidebar */}
-      <aside className="w-64 border-r border-slate-900 bg-[#070A12] flex flex-col justify-between p-4 hidden md:flex">
+    <div className="min-h-screen bg-[#090A0D] text-[#EDEDEE] flex flex-col md:flex-row">
+      {/* Structural Sidebar */}
+      <aside className="w-full md:w-60 border-b md:border-b-0 md:border-r border-[#1E222A] bg-[#0C0E12] flex flex-col justify-between p-4 shrink-0">
         <div className="space-y-6">
-          <Link href="/" className="flex items-center gap-2.5 px-2">
-            <div className="w-7 h-7 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
-              <Activity className="w-4 h-4 text-blue-400" />
-            </div>
-            <span className="font-bold text-base tracking-tight text-white font-sans">
-              Ripple<span className="text-blue-500">CI</span>
+          <Link href="/" className="flex items-center gap-2">
+            <span className="font-mono font-bold text-sm tracking-tight text-[#EDEDEE]">
+              ripple<span className="text-[#3B82F6]">ci</span>
             </span>
+            <span className="text-xs font-mono text-[#636975]">v0.1.0</span>
           </Link>
 
-          <nav className="space-y-1">
+          <nav className="space-y-1 text-xs font-mono">
             <Link
               href="/app"
-              className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-blue-600/10 border border-blue-500/20 text-blue-400 text-xs font-medium"
+              className="flex items-center gap-2 px-3 py-2 rounded bg-[#161920] border border-[#222733] text-[#EDEDEE] font-medium"
             >
-              <Layers className="w-4 h-4" />
+              <Layers className="w-3.5 h-3.5 text-[#3B82F6]" />
               <span>Overview</span>
             </Link>
 
             <Link
               href="/app/graph"
-              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 text-xs font-medium transition-colors"
+              className="flex items-center gap-2 px-3 py-2 rounded text-[#8B919D] hover:text-[#EDEDEE] hover:bg-[#12151B] transition-colors"
             >
-              <Network className="w-4 h-4" />
+              <Network className="w-3.5 h-3.5 text-[#8B919D]" />
               <span>Graph Explorer</span>
             </Link>
 
             <Link
               href="/app/runs/run_prod_8f12a9"
-              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 text-xs font-medium transition-colors"
+              className="flex items-center gap-2 px-3 py-2 rounded text-[#8B919D] hover:text-[#EDEDEE] hover:bg-[#12151B] transition-colors"
             >
-              <GitPullRequest className="w-4 h-4" />
-              <span>Pull Request Impact</span>
+              <GitPullRequest className="w-3.5 h-3.5 text-[#8B919D]" />
+              <span>PR Release Report</span>
             </Link>
           </nav>
         </div>
 
-        {/* Database Health Pill in Sidebar */}
-        <div className="border border-slate-800 rounded-lg p-3 bg-slate-950 text-xs space-y-1.5">
+        {/* Database Status Panel */}
+        <div className="mt-6 md:mt-0 p-3 rounded border border-[#1E222A] bg-[#101217] text-xs font-mono space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-slate-400 font-medium">FalkorDB Graph</span>
-            <span className="flex items-center gap-1 text-[11px] text-emerald-400 font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Connected
-            </span>
+            <span className="text-[#636975]">FalkorDB</span>
+            <span className="text-[#10B981] font-semibold text-[11px]">ACTIVE</span>
           </div>
-          <div className="font-mono text-[10px] text-slate-500 truncate">
+          <div className="text-[11px] text-[#8B919D] truncate">
             {health.graph_url || "redis://localhost:6379"}
           </div>
         </div>
@@ -114,14 +105,14 @@ export default function DashboardPage() {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0">
-        {/* Top Header */}
-        <header className="h-16 border-b border-slate-900 px-6 flex items-center justify-between bg-[#080B14]">
+        {/* Top Workbench Header */}
+        <header className="h-14 border-b border-[#1E222A] px-6 flex items-center justify-between bg-[#0C0E12]">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Repository</span>
+            <span className="text-xs font-mono uppercase text-[#636975]">Repo:</span>
             <select
               value={selectedRepo}
               onChange={(e) => setSelectedRepo(e.target.value)}
-              className="bg-slate-900 border border-slate-800 rounded-md px-3 py-1 text-xs text-white font-mono focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="bg-[#12151B] border border-[#222733] rounded px-2.5 py-1 text-xs text-[#EDEDEE] font-mono focus:outline-none focus:border-[#3B82F6]"
             >
               <option value="payments-core-service">payments-core-service (main)</option>
               <option value="auth-gateway">auth-gateway (main)</option>
@@ -133,108 +124,101 @@ export default function DashboardPage() {
             <button
               onClick={triggerNewAnalysis}
               disabled={loading}
-              className="flex items-center gap-1.5 text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-1.5 rounded-lg shadow-sm transition-colors disabled:opacity-60"
+              className="flex items-center gap-1.5 text-xs font-mono font-medium bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-3 py-1.5 rounded transition-colors disabled:opacity-50"
             >
-              <Play className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-              <span>{loading ? "Analyzing..." : "Trigger Impact Analysis"}</span>
+              <Play className={`w-3 h-3 ${loading ? "animate-spin" : ""}`} />
+              <span>{loading ? "Analyzing Graph..." : "Run Impact Analysis"}</span>
             </button>
           </div>
         </header>
 
-        {/* Content Body */}
-        <div className="p-6 md:p-8 space-y-8 max-w-7xl">
-          {/* Metrics Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-slate-800/80 bg-slate-950 p-4 space-y-1">
-              <div className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Indexed Symbols</div>
-              <div className="text-2xl font-bold font-mono text-white">22</div>
-              <div className="text-[11px] text-blue-400 flex items-center gap-1">
-                <Code2 className="w-3 h-3" /> 10 files scanned
-              </div>
+        {/* Dashboard Workspace */}
+        <div className="p-6 space-y-6 max-w-7xl">
+          {/* Telemetry Row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="rounded border border-[#1E222A] bg-[#0E1015] p-3.5 space-y-1">
+              <div className="text-[11px] font-mono text-[#636975] uppercase">Indexed Symbols</div>
+              <div className="text-xl font-bold font-mono text-[#EDEDEE]">22</div>
+              <div className="text-[11px] font-mono text-[#8B919D]">10 files scanned</div>
             </div>
 
-            <div className="rounded-xl border border-slate-800/80 bg-slate-950 p-4 space-y-1">
-              <div className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Dependency Edges</div>
-              <div className="text-2xl font-bold font-mono text-white">41</div>
-              <div className="text-[11px] text-purple-400 flex items-center gap-1">
-                <Network className="w-3 h-3" /> 23 calls, 18 coverage
-              </div>
+            <div className="rounded border border-[#1E222A] bg-[#0E1015] p-3.5 space-y-1">
+              <div className="text-[11px] font-mono text-[#636975] uppercase">FalkorDB Edges</div>
+              <div className="text-xl font-bold font-mono text-[#EDEDEE]">41</div>
+              <div className="text-[11px] font-mono text-[#8B919D]">23 calls · 18 coverage</div>
             </div>
 
-            <div className="rounded-xl border border-slate-800/80 bg-slate-950 p-4 space-y-1">
-              <div className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Candidate Tests</div>
-              <div className="text-2xl font-bold font-mono text-white">13</div>
-              <div className="text-[11px] text-emerald-400 flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3" /> 100% pytest mapped
-              </div>
+            <div className="rounded border border-[#1E222A] bg-[#0E1015] p-3.5 space-y-1">
+              <div className="text-[11px] font-mono text-[#636975] uppercase">Candidate Tests</div>
+              <div className="text-xl font-bold font-mono text-[#EDEDEE]">13</div>
+              <div className="text-[11px] font-mono text-[#8B919D]">100% pytest mapped</div>
             </div>
 
-            <div className="rounded-xl border border-slate-800/80 bg-slate-950 p-4 space-y-1">
-              <div className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Release Verdict</div>
-              <div className="text-xl font-bold font-mono text-emerald-400 flex items-center gap-1.5">
-                <ShieldCheck className="w-5 h-5 text-emerald-400" /> RELEASE SAFE
-              </div>
-              <div className="text-[11px] text-slate-400">Evidence verified in graph</div>
+            <div className="rounded border border-[#1E222A] bg-[#0E1015] p-3.5 space-y-1">
+              <div className="text-[11px] font-mono text-[#636975] uppercase">Release State</div>
+              <div className="text-xl font-bold font-mono text-[#10B981]">VERIFIED SAFE</div>
+              <div className="text-[11px] font-mono text-[#8B919D]">0 surviving mutants</div>
             </div>
           </div>
 
-          {/* Recent Analysis Runs Table */}
-          <div className="rounded-xl border border-slate-800 bg-slate-950 overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+          {/* Recent PR Impact Analysis Runs */}
+          <div className="rounded border border-[#1E222A] bg-[#0E1015] overflow-hidden">
+            <div className="px-4 py-3 bg-[#111318] border-b border-[#1E222A] flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-semibold text-white">Recent Pull Request Impact Runs</h2>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Trace downstream callers, selected test plans, and mutation verification results.
+                <h2 className="text-xs font-mono font-bold text-[#EDEDEE] uppercase tracking-wider">
+                  Pull Request Analysis Runs
+                </h2>
+                <p className="text-[11px] text-[#636975]">
+                  Downstream caller impact, ML test prioritization, and mutation verification.
                 </p>
               </div>
-              <span className="text-xs font-mono text-slate-500">Live FalkorDB session</span>
+              <span className="text-[11px] font-mono text-[#8B919D]">Branch: main</span>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-900/60 text-slate-400 font-mono text-[11px] border-b border-slate-800">
+            <div className="overflow-x-auto text-xs font-mono">
+              <table className="w-full text-left">
+                <thead className="bg-[#13161C] border-b border-[#1E222A] text-[#8B919D] text-[11px]">
                   <tr>
-                    <th className="py-3 px-4 font-semibold">Run ID</th>
-                    <th className="py-3 px-4 font-semibold">Branch Range</th>
-                    <th className="py-3 px-4 font-semibold">Changed</th>
-                    <th className="py-3 px-4 font-semibold">Impacted Callers</th>
-                    <th className="py-3 px-4 font-semibold">Selected Tests</th>
-                    <th className="py-3 px-4 font-semibold">Mutations</th>
-                    <th className="py-3 px-4 font-semibold">Verdict</th>
-                    <th className="py-3 px-4 text-right font-semibold">Action</th>
+                    <th className="py-2.5 px-4">Run Identifier</th>
+                    <th className="py-2.5 px-4">Revision Range</th>
+                    <th className="py-2.5 px-4">Modified</th>
+                    <th className="py-2.5 px-4">Impacted Callers</th>
+                    <th className="py-2.5 px-4">Selected Tests</th>
+                    <th className="py-2.5 px-4">Mutation Score</th>
+                    <th className="py-2.5 px-4">Verdict</th>
+                    <th className="py-2.5 px-4 text-right">Inspection</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-900 text-slate-300 font-mono">
+                <tbody className="divide-y divide-[#1A1D24] text-[#D1D5DB]">
                   {runs.map((r) => (
-                    <tr key={r.run_id} className="hover:bg-slate-900/40 transition-colors">
-                      <td className="py-3.5 px-4 font-semibold text-white flex items-center gap-1.5">
-                        <GitCommit className="w-3.5 h-3.5 text-blue-400" />
+                    <tr key={r.run_id} className="hover:bg-[#12151B] transition-colors">
+                      <td className="py-3 px-4 font-semibold text-[#EDEDEE]">
                         {r.run_id}
                       </td>
-                      <td className="py-3.5 px-4 text-slate-400">
+                      <td className="py-3 px-4 text-[#8B919D]">
                         {r.base_ref}..{r.head_ref}
                       </td>
-                      <td className="py-3.5 px-4 text-amber-300 font-semibold">
+                      <td className="py-3 px-4 text-[#F59E0B]">
                         {r.impact.changed_symbols.length} symbol(s)
                       </td>
-                      <td className="py-3.5 px-4 text-blue-300">
+                      <td className="py-3 px-4 text-[#60A5FA]">
                         {r.impact.impacted_symbols.length} caller(s)
                       </td>
-                      <td className="py-3.5 px-4 text-emerald-400">
+                      <td className="py-3 px-4 text-[#10B981]">
                         {r.plan?.selected_tests.length || 0} tests ({r.plan?.estimated_total_seconds || 0}s)
                       </td>
-                      <td className="py-3.5 px-4">
-                        {r.verification?.killed_mutations_count || 0}/{r.verification?.mutations_tested_count || 0} killed
+                      <td className="py-3 px-4">
+                        {(r.verification?.mutation_score ? r.verification.mutation_score * 100 : 100).toFixed(0)}% ({r.verification?.killed_mutations_count || 0}/{r.verification?.mutations_tested_count || 0} killed)
                       </td>
-                      <td className="py-3.5 px-4">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-sans font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
+                      <td className="py-3 px-4">
+                        <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#0E1A14] text-[#10B981] border border-[#1A3326]">
                           {r.recommendation}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-right">
+                      <td className="py-3 px-4 text-right">
                         <Link
                           href={`/app/runs/${r.run_id}`}
-                          className="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 font-medium"
+                          className="inline-flex items-center gap-1 text-xs text-[#3B82F6] hover:text-[#60A5FA]"
                         >
                           <span>Inspect Report</span>
                           <ArrowRight className="w-3 h-3" />
@@ -247,36 +231,35 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Regression Test Selection Benchmark */}
-          <div className="rounded-xl border border-slate-800 bg-slate-950 overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+          {/* Strategy Evaluation Benchmark */}
+          <div className="rounded border border-[#1E222A] bg-[#0E1015] overflow-hidden">
+            <div className="px-4 py-3 bg-[#111318] border-b border-[#1E222A] flex items-center justify-between">
               <div>
-                <div className="flex items-center gap-2">
-                  <BarChart3 className="w-4 h-4 text-blue-400" />
-                  <h2 className="text-sm font-semibold text-white">Regression Test Selection Benchmark (4 Strategies)</h2>
-                </div>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Evaluation across realistic changes comparing baseline full-suite, file-matching heuristics, graph traversal, and ML ranking.
+                <h2 className="text-xs font-mono font-bold text-[#EDEDEE] uppercase tracking-wider">
+                  Regression Test Selection Benchmark (4 Strategies)
+                </h2>
+                <p className="text-[11px] text-[#636975]">
+                  Evaluates test selection ratio, average runtime, and fault recall across injected test faults.
                 </p>
               </div>
-              <span className="text-xs font-mono text-emerald-400 font-semibold bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-mono text-[#10B981] font-semibold">
                 100% Fault Recall Preserved
               </span>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-900/60 text-slate-400 font-mono text-[11px] border-b border-slate-800">
+            <div className="overflow-x-auto text-xs font-mono">
+              <table className="w-full text-left">
+                <thead className="bg-[#13161C] border-b border-[#1E222A] text-[#8B919D] text-[11px]">
                   <tr>
-                    <th className="py-3 px-4 font-semibold">Strategy</th>
-                    <th className="py-3 px-4 font-semibold">Tests Selected</th>
-                    <th className="py-3 px-4 font-semibold">Selection Ratio</th>
-                    <th className="py-3 px-4 font-semibold">Estimated Time</th>
-                    <th className="py-3 px-4 font-semibold">Fault Recall</th>
-                    <th className="py-3 px-4 font-semibold">Missed Scenarios</th>
+                    <th className="py-2.5 px-4">Strategy</th>
+                    <th className="py-2.5 px-4">Selection Ratio</th>
+                    <th className="py-2.5 px-4">Duration</th>
+                    <th className="py-2.5 px-4">Fault Recall</th>
+                    <th className="py-2.5 px-4">Missed Scenarios</th>
+                    <th className="py-2.5 px-4">Recommendation</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-900 text-slate-300 font-mono">
+                <tbody className="divide-y divide-[#1A1D24] text-[#D1D5DB]">
                   {Object.entries(benchmark.strategies).map(([key, s]) => {
                     const isOptimal = key === "graph_plus_ml";
                     const isFlawed = s.fault_recall < 1.0;
@@ -284,46 +267,41 @@ export default function DashboardPage() {
                       <tr
                         key={key}
                         className={`transition-colors ${
-                          isOptimal
-                            ? "bg-blue-950/20 border-l-2 border-l-blue-500"
-                            : "hover:bg-slate-900/40"
+                          isOptimal ? "bg-[#101420]" : "hover:bg-[#12151B]"
                         }`}
                       >
-                        <td className="py-3.5 px-4 font-semibold text-white">
-                          <div className="flex items-center gap-1.5">
-                            <span>{s.strategy}</span>
-                            {isOptimal && (
-                              <span className="text-[10px] font-sans px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40">
-                                Recommended
-                              </span>
-                            )}
-                          </div>
+                        <td className="py-3 px-4 font-semibold text-[#EDEDEE]">
+                          {s.strategy}
                         </td>
-                        <td className="py-3.5 px-4">
-                          {s.selected_tests_count} / {s.total_tests_count}
+                        <td className="py-3 px-4">
+                          {(s.selection_ratio * 100).toFixed(1)}% ({s.selected_tests_count}/{s.total_tests_count})
                         </td>
-                        <td className="py-3.5 px-4 font-bold text-white">
-                          {(s.selection_ratio * 100).toFixed(1)}%
-                        </td>
-                        <td className="py-3.5 px-4 text-slate-300">
+                        <td className="py-3 px-4 text-[#8B919D]">
                           {s.estimated_duration_s.toFixed(1)}s
                         </td>
-                        <td className="py-3.5 px-4">
-                          <span
-                            className={`font-bold ${
-                              isFlawed ? "text-amber-400" : "text-emerald-400"
-                            }`}
-                          >
+                        <td className="py-3 px-4">
+                          <span className={`font-bold ${isFlawed ? "text-[#F59E0B]" : "text-[#10B981]"}`}>
                             {(s.fault_recall * 100).toFixed(1)}%
                           </span>
                         </td>
-                        <td className="py-3.5 px-4">
+                        <td className="py-3 px-4">
                           {s.missed_scenarios && s.missed_scenarios.length > 0 ? (
-                            <span className="text-amber-400 font-semibold">
-                              ⚠️ {s.missed_scenarios.join(", ")}
+                            <span className="text-[#F59E0B] font-semibold">
+                              {s.missed_scenarios.join(", ")} (MISSED)
                             </span>
                           ) : (
-                            <span className="text-emerald-400 font-sans text-xs">✓ None (0 missed)</span>
+                            <span className="text-[#10B981]">None (100% caught)</span>
+                          )}
+                        </td>
+                        <td className="py-3 px-4">
+                          {isOptimal ? (
+                            <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-[#132338] text-[#60A5FA] border border-[#1E3B5C]">
+                              RECOMMENDED
+                            </span>
+                          ) : isFlawed ? (
+                            <span className="text-[#F59E0B] text-[11px]">Unsafe for release</span>
+                          ) : (
+                            <span className="text-[#636975] text-[11px]">Baseline</span>
                           )}
                         </td>
                       </tr>

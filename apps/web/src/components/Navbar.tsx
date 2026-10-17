@@ -1,31 +1,44 @@
 import React from "react";
 import Link from "next/link";
-import { Activity, ArrowRight, Github } from "lucide-react";
+import { ArrowUpRight, Github } from "lucide-react";
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-[#090D16]/80 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b border-[#1E222A] bg-[#090A0D]/95 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto flex h-14 items-center justify-between px-4 sm:px-6">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 group-hover:border-blue-400 transition-colors">
-            <Activity className="w-4 h-4 text-blue-400" />
-          </div>
-          <span className="font-bold text-lg tracking-tight text-white flex items-center gap-1.5 font-sans">
-            Ripple<span className="text-blue-500">CI</span>
+        <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="font-mono font-bold text-sm tracking-tight text-[#EDEDEE]">
+              ripple<span className="text-[#3B82F6]">ci</span>
+            </span>
+          </Link>
+          <span className="text-[#333945]">/</span>
+          <span className="text-xs font-mono px-2 py-0.5 rounded border border-[#222733] bg-[#12141A] text-[#8B919D]">
+            release intelligence
           </span>
-          <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-950 text-blue-400 border border-blue-800">
-            FalkorDB Native
-          </span>
-        </Link>
+        </div>
 
         {/* Center navigation */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-          <Link href="#features" className="hover:text-white transition-colors">Features</Link>
-          <Link href="#how-it-works" className="hover:text-white transition-colors">How It Works</Link>
-          <Link href="#architecture" className="hover:text-white transition-colors">Architecture</Link>
-          <Link href="#benchmarks" className="hover:text-white transition-colors">Benchmarks</Link>
-          <Link href="/app/graph" className="hover:text-blue-400 transition-colors text-blue-300">Graph Explorer</Link>
+        <nav className="hidden md:flex items-center gap-6 text-xs font-mono text-[#8B919D]">
+          <Link href="/app" className="hover:text-[#EDEDEE] transition-colors">
+            Dashboard
+          </Link>
+          <Link href="/app/graph" className="hover:text-[#EDEDEE] transition-colors">
+            Graph Explorer
+          </Link>
+          <Link href="/app/runs/run_prod_8f12a9" className="hover:text-[#EDEDEE] transition-colors">
+            PR Inspection
+          </Link>
+          <a
+            href="http://localhost:8000/docs"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1 hover:text-[#EDEDEE] transition-colors"
+          >
+            <span>API Docs</span>
+            <ArrowUpRight className="w-3 h-3 text-[#636975]" />
+          </a>
         </nav>
 
         {/* Action Buttons */}
@@ -34,18 +47,17 @@ export function Navbar() {
             href="https://github.com/Shikhyy/RippleCI.git"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 px-3 py-2 rounded-lg transition-colors font-medium"
+            className="flex items-center gap-1.5 text-xs text-[#8B919D] hover:text-[#EDEDEE] px-2.5 py-1.5 rounded border border-[#222733] hover:border-[#2C323D] bg-[#101216] transition-colors font-mono"
           >
-            <Github className="w-4 h-4" />
+            <Github className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">GitHub</span>
           </a>
 
           <Link
             href="/app"
-            className="flex items-center gap-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 px-3.5 py-2 rounded-lg shadow-sm transition-colors"
+            className="flex items-center gap-1 text-xs font-mono font-medium text-white bg-[#2563EB] hover:bg-[#1D4ED8] px-3 py-1.5 rounded transition-colors"
           >
-            <span>Launch App</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span>Open Workbench</span>
           </Link>
         </div>
       </div>

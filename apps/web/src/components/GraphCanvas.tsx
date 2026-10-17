@@ -12,7 +12,7 @@ import {
   useEdgesState,
   useNodesState,
 } from "@xyflow/react";
-import { CheckCircle2, Code2, FileCode, GitFork, ShieldCheck } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { GraphData, GraphNode } from "@/lib/api";
 
 interface GraphCanvasProps {
@@ -22,26 +22,30 @@ interface GraphCanvasProps {
 export function GraphCanvas({ initialData }: GraphCanvasProps) {
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
 
-  // Convert GraphData to React Flow nodes with clean layout positions
+  // Position nodes cleanly across execution tiers
   const initialNodes: Node[] = useMemo(() => {
     return initialData.nodes.map((n, i) => {
-      let x = 100;
+      let x = 120;
       let y = 100;
 
       if (n.kind === "changed") {
-        x = 400;
-        y = 300;
+        x = 360;
+        y = 260;
       } else if (n.kind === "impacted") {
-        const hops = n.data.hops || 1;
-        x = 400 + (hops === 1 ? -220 : -440);
-        y = 200 + (i % 3) * 120;
+        const hops = n.data?.hops || 1;
+        x = 360 + (hops === 1 ? -220 : -440);
+        y = 160 + (i % 3) * 110;
       } else if (n.kind === "test") {
-        x = 750;
-        y = 150 + (i % 5) * 100;
+        x = 680;
+        y = 120 + (i % 5) * 85;
       } else {
         x = 120 + (i % 3) * 180;
-        y = 100 + Math.floor(i / 3) * 120;
+        y = 100 + Math.floor(i / 3) * 100;
       }
+
+      const isChanged = n.kind === "changed";
+      const isImpacted = n.kind === "impacted";
+      const isTest = n.kind === "test";
 
       return {
         id: n.id,
@@ -50,20 +54,20 @@ export function GraphCanvas({ initialData }: GraphCanvasProps) {
           label: n.label,
           raw: n,
         },
-        className: `rounded-lg p-3 border shadow-lg cursor-pointer transition-all duration-200 text-xs font-mono select-none ${
-          n.kind === "changed"
-            ? "bg-amber-950/60 border-amber-500/80 text-amber-200 ring-2 ring-amber-500/40"
-            : n.kind === "impacted"
-            ? "bg-blue-950/60 border-blue-500/80 text-blue-200 ring-1 ring-blue-500/30"
-            : n.kind === "test"
-            ? "bg-emerald-950/60 border-emerald-500/80 text-emerald-200 ring-1 ring-emerald-500/30"
-            : "bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500"
+        className: `rounded border cursor-pointer select-none transition-all duration-150 p-2.5 text-xs font-mono min-w-[170px] ${
+          isChanged
+            ? "bg-[#18140D] border-[#D97706] text-[#FDE68A]"
+            : isImpacted
+            ? "bg-[#10141D] border-[#2563EB] text-[#BFDBFE]"
+            : isTest
+            ? "bg-[#0E1713] border-[#10B981] text-[#A7F3D0]"
+            : "bg-[#13161C] border-[#262B35] text-[#D1D5DB] hover:border-[#3E4554]"
         }`,
       };
     });
   }, [initialData]);
 
-  // Convert GraphData to React Flow edges with distinct colors & arrows
+  // Clean edge styling with technical labels
   const initialEdges: Edge[] = useMemo(() => {
     return initialData.edges.map((e) => {
       const isCovers = e.type === "covers";
@@ -74,14 +78,16 @@ export function GraphCanvas({ initialData }: GraphCanvasProps) {
         animated: isCovers,
         label: e.data?.label || e.type.toUpperCase(),
         labelStyle: { fill: isCovers ? "#34D399" : "#60A5FA", fontSize: 10, fontFamily: "monospace" },
-        labelBgStyle: { fill: "#0E1424", fillOpacity: 0.9 },
+        labelBgStyle: { fill: "#111317", fillOpacity: 0.95 },
         style: {
-          stroke: isCovers ? "#10B981" : "#3B82F6",
-          strokeWidth: isCovers ? 2 : 1.5,
+          stroke: isCovers ? "#059669" : "#2563EB",
+          strokeWidth: isCovers ? 1.5 : 1.2,
         },
         markerEnd: {
           type: MarkerType.ArrowClosed,
-          color: isCovers ? "#10B981" : "#3B82F6",
+          color: isCovers ? "#059669" : "#2563EB",
+          width: 14,
+          height: 14,
         },
       };
     });
@@ -95,7 +101,7 @@ export function GraphCanvas({ initialData }: GraphCanvasProps) {
   }, []);
 
   return (
-    <div className="relative w-full h-[620px] rounded-xl border border-slate-800 bg-[#090D16] overflow-hidden">
+    <div className="relative w-full h-[580px] rounded-lg border border-[#222733] bg-[#090A0D] overflow-hidden">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -103,92 +109,98 @@ export function GraphCanvas({ initialData }: GraphCanvasProps) {
         onEdgesChange={onEdgesChange}
         onNodeClick={onNodeClick}
         fitView
-        fitViewOptions={{ padding: 0.2 }}
-        minZoom={0.2}
-        maxZoom={2}
+        minZoom={0.3}
+        maxZoom={1.5}
       >
-        <Background color="#1E293B" gap={20} size={1} />
-        <Controls className="bg-slate-900 border-slate-800 text-slate-300" />
+        <Background color="#1C202B" gap={20} size={1} />
+        <Controls className="!bg-[#13161C] !border-[#262B35] !text-[#EDEDEE] !rounded fill-white" />
         <MiniMap
-          className="bg-slate-950 border-slate-800 rounded-lg"
-          nodeColor={(n) => {
-            if (n.id.includes("auth.verify")) return "#F59E0B";
-            if (n.id.includes("test")) return "#10B981";
-            return "#3B82F6";
+          nodeColor={(node) => {
+            const raw = node.data?.raw as GraphNode;
+            if (raw?.kind === "changed") return "#D97706";
+            if (raw?.kind === "impacted") return "#2563EB";
+            if (raw?.kind === "test") return "#10B981";
+            return "#374151";
           }}
+          maskColor="rgba(9, 10, 13, 0.85)"
+          className="!bg-[#0E1015] !border-[#222733] !rounded"
         />
       </ReactFlow>
 
-      {/* Legend overlay */}
-      <div className="absolute top-4 left-4 flex items-center gap-3 bg-slate-950/90 backdrop-blur-md px-3 py-2 rounded-lg border border-slate-800 text-xs">
-        <span className="flex items-center gap-1.5 text-amber-300">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Changed Symbol
-        </span>
-        <span className="flex items-center gap-1.5 text-blue-300">
-          <span className="w-2.5 h-2.5 rounded-full bg-blue-500" /> Impacted Caller
-        </span>
-        <span className="flex items-center gap-1.5 text-emerald-300">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Selected Test
-        </span>
-      </div>
-
-      {/* Selected Node Details Drawer */}
+      {/* Selected Node Inspector Drawer */}
       {selectedNode && (
-        <div className="absolute top-4 right-4 w-80 bg-slate-950/95 backdrop-blur-md border border-slate-800 rounded-xl p-4 shadow-2xl text-xs space-y-3">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <span className="font-semibold text-slate-200 flex items-center gap-1.5">
-              {selectedNode.kind === "test" ? (
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              ) : selectedNode.kind === "changed" ? (
-                <GitFork className="w-4 h-4 text-amber-400" />
-              ) : (
-                <Code2 className="w-4 h-4 text-blue-400" />
-              )}
-              {selectedNode.kind.toUpperCase()} INSPECTOR
-            </span>
-            <button
-              onClick={() => setSelectedNode(null)}
-              className="text-slate-400 hover:text-slate-200"
-            >
-              ✕
-            </button>
-          </div>
+        <aside className="absolute right-3 top-3 bottom-3 w-80 rounded border border-[#2A303D] bg-[#111318]/95 backdrop-blur-md p-4 flex flex-col justify-between text-xs z-10 shadow-xl">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-[#222733]">
+              <div className="flex items-center gap-2">
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    selectedNode.kind === "changed"
+                      ? "bg-[#D97706]"
+                      : selectedNode.kind === "impacted"
+                      ? "bg-[#2563EB]"
+                      : selectedNode.kind === "test"
+                      ? "bg-[#10B981]"
+                      : "bg-[#6B7280]"
+                  }`}
+                />
+                <span className="font-mono font-semibold uppercase text-xs tracking-wider text-[#EDEDEE]">
+                  {selectedNode.kind} Node
+                </span>
+              </div>
+              <button
+                onClick={() => setSelectedNode(null)}
+                className="text-[#8B919D] hover:text-[#EDEDEE] p-1 rounded hover:bg-[#1C2029]"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
 
-          <div>
-            <div className="text-[10px] text-slate-500 uppercase tracking-wider">Identifier</div>
-            <div className="font-mono text-slate-100 font-semibold truncate">{selectedNode.label}</div>
-          </div>
-
-          {selectedNode.data.file_path && (
             <div>
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider">Source Location</div>
-              <div className="font-mono text-slate-300 flex items-center gap-1 mt-0.5">
-                <FileCode className="w-3.5 h-3.5 text-slate-400" />
-                {selectedNode.data.file_path} {selectedNode.data.lines ? `:${selectedNode.data.lines}` : ""}
+              <div className="text-[11px] font-mono text-[#636975] uppercase">Symbol / Test Identifier</div>
+              <div className="font-mono text-xs font-bold text-[#EDEDEE] break-all mt-0.5">
+                {selectedNode.id}
               </div>
             </div>
-          )}
 
-          {selectedNode.data.hops !== undefined && (
-            <div>
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider">Blast Radius Distance</div>
-              <div className="text-blue-400 font-semibold">{selectedNode.data.hops} hop(s) from changed symbol</div>
-            </div>
-          )}
-
-          {selectedNode.data.score !== undefined && (
-            <div>
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider">ML Relevance Score</div>
-              <div className="text-emerald-400 font-semibold font-mono text-sm">
-                {(selectedNode.data.score * 100).toFixed(1)}% relevance
+            {selectedNode.data?.file_path && (
+              <div>
+                <div className="text-[11px] font-mono text-[#636975] uppercase">Source Location</div>
+                <div className="font-mono text-xs text-[#9CA3AF] mt-0.5">
+                  {selectedNode.data.file_path}
+                  {selectedNode.data.lines && <span className="text-[#3B82F6]">:{selectedNode.data.lines}</span>}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <div className="pt-2 border-t border-slate-800 text-[11px] text-slate-400 flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" /> FalkorDB Graph Provenance Verified
+            {selectedNode.data?.hops !== undefined && (
+              <div>
+                <div className="text-[11px] font-mono text-[#636975] uppercase">Graph Distance</div>
+                <div className="font-mono text-xs text-[#60A5FA] mt-0.5">
+                  {selectedNode.data.hops} hop(s) from modified symbol
+                </div>
+              </div>
+            )}
+
+            {selectedNode.data?.score !== undefined && (
+              <div>
+                <div className="text-[11px] font-mono text-[#636975] uppercase">ML Prioritization Score</div>
+                <div className="font-mono text-xs text-[#34D399] font-bold mt-0.5">
+                  {selectedNode.data.score.toFixed(3)}
+                </div>
+              </div>
+            )}
+
+            <div className="p-2.5 rounded border border-[#222733] bg-[#0E1015] font-mono text-[11px] text-[#8B919D] leading-relaxed">
+              Indexed in FalkorDB with deterministic AST hash. Used for bounded regression testing.
+            </div>
           </div>
-        </div>
+
+          <div className="pt-3 border-t border-[#222733] flex justify-between items-center text-[11px] text-[#8B919D]">
+            <span>FalkorDB Node</span>
+            <span className="font-mono text-[#EDEDEE]">{selectedNode.kind.toUpperCase()}</span>
+          </div>
+        </aside>
       )}
     </div>
   );
