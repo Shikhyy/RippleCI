@@ -130,6 +130,7 @@ class SelectedTest(BaseModel):
 
 
 class TestPlan(BaseModel):
+    __test__ = False
     plan_id: str
     run_id: str
     repo_id: str
@@ -146,6 +147,7 @@ class TestPlan(BaseModel):
 
 
 class TestExecutionResult(BaseModel):
+    __test__ = False
     test_id: str
     node_id: str
     status: str  # "passed" | "failed" | "skipped" | "error"
