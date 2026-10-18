@@ -29,6 +29,7 @@ import { Navbar } from "@/components/Navbar";
 import { TerminalBlock } from "@/components/TerminalBlock";
 import { BlastRadiusCalculator } from "@/components/BlastRadiusCalculator";
 import { CanvasRevealEffectDemo3 } from "@/components/CanvasRevealEffectDemo3";
+import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
 
 const SDK_SNIPPETS = [
   {
@@ -120,15 +121,57 @@ export default function LandingPage() {
       />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 border-b border-[#6CC6CB]/20 overflow-hidden">
-        {/* Ambient Glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[#6CC6CB]/[0.08] blur-[150px] rounded-full pointer-events-none" />
+      <section className="relative pt-36 pb-28 border-b border-[#6CC6CB]/20 overflow-hidden">
+        {/* Dynamic Aceternity Canvas Reveal Shaders Background */}
+        <div className="absolute inset-0 z-0 opacity-45 pointer-events-none">
+          <CanvasRevealEffect
+            animationSpeed={1.2}
+            containerClassName="bg-transparent"
+            colors={[
+              [108, 198, 203],
+              [34, 211, 238],
+              [234, 229, 201],
+            ]}
+            opacities={[0.1, 0.15, 0.2, 0.25, 0.35, 0.5, 0.7]}
+            dotSize={2.2}
+            showGradient={true}
+          />
+        </div>
+
+        {/* Ambient Radial Fog & Vignette */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#080c0e]/30 via-transparent to-[#080c0e] pointer-events-none z-[1]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[500px] bg-[#6CC6CB]/[0.10] blur-[160px] rounded-full pointer-events-none z-[1]" />
+
+        {/* Floating Architectural Telemetry Chips on Desktop */}
+        <div className="hidden xl:flex items-center justify-between absolute inset-x-12 top-1/2 -translate-y-1/2 pointer-events-none z-10">
+          <div className="p-4 rounded-2xl bg-[#0a1014]/90 border border-cyan-500/30 backdrop-blur-xl shadow-[0_0_35px_rgba(108,198,203,0.18)] flex items-center gap-3.5 transition-all hover:scale-105 pointer-events-auto">
+            <div className="w-9 h-9 rounded-xl bg-cyan-950 flex items-center justify-center border border-cyan-500/40 text-cyan-400">
+              <Network className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-[11px] font-mono text-cyan-400 uppercase tracking-wider font-semibold">FalkorDB Cypher</div>
+              <div className="text-xs font-mono text-white font-bold">&lt; 14.2ms AST Multi-Hop</div>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-[#0a1014]/90 border border-amber-500/30 backdrop-blur-xl shadow-[0_0_35px_rgba(234,229,201,0.18)] flex items-center gap-3.5 transition-all hover:scale-105 pointer-events-auto">
+            <div className="w-9 h-9 rounded-xl bg-amber-950 flex items-center justify-center border border-amber-500/40 text-[#EAE5C9]">
+              <Cpu className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-[11px] font-mono text-[#EAE5C9] uppercase tracking-wider font-semibold">Learned Prioritization</div>
+              <div className="text-xs font-mono text-white font-bold">100% Fault Recall Guarantee</div>
+            </div>
+          </div>
+        </div>
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center relative z-10">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#6CC6CB]/35 bg-[#0d1417]/90 backdrop-blur-md text-[#EAE5C9] text-xs font-mono mb-8 shadow-[0_0_20px_rgba(108,198,203,0.15)]">
-            <span className="w-2 h-2 rounded-full bg-[#6CC6CB] animate-pulse" />
-            <span>FalkorDB Graph-Native Release Intelligence</span>
+          {/* Live Badge */}
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#6CC6CB]/40 bg-[#0d1417]/95 backdrop-blur-xl text-[#EAE5C9] text-xs font-mono mb-8 shadow-[0_0_25px_rgba(108,198,203,0.2)]">
+            <span className="w-2 h-2 rounded-full bg-[#6CC6CB] animate-ping" />
+            <span className="font-semibold">FalkorDB Graph-Native Release Intelligence</span>
+            <span className="text-slate-600">|</span>
+            <span className="text-cyan-400 font-bold">v0.1.0 Ready</span>
           </div>
 
           {/* Headline */}
@@ -140,7 +183,7 @@ export default function LandingPage() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
             Index code AST into FalkorDB, trace multi-hop blast radius, prioritize regression tests with ML under runtime budgets, and verify with counterfactual mutation testing before merge.
           </p>
 
@@ -148,7 +191,7 @@ export default function LandingPage() {
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs sm:text-sm font-mono mb-12">
             <Link
               href="/app"
-              className="flex items-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(108,198,203,0.45)] active:scale-[0.98]"
+              className="flex items-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(108,198,203,0.45)] hover:shadow-[0_1px_35px_rgba(108,198,203,0.65)] hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>Launch Web Companion</span>
               <ArrowRight className="w-4 h-4" />
@@ -156,7 +199,7 @@ export default function LandingPage() {
 
             <button
               onClick={() => setIsConnectModalOpen(true)}
-              className="flex items-center gap-2 bg-[#0d1417] hover:bg-[#121b1f] text-white border border-[#6CC6CB]/35 px-5 py-3.5 rounded-xl transition-all font-semibold active:scale-[0.98]"
+              className="flex items-center gap-2 bg-[#0d1417]/90 hover:bg-[#121b1f] text-white border border-[#6CC6CB]/40 px-5 py-3.5 rounded-xl transition-all font-semibold hover:border-cyan-400 hover:scale-[1.02] active:scale-[0.98]"
             >
               <Github className="w-4 h-4 text-[#6CC6CB]" />
               <span>Connect Repository</span>
@@ -164,7 +207,7 @@ export default function LandingPage() {
 
             <button
               onClick={handleCopyPip}
-              className="flex items-center gap-2 bg-black/60 hover:bg-white/[0.06] text-[#EAE5C9] border border-white/[0.1] px-4 py-3.5 rounded-xl transition-all"
+              className="flex items-center gap-2 bg-black/70 hover:bg-white/[0.08] text-[#EAE5C9] border border-white/[0.15] px-4 py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>pip install rippleci</span>
               {copiedPip ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-[#6CC6CB]" />}
@@ -172,16 +215,16 @@ export default function LandingPage() {
           </div>
 
           {/* Trust Value Points */}
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-zinc-400">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-zinc-300">
+            <div className="flex items-center gap-2 bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-800">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>80%+ CI Runtime Saved</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-800">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>99.4% Empirical Fault Recall</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-800">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>Zero Credentials Required</span>
             </div>
