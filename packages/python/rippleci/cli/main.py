@@ -24,9 +24,11 @@ app = typer.Typer(
 )
 graph_app = typer.Typer(help="Inspect and manage the FalkorDB dependency graph.")
 config_app = typer.Typer(help="Manage RippleCI repository configuration.")
+mcp_app = typer.Typer(help="Model Context Protocol (MCP) server for AI coding agents.")
 
 app.add_typer(graph_app, name="graph")
 app.add_typer(config_app, name="config")
+app.add_typer(mcp_app, name="mcp")
 
 console = Console()
 err_console = Console(stderr=True)
@@ -555,6 +557,37 @@ def config_validate_cmd():
     except Exception as e:
         err_console.print(f"[red]Configuration invalid:[/red] {e}")
         raise typer.Exit(code=2)
+
+
+@mcp_app.command("serve")
+def mcp_serve_cmd(
+    repo_path: Optional[str] = typer.Option(".", "--path", "-p", help="Target repository directory."),
+    transport: str = typer.Option("stdio", "--transport", "-t", help="MCP transport protocol ('stdio')."),
+):
+    """Start the Model Context Protocol (MCP) server for AI coding agents (Claude, Cursor, Copilot)."""
+    from rippleci.mcp.server import serve_stdio
+    serve_stdio(root_path=repo_path)
+
+
+@mcp_app.command("tools")
+def mcp_tools_cmd():
+    """List available RippleCI MCP tools and schemas."""
+    from rippleci.mcp.tools import TOOL_DEFINITIONS
+    table = Table(title="RippleCI MCP Tools Catalog", border_style="cyan")
+    table.add_column("Tool Name", style="bold cyan")
+    table.add_column("Description")
+    for t in TOOL_DEFINITIONS:
+        table.add_row(t["name"], t["description"])
+    console.print(table)
+
+
+@app.command("mcp-serve", hidden=True)
+def mcp_serve_shortcut(
+    repo_path: Optional[str] = typer.Option(".", "--path", "-p", help="Target repository directory."),
+):
+    """Shortcut to start the MCP server over standard I/O."""
+    from rippleci.mcp.server import serve_stdio
+    serve_stdio(root_path=repo_path)
 
 
 if __name__ == "__main__":
