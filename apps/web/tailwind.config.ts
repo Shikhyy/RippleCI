@@ -9,27 +9,37 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#09090b",
+        background: "#080c0e",
         surface: {
-          DEFAULT: "#111116",
-          hover: "#18171f",
-          elevated: "#1f1e29",
+          DEFAULT: "#0d1417",
+          hover: "#121b1f",
+          elevated: "#182329",
         },
         border: {
           subtle: "rgba(255, 255, 255, 0.07)",
-          DEFAULT: "rgba(245, 158, 11, 0.20)",
-          strong: "rgba(254, 243, 199, 0.30)",
+          DEFAULT: "rgba(108, 198, 203, 0.20)",
+          strong: "rgba(234, 229, 201, 0.35)",
         },
         spectral: {
-          base: "#F59E0B",
-          crest: "#FEF3C7",
-          glow: "rgba(245, 158, 11, 0.25)",
+          base: "#6CC6CB",
+          crest: "#EAE5C9",
+          glow: "rgba(108, 198, 203, 0.28)",
+        },
+        champagne: {
+          DEFAULT: "#EAE5C9",
+          light: "#FAF7EA",
+          dark: "#D8D1A3",
+        },
+        teal: {
+          DEFAULT: "#6CC6CB",
+          light: "#A4E4E8",
+          dark: "#4CA2A7",
         },
         accent: {
-          DEFAULT: "#F59E0B",
-          hover: "#D97706",
-          subtle: "rgba(245, 158, 11, 0.12)",
-          highlight: "#FEF3C7",
+          DEFAULT: "#6CC6CB",
+          hover: "#58B4B9",
+          subtle: "rgba(108, 198, 203, 0.12)",
+          highlight: "#EAE5C9",
         },
         success: {
           DEFAULT: "#10b981",
@@ -45,11 +55,11 @@ const config: Config = {
         mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "monospace"],
       },
       boxShadow: {
-        rim: "inset 0 1px 0 0 rgba(254, 243, 199, 0.18)",
+        rim: "inset 0 1px 0 0 rgba(234, 229, 201, 0.24)",
         "rim-subtle": "inset 0 1px 0 0 rgba(255, 255, 255, 0.06)",
-        card: "0 8px 30px rgba(0, 0, 0, 0.4)",
-        glow: "0 0 28px -4px rgba(245, 158, 11, 0.35)",
-        "glow-lg": "0 0 60px -8px rgba(245, 158, 11, 0.45)",
+        card: "0 8px 30px rgba(0, 0, 0, 0.45)",
+        glow: "0 0 28px -4px rgba(108, 198, 203, 0.35)",
+        "glow-lg": "0 0 60px -8px rgba(108, 198, 203, 0.45)",
       },
     },
   },

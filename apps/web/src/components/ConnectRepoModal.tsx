@@ -121,11 +121,11 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-[#0e0d14] border border-amber-500/30 rounded-2xl shadow-[0_0_60px_-15px_rgba(245,158,11,0.25)] overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-2xl bg-[#0a1012] border border-[#6CC6CB]/30 rounded-2xl shadow-[0_0_60px_-15px_rgba(108,198,203,0.3)] overflow-hidden flex flex-col max-h-[90vh]">
         {/* Modal Header */}
-        <div className="p-5 border-b border-amber-500/20 flex items-center justify-between bg-[#13121b]">
+        <div className="p-5 border-b border-[#6CC6CB]/20 flex items-center justify-between bg-[#0e1619]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <div className="w-9 h-9 rounded-xl bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB]">
               <FolderGit2 className="w-5 h-5" />
             </div>
             <div>
@@ -149,7 +149,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
             onClick={() => setActiveTab("local")}
             className={`pb-2.5 px-2 border-b-2 flex items-center gap-1.5 transition-all ${
               activeTab === "local"
-                ? "border-amber-400 text-amber-300 font-semibold"
+                ? "border-[#6CC6CB] text-[#EAE5C9] font-semibold"
                 : "border-transparent text-zinc-400 hover:text-zinc-200"
             }`}
           >
@@ -160,7 +160,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
             onClick={() => setActiveTab("github")}
             className={`pb-2.5 px-2 border-b-2 flex items-center gap-1.5 transition-all ${
               activeTab === "github"
-                ? "border-amber-400 text-amber-300 font-semibold"
+                ? "border-[#6CC6CB] text-[#EAE5C9] font-semibold"
                 : "border-transparent text-zinc-400 hover:text-zinc-200"
             }`}
           >
@@ -171,7 +171,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
             onClick={() => setActiveTab("sdk")}
             className={`pb-2.5 px-2 border-b-2 flex items-center gap-1.5 transition-all ${
               activeTab === "sdk"
-                ? "border-amber-400 text-amber-300 font-semibold"
+                ? "border-[#6CC6CB] text-[#EAE5C9] font-semibold"
                 : "border-transparent text-zinc-400 hover:text-zinc-200"
             }`}
           >
@@ -197,7 +197,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
                       setRepoPath("examples/sample-repository");
                       setRepoName("payments-core-service");
                     }}
-                    className="text-xs font-mono px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 transition-colors"
+                    className="text-xs font-mono px-2.5 py-1 rounded-lg bg-[#6CC6CB]/10 hover:bg-[#6CC6CB]/20 border border-[#6CC6CB]/30 text-[#EAE5C9] transition-colors"
                   >
                     ⚡ sample-repository (Payments Service)
                   </button>
@@ -223,7 +223,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
                     type="text"
                     value={repoPath}
                     onChange={(e) => setRepoPath(e.target.value)}
-                    className="w-full bg-[#171622] border border-amber-500/25 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-amber-400 transition-colors text-xs"
+                    className="w-full bg-[#111c20] border border-[#6CC6CB]/25 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-[#6CC6CB] transition-colors text-xs"
                     placeholder="e.g. ./examples/sample-repository"
                   />
                 </div>
@@ -235,7 +235,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
                     type="text"
                     value={repoName}
                     onChange={(e) => setRepoName(e.target.value)}
-                    className="w-full bg-[#171622] border border-amber-500/25 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-amber-400 transition-colors text-xs"
+                    className="w-full bg-[#111c20] border border-[#6CC6CB]/25 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-[#6CC6CB] transition-colors text-xs"
                     placeholder="e.g. payments-core-service"
                   />
                 </div>
@@ -243,7 +243,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
 
               {/* Indexing Logs / Status */}
               {indexLogs.length > 0 && (
-                <div className="p-3.5 rounded-xl bg-black/60 border border-amber-500/20 font-mono text-[11px] space-y-1 text-zinc-300 max-h-36 overflow-y-auto">
+                <div className="p-3.5 rounded-xl bg-black/60 border border-[#6CC6CB]/20 font-mono text-[11px] space-y-1 text-zinc-300 max-h-36 overflow-y-auto">
                   {indexLogs.map((log, i) => (
                     <div
                       key={i}
@@ -251,7 +251,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
                         log.startsWith("✓")
                           ? "text-emerald-400 font-bold"
                           : log.startsWith("➜ FalkorDB")
-                          ? "text-amber-300"
+                          ? "text-[#EAE5C9]"
                           : "text-zinc-400"
                       }
                     >
@@ -266,7 +266,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
                 <button
                   onClick={handleConnectLocal}
                   disabled={indexing}
-                  className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-black font-bold py-2.5 rounded-xl transition-all shadow-[0_1px_16px_rgba(245,158,11,0.4)] disabled:opacity-50 active:scale-[0.99] text-xs"
+                  className="w-full flex items-center justify-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-bold py-2.5 rounded-xl transition-all shadow-[0_1px_16px_rgba(108,198,203,0.45)] disabled:opacity-50 active:scale-[0.99] text-xs"
                 >
                   <Play className={`w-3.5 h-3.5 ${indexing ? "animate-spin" : ""}`} />
                   <span>{indexing ? "Indexing AST into FalkorDB..." : "Connect & Index Repository"}</span>
@@ -306,7 +306,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
             <div className="space-y-3 text-xs">
               <p className="text-zinc-300 leading-relaxed">
                 Connect your GitHub repository to automatically analyze every pull request. Add this workflow file to{" "}
-                <code className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 font-mono text-[11px]">
+                <code className="px-1.5 py-0.5 rounded bg-[#6CC6CB]/15 text-[#EAE5C9] font-mono text-[11px]">
                   .github/workflows/rippleci.yml
                 </code>
                 .
@@ -315,7 +315,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
               <div className="relative rounded-xl bg-black/70 border border-white/[0.08] p-4 font-mono text-[11px] overflow-x-auto text-zinc-300">
                 <button
                   onClick={copyGithubWorkflow}
-                  className="absolute top-3 right-3 flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 transition-colors"
+                  className="absolute top-3 right-3 flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[#6CC6CB]/20 hover:bg-[#6CC6CB]/30 text-[#EAE5C9] border border-[#6CC6CB]/30 transition-colors"
                 >
                   {copiedAction ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
                   <span>{copiedAction ? "Copied" : "Copy YAML"}</span>
@@ -345,8 +345,8 @@ jobs:
           ripple verify --mutations 3`}</pre>
               </div>
 
-              <div className="p-3 rounded-xl bg-amber-500/[0.06] border border-amber-500/20 text-[11px] text-zinc-400 space-y-1">
-                <span className="font-semibold text-amber-300">💡 FalkorDB Connection:</span>
+              <div className="p-3 rounded-xl bg-[#6CC6CB]/[0.06] border border-[#6CC6CB]/20 text-[11px] text-zinc-400 space-y-1">
+                <span className="font-semibold text-[#EAE5C9]">💡 FalkorDB Connection:</span>
                 <p>
                   To persist graphs between runs, set secret <code className="text-white">FALKORDB_URL</code> in GitHub repository secrets (defaults to fast embedded in-memory graph if unset).
                 </p>
@@ -363,7 +363,7 @@ jobs:
               <div className="relative rounded-xl bg-black/70 border border-white/[0.08] p-4 font-mono text-[11px] overflow-x-auto text-zinc-300">
                 <button
                   onClick={copySdkSnippet}
-                  className="absolute top-3 right-3 flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 transition-colors"
+                  className="absolute top-3 right-3 flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[#6CC6CB]/20 hover:bg-[#6CC6CB]/30 text-[#EAE5C9] border border-[#6CC6CB]/30 transition-colors"
                 >
                   {copiedSdk ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
                   <span>{copiedSdk ? "Copied" : "Copy Python"}</span>

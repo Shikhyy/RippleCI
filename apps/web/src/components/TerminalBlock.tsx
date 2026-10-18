@@ -126,15 +126,15 @@ export function TerminalBlock() {
   return (
     <div className="craft-card overflow-hidden">
       {/* Workbench Header */}
-      <div className="flex flex-wrap items-center justify-between px-3.5 py-2.5 bg-[#111116] border-b border-amber-500/20 gap-2">
-        <div className="flex items-center gap-1.5 p-1 bg-zinc-950/80 rounded-lg border border-white/[0.06] overflow-x-auto">
+      <div className="flex flex-wrap items-center justify-between px-3.5 py-2.5 bg-[#0d1417] border-b border-[#6CC6CB]/20 gap-2">
+        <div className="flex items-center gap-1.5 p-1 bg-[#060a0c] rounded-lg border border-white/[0.06] overflow-x-auto">
           {COMMAND_TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`px-3 py-1.5 rounded-md text-xs font-mono transition-all flex items-center gap-2 ${
                 activeTab === tab.id
-                  ? "bg-amber-500/20 text-amber-200 font-semibold shadow-sm border border-amber-500/40"
+                  ? "bg-[#6CC6CB]/15 text-[#EAE5C9] font-semibold shadow-sm border border-[#6CC6CB]/40"
                   : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
               }`}
             >
@@ -142,7 +142,7 @@ export function TerminalBlock() {
               <span
                 className={`text-[10px] px-1.5 py-0.2 rounded ${
                   activeTab === tab.id
-                    ? "bg-amber-500/30 text-amber-300 font-sans font-semibold"
+                    ? "bg-[#6CC6CB]/25 text-[#6CC6CB] font-sans font-semibold"
                     : "text-zinc-500 font-sans"
                 }`}
               >
@@ -154,24 +154,24 @@ export function TerminalBlock() {
 
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-500/25 hover:border-amber-500/50 bg-[#171622] hover:bg-[#1f1e29] text-amber-200 font-mono text-xs transition-all shrink-0 active:scale-[0.98]"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#6CC6CB]/25 hover:border-[#6CC6CB]/50 bg-[#0d1417] hover:bg-[#121b1f] text-[#EAE5C9] font-mono text-xs transition-all shrink-0 active:scale-[0.98]"
         >
-          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-amber-300/70" />}
+          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-[#6CC6CB]" />}
           <span>{copied ? "Copied" : "Copy Command"}</span>
         </button>
       </div>
 
       {/* Command Prompt Line */}
-      <div className="px-4 py-3 bg-[#0a0a0c] border-b border-white/[0.06] font-mono text-xs flex items-center justify-between gap-2">
+      <div className="px-4 py-3 bg-[#080d0f] border-b border-white/[0.06] font-mono text-xs flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-amber-400 select-none font-bold">$</span>
+          <span className="text-[#6CC6CB] select-none font-bold">$</span>
           <span className="text-white font-medium">{current.command}</span>
         </div>
-        <span className="text-[11px] font-mono text-amber-200/60">exit 0 · deterministic</span>
+        <span className="text-[11px] font-mono text-[#EAE5C9]/70">exit 0 · deterministic</span>
       </div>
 
       {/* Output Console View */}
-      <div className="p-4 sm:p-5 font-mono text-xs text-zinc-300 leading-relaxed overflow-x-auto max-h-[380px] bg-[#09090b]">
+      <div className="p-4 sm:p-5 font-mono text-xs text-zinc-300 leading-relaxed overflow-x-auto max-h-[380px] bg-[#060a0c]">
         <pre className="whitespace-pre">{current.output}</pre>
       </div>
     </div>

@@ -33,12 +33,12 @@ function hexToRgb(hex: string): [number, number, number] {
     c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
   }
   const num = parseInt(c, 16);
-  if (isNaN(num)) return [217 / 255, 119 / 255, 6 / 255];
+  if (isNaN(num)) return [108 / 255, 198 / 255, 203 / 255];
   return [(num >> 16) / 255, ((num >> 8) & 255) / 255, (num & 255) / 255];
 }
 
 export function SpectralDrape({
-  colors = ["#D97706", "#FEF3C7"],
+  colors = ["#6CC6CB", "#EAE5C9"],
   backgroundColor = "transparent",
   density = 1,
   dotSize = 1.1,
@@ -220,8 +220,8 @@ export function SpectralDrape({
     const uIntensityLoc = gl.getUniformLocation(program, "u_intensity");
 
     // Static uniforms
-    const rgbBase = hexToRgb(colors[0] || "#D97706");
-    const rgbCrest = hexToRgb(colors[1] || "#FEF3C7");
+    const rgbBase = hexToRgb(colors[0] || "#6CC6CB");
+    const rgbCrest = hexToRgb(colors[1] || "#EAE5C9");
     gl.uniform3f(uColorBaseLoc, rgbBase[0], rgbBase[1], rgbBase[2]);
     gl.uniform3f(uColorCrestLoc, rgbCrest[0], rgbCrest[1], rgbCrest[2]);
     gl.uniform1f(uFlowLoc, flow);

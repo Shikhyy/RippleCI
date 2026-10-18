@@ -141,7 +141,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#09090b] text-zinc-100">
+    <div className="min-h-screen flex flex-col bg-[#080c0e] text-zinc-100">
       <Navbar />
 
       {/* Connect Repository Modal */}
@@ -150,9 +150,9 @@ export default function LandingPage() {
         onClose={() => setIsConnectModalOpen(false)}
       />
 
-      {/* Hero Section with 3D Solar Drape in Background */}
-      <section className="relative pt-20 pb-16 md:pt-28 md:pb-28 border-b border-amber-500/20 overflow-hidden">
-        {/* Spectral Drape: 3D folding glowing drape in warm solar amber */}
+      {/* Hero Section with 3D Spectral Drape in Background */}
+      <section className="relative pt-20 pb-16 md:pt-28 md:pb-28 border-b border-[#6CC6CB]/20 overflow-hidden">
+        {/* Spectral Drape: 3D folding glowing drape in luminous teal & pale champagne */}
         <div
           className="absolute inset-0 pointer-events-none opacity-50 z-0"
           style={{
@@ -161,7 +161,7 @@ export default function LandingPage() {
           }}
         >
           <SpectralDrape
-            colors={["#D97706", "#FEF3C7"]}
+            colors={["#6CC6CB", "#EAE5C9"]}
             backgroundColor="transparent"
             density={1.15}
             dotSize={1.15}
@@ -182,22 +182,22 @@ export default function LandingPage() {
           />
         </div>
 
-        {/* Ambient Top Glow in Warm Solar Amber */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-96 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/15 via-amber-500/5 to-transparent pointer-events-none z-0" />
+        {/* Ambient Top Glow in Luminous Aqua Teal */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-96 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#6CC6CB]/15 via-[#6CC6CB]/5 to-transparent pointer-events-none z-0" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Hero Column */}
             <div className="lg:col-span-7 space-y-6">
               {/* Header Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-[#111116]/90 backdrop-blur-md text-amber-200 text-xs font-medium shadow-[0_0_20px_rgba(245,158,11,0.2)]">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#6CC6CB]/30 bg-[#0d1417]/90 backdrop-blur-md text-[#EAE5C9] text-xs font-medium shadow-[0_0_20px_rgba(108,198,203,0.2)]">
+                <span className="w-2 h-2 rounded-full bg-[#6CC6CB] animate-pulse" />
                 <span>FalkorDB Graph-Native Release Intelligence</span>
               </div>
 
               <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.08]">
                 Never merge untested <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-200 to-amber-500">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#EAE5C9] via-[#6CC6CB] to-[#EAE5C9]">
                   blast radius again.
                 </span>
               </h1>
@@ -210,7 +210,7 @@ export default function LandingPage() {
               <div className="flex flex-wrap items-center gap-3 pt-2 text-xs">
                 <button
                   onClick={() => setIsConnectModalOpen(true)}
-                  className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-black font-bold px-5 py-2.5 rounded-xl shadow-[0_1px_16px_rgba(245,158,11,0.45),inset_0_1px_0_rgba(254,243,199,0.5)] transition-all active:scale-[0.98]"
+                  className="flex items-center gap-2 bg-gradient-to-r from-[#6CC6CB] to-[#5bb4b9] hover:from-[#7cd0d5] hover:to-[#6CC6CB] text-[#061012] font-bold px-5 py-2.5 rounded-xl shadow-[0_1px_16px_rgba(108,198,203,0.45),inset_0_1px_0_rgba(234,229,201,0.5)] transition-all active:scale-[0.98]"
                 >
                   <FolderGit2 className="w-4 h-4" />
                   <span>Connect Repository</span>
@@ -218,27 +218,27 @@ export default function LandingPage() {
 
                 <Link
                   href="/app"
-                  className="flex items-center gap-2 bg-[#171622] hover:bg-[#1f1e29] text-white border border-amber-500/30 hover:border-amber-500/60 font-semibold px-4 py-2.5 rounded-xl transition-all active:scale-[0.98]"
+                  className="flex items-center gap-2 bg-[#0d1417] hover:bg-[#121b1f] text-white border border-[#6CC6CB]/30 hover:border-[#6CC6CB]/60 font-semibold px-4 py-2.5 rounded-xl transition-all active:scale-[0.98]"
                 >
                   <span>Launch Workbench</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
+                  <ArrowRight className="w-3.5 h-3.5 text-[#6CC6CB]" />
                 </Link>
 
                 <button
                   onClick={handleCopyPip}
-                  className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-white/[0.1] hover:border-amber-500/40 bg-[#111116]/80 hover:bg-[#171622] text-amber-200 font-mono transition-all text-xs active:scale-[0.98]"
+                  className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-white/[0.1] hover:border-[#6CC6CB]/40 bg-[#0d1417]/80 hover:bg-[#121b1f] text-[#EAE5C9] font-mono transition-all text-xs active:scale-[0.98]"
                 >
                   <span>pip install rippleci</span>
                   {copiedPip ? (
                     <Check className="w-3.5 h-3.5 text-emerald-400" />
                   ) : (
-                    <Copy className="w-3.5 h-3.5 text-amber-200/70" />
+                    <Copy className="w-3.5 h-3.5 text-[#6CC6CB]" />
                   )}
                 </button>
               </div>
 
               {/* Quick Metrics Strip */}
-              <div className="pt-6 border-t border-amber-500/20 grid grid-cols-2 sm:grid-cols-4 gap-6">
+              <div className="pt-6 border-t border-[#6CC6CB]/20 grid grid-cols-2 sm:grid-cols-4 gap-6">
                 <div>
                   <div className="text-2xl font-bold tracking-tight text-white font-mono">7.3x</div>
                   <div className="text-xs text-zinc-400 mt-0.5">Faster CI execution</div>
@@ -248,7 +248,7 @@ export default function LandingPage() {
                   <div className="text-xs text-zinc-400 mt-0.5">Benchmark fault recall</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold tracking-tight text-amber-300 font-mono">&lt; 2ms</div>
+                  <div className="text-2xl font-bold tracking-tight text-[#6CC6CB] font-mono">&lt; 2ms</div>
                   <div className="text-xs text-zinc-400 mt-0.5">FalkorDB Cypher latency</div>
                 </div>
                 <div>
@@ -260,25 +260,25 @@ export default function LandingPage() {
 
             {/* Right Hero Interactive Simulation Card */}
             <div className="lg:col-span-5">
-              <div className="craft-card p-5 space-y-4 shadow-[0_0_40px_rgba(245,158,11,0.15)] relative">
+              <div className="craft-card p-5 space-y-4 shadow-[0_0_40px_rgba(108,198,203,0.15)] relative">
                 {/* Header */}
                 <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
                     <span className="text-xs font-mono font-bold text-white">Live PR Impact Simulation</span>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 text-amber-300">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 text-[#6CC6CB]">
                     PR #142 (main)
                   </span>
                 </div>
 
                 {/* Subtitle / Change */}
-                <div className="text-xs text-zinc-300 flex items-center justify-between font-mono bg-[#171622] p-2.5 rounded-lg border border-white/[0.06]">
+                <div className="text-xs text-zinc-300 flex items-center justify-between font-mono bg-[#0d1417] p-2.5 rounded-lg border border-white/[0.06]">
                   <div className="flex items-center gap-2 truncate">
-                    <GitCommit className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    <GitCommit className="w-3.5 h-3.5 text-[#6CC6CB] shrink-0" />
                     <span className="truncate">refactor(auth): migrate token verification</span>
                   </div>
-                  <span className="text-amber-300 font-semibold shrink-0">+14 -6</span>
+                  <span className="text-[#EAE5C9] font-semibold shrink-0">+14 -6</span>
                 </div>
 
                 {/* Interactive Simulator Tabs */}
@@ -287,7 +287,7 @@ export default function LandingPage() {
                     onClick={() => setHeroSimTab("graph")}
                     className={`flex-1 py-1.5 rounded-md text-[11px] font-mono transition-all ${
                       heroSimTab === "graph"
-                        ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 font-semibold"
+                        ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB]/40 font-semibold"
                         : "text-zinc-400 hover:text-white"
                     }`}
                   >
@@ -297,7 +297,7 @@ export default function LandingPage() {
                     onClick={() => setHeroSimTab("plan")}
                     className={`flex-1 py-1.5 rounded-md text-[11px] font-mono transition-all ${
                       heroSimTab === "plan"
-                        ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 font-semibold"
+                        ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB]/40 font-semibold"
                         : "text-zinc-400 hover:text-white"
                     }`}
                   >
@@ -307,7 +307,7 @@ export default function LandingPage() {
                     onClick={() => setHeroSimTab("verify")}
                     className={`flex-1 py-1.5 rounded-md text-[11px] font-mono transition-all ${
                       heroSimTab === "verify"
-                        ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 font-semibold"
+                        ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB]/40 font-semibold"
                         : "text-zinc-400 hover:text-white"
                     }`}
                   >
@@ -319,11 +319,11 @@ export default function LandingPage() {
                 <div className="min-h-[175px] text-xs font-mono">
                   {heroSimTab === "graph" && (
                     <div className="space-y-2.5 text-[11px] text-zinc-300">
-                      <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
-                        <span className="text-amber-300 font-bold">Modified: auth.verify_token</span>
+                      <div className="p-2 rounded-lg bg-[#6CC6CB]/10 border border-[#6CC6CB]/30 flex items-center justify-between">
+                        <span className="text-[#6CC6CB] font-bold">Modified: auth.verify_token</span>
                         <span className="text-[10px] text-zinc-400">src/auth.py:9</span>
                       </div>
-                      <div className="pl-4 border-l-2 border-amber-500/30 space-y-1.5">
+                      <div className="pl-4 border-l-2 border-[#6CC6CB]/30 space-y-1.5">
                         <div className="flex items-center justify-between text-zinc-300">
                           <span>↳ 1-hop caller: <span className="text-white font-semibold">process_payment</span></span>
                           <span className="text-zinc-500 text-[10px]">payments.py</span>
@@ -394,9 +394,9 @@ export default function LandingPage() {
                 <button
                   onClick={handleTriggerSim}
                   disabled={isSimulating}
-                  className="w-full py-2 px-3 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.99] disabled:opacity-50"
+                  className="w-full py-2 px-3 rounded-lg bg-[#6CC6CB]/15 hover:bg-[#6CC6CB]/25 border border-[#6CC6CB]/40 text-[#EAE5C9] font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.99] disabled:opacity-50"
                 >
-                  <RefreshCw className={`w-3.5 h-3.5 text-amber-400 ${isSimulating ? "animate-spin" : ""}`} />
+                  <RefreshCw className={`w-3.5 h-3.5 text-[#6CC6CB] ${isSimulating ? "animate-spin" : ""}`} />
                   <span>{isSimulating ? "Running FalkorDB Traversal & Verifier..." : "Simulate PR Verification"}</span>
                 </button>
               </div>
@@ -406,10 +406,10 @@ export default function LandingPage() {
       </section>
 
       {/* Onboarding & Repository Connection Section */}
-      <section className="py-16 md:py-24 border-b border-amber-500/20 bg-[#0c0b12]">
+      <section className="py-16 md:py-24 border-b border-[#6CC6CB]/20 bg-[#060a0c]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-3xl mb-12">
-            <div className="text-xs font-mono uppercase tracking-wider text-amber-400 font-semibold">
+            <div className="text-xs font-mono uppercase tracking-wider text-[#6CC6CB] font-semibold">
               Developer Onboarding
             </div>
             <h2 className="mt-1.5 text-2xl sm:text-4xl font-bold text-white tracking-tight">
@@ -424,7 +424,7 @@ export default function LandingPage() {
             {/* Pathway 1: Web Companion */}
             <div className="craft-card p-6 flex flex-col justify-between space-y-5">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <div className="w-10 h-10 rounded-xl bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB]">
                   <FolderGit2 className="w-5 h-5" />
                 </div>
                 <h3 className="text-base font-bold text-white tracking-tight">1. Web Companion Connector</h3>
@@ -434,7 +434,7 @@ export default function LandingPage() {
               </div>
               <button
                 onClick={() => setIsConnectModalOpen(true)}
-                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs transition-all shadow-[0_1px_12px_rgba(245,158,11,0.3)] active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-gradient-to-r from-[#6CC6CB] to-[#5bb4b9] hover:from-[#7cd0d5] hover:to-[#6CC6CB] text-[#061012] font-bold text-xs transition-all shadow-[0_1px_12px_rgba(108,198,203,0.3)] active:scale-[0.98]"
               >
                 <span>Connect Codebase</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -444,7 +444,7 @@ export default function LandingPage() {
             {/* Pathway 2: CLI Terminal */}
             <div className="craft-card p-6 flex flex-col justify-between space-y-5">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <div className="w-10 h-10 rounded-xl bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB]">
                   <Terminal className="w-5 h-5" />
                 </div>
                 <h3 className="text-base font-bold text-white tracking-tight">2. CLI Terminal Workflow</h3>
@@ -452,7 +452,7 @@ export default function LandingPage() {
                   Install via pip and run natively in your development shell. Fast AST indexing, parameterized Cypher traversals, and machine-readable JSON outputs for seamless scripting.
                 </p>
               </div>
-              <div className="font-mono text-[11px] p-2.5 rounded-lg bg-black/60 border border-white/[0.08] text-amber-200">
+              <div className="font-mono text-[11px] p-2.5 rounded-lg bg-black/60 border border-white/[0.08] text-[#EAE5C9]">
                 ripple index . && ripple impact
               </div>
             </div>
@@ -460,7 +460,7 @@ export default function LandingPage() {
             {/* Pathway 3: GitHub Actions CI */}
             <div className="craft-card p-6 flex flex-col justify-between space-y-5">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <div className="w-10 h-10 rounded-xl bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB]">
                   <Github className="w-5 h-5" />
                 </div>
                 <h3 className="text-base font-bold text-white tracking-tight">3. GitHub Actions CI</h3>
@@ -472,7 +472,7 @@ export default function LandingPage() {
                 onClick={() => {
                   setIsConnectModalOpen(true);
                 }}
-                className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-[#171622] hover:bg-[#1f1e29] border border-amber-500/30 text-amber-200 font-medium text-xs transition-all"
+                className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-[#0d1417] hover:bg-[#121b1f] border border-[#6CC6CB]/30 text-[#EAE5C9] font-medium text-xs transition-all"
               >
                 <span>View CI Workflow</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -483,10 +483,10 @@ export default function LandingPage() {
       </section>
 
       {/* Comprehensive Python SDK Showcase Section */}
-      <section id="sdk" className="py-16 md:py-24 border-b border-amber-500/20 bg-[#09090b]">
+      <section id="sdk" className="py-16 md:py-24 border-b border-[#6CC6CB]/20 bg-[#080c0e]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-3xl mb-12">
-            <div className="text-xs font-mono uppercase tracking-wider text-amber-400 font-semibold">
+            <div className="text-xs font-mono uppercase tracking-wider text-[#6CC6CB] font-semibold">
               Python SDK
             </div>
             <h2 className="mt-1.5 text-2xl sm:text-4xl font-bold text-white tracking-tight">
@@ -500,13 +500,13 @@ export default function LandingPage() {
           {/* SDK Showcase Card */}
           <div className="craft-card overflow-hidden">
             {/* SDK Tabs Header */}
-            <div className="flex flex-wrap items-center justify-between px-4 py-3 bg-[#111116] border-b border-amber-500/20 gap-3">
-              <div className="flex items-center gap-1.5 p-1 bg-zinc-950/80 rounded-lg border border-white/[0.06] overflow-x-auto">
+            <div className="flex flex-wrap items-center justify-between px-4 py-3 bg-[#0d1417] border-b border-[#6CC6CB]/20 gap-3">
+              <div className="flex items-center gap-1.5 p-1 bg-[#060a0c] rounded-lg border border-white/[0.06] overflow-x-auto">
                 <button
                   onClick={() => setSdkTab("quickstart")}
                   className={`px-3 py-1.5 rounded-md text-xs font-mono transition-all ${
                     sdkTab === "quickstart"
-                      ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 font-semibold"
+                      ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB]/40 font-semibold"
                       : "text-zinc-400 hover:text-white"
                   }`}
                 >
@@ -516,7 +516,7 @@ export default function LandingPage() {
                   onClick={() => setSdkTab("verification")}
                   className={`px-3 py-1.5 rounded-md text-xs font-mono transition-all ${
                     sdkTab === "verification"
-                      ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 font-semibold"
+                      ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB]/40 font-semibold"
                       : "text-zinc-400 hover:text-white"
                   }`}
                 >
@@ -526,7 +526,7 @@ export default function LandingPage() {
                   onClick={() => setSdkTab("agent")}
                   className={`px-3 py-1.5 rounded-md text-xs font-mono transition-all ${
                     sdkTab === "agent"
-                      ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 font-semibold"
+                      ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB]/40 font-semibold"
                       : "text-zinc-400 hover:text-white"
                   }`}
                 >
@@ -536,7 +536,7 @@ export default function LandingPage() {
                   onClick={() => setSdkTab("cypher")}
                   className={`px-3 py-1.5 rounded-md text-xs font-mono transition-all ${
                     sdkTab === "cypher"
-                      ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 font-semibold"
+                      ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB]/40 font-semibold"
                       : "text-zinc-400 hover:text-white"
                   }`}
                 >
@@ -546,27 +546,27 @@ export default function LandingPage() {
 
               <button
                 onClick={handleCopySdk}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-500/25 hover:border-amber-500/50 bg-[#171622] hover:bg-[#1f1e29] text-amber-200 font-mono text-xs transition-all active:scale-[0.98]"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#6CC6CB]/25 hover:border-[#6CC6CB]/50 bg-[#0d1417] hover:bg-[#121b1f] text-[#EAE5C9] font-mono text-xs transition-all active:scale-[0.98]"
               >
-                {copiedSdk ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-amber-300/70" />}
+                {copiedSdk ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-[#6CC6CB]" />}
                 <span>{copiedSdk ? "Copied" : "Copy Python Snippet"}</span>
               </button>
             </div>
 
             {/* Description Banner */}
-            <div className="px-5 py-3 bg-[#0c0b12] border-b border-white/[0.06] text-xs text-zinc-300 font-mono flex items-center justify-between">
+            <div className="px-5 py-3 bg-[#080d0f] border-b border-white/[0.06] text-xs text-zinc-300 font-mono flex items-center justify-between">
               <div>
                 <span className="text-white font-bold">{SDK_EXAMPLES[sdkTab].title}</span>
                 <span className="text-zinc-500 mx-2">—</span>
                 <span className="text-zinc-400">{SDK_EXAMPLES[sdkTab].desc}</span>
               </div>
-              <span className="text-[10px] text-amber-400 font-semibold shrink-0 hidden sm:inline">
+              <span className="text-[10px] text-[#6CC6CB] font-semibold shrink-0 hidden sm:inline">
                 pip install rippleci
               </span>
             </div>
 
             {/* Code Box */}
-            <div className="p-5 font-mono text-xs text-zinc-200 bg-[#09090b] overflow-x-auto leading-relaxed">
+            <div className="p-5 font-mono text-xs text-zinc-200 bg-[#060a0c] overflow-x-auto leading-relaxed">
               <pre className="whitespace-pre">{SDK_EXAMPLES[sdkTab].code}</pre>
             </div>
           </div>
@@ -574,28 +574,28 @@ export default function LandingPage() {
           {/* 4 Core SDK Primitives Grid */}
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="craft-card p-4 space-y-2">
-              <div className="text-xs font-mono font-bold text-amber-400">RippleProject.open()</div>
+              <div className="text-xs font-mono font-bold text-[#6CC6CB]">RippleProject.open()</div>
               <p className="text-[11px] text-zinc-400 leading-relaxed">
                 Central service locator and lifecycle manager. Discovers repo root, initializes FalkorDB client, and loads config.
               </p>
             </div>
 
             <div className="craft-card p-4 space-y-2">
-              <div className="text-xs font-mono font-bold text-amber-400">RepositoryIndexer</div>
+              <div className="text-xs font-mono font-bold text-[#6CC6CB]">RepositoryIndexer</div>
               <p className="text-[11px] text-zinc-400 leading-relaxed">
                 Extracts AST function definitions, class hierarchies, internal imports, and pytest test node IDs into graph nodes.
               </p>
             </div>
 
             <div className="craft-card p-4 space-y-2">
-              <div className="text-xs font-mono font-bold text-amber-400">ImpactAnalyzer</div>
+              <div className="text-xs font-mono font-bold text-[#6CC6CB]">ImpactAnalyzer</div>
               <p className="text-[11px] text-zinc-400 leading-relaxed">
                 Computes unified git diffs and runs multi-hop Cypher queries across CALLS edges to locate indirect callers.
               </p>
             </div>
 
             <div className="craft-card p-4 space-y-2">
-              <div className="text-xs font-mono font-bold text-amber-400">VerificationEngine</div>
+              <div className="text-xs font-mono font-bold text-[#6CC6CB]">VerificationEngine</div>
               <p className="text-[11px] text-zinc-400 leading-relaxed">
                 Injects transient AST mutants into modified lines, runs selected tests in sandboxed sub-processes, and computes kill scores.
               </p>
@@ -605,11 +605,11 @@ export default function LandingPage() {
       </section>
 
       {/* CLI Developer Workflow Section */}
-      <section className="py-16 md:py-24 border-b border-amber-500/20 bg-[#0c0b12]">
+      <section className="py-16 md:py-24 border-b border-[#6CC6CB]/20 bg-[#060a0c]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-              <div className="text-xs font-mono uppercase tracking-wider text-amber-400 font-semibold">
+              <div className="text-xs font-mono uppercase tracking-wider text-[#6CC6CB] font-semibold">
                 CLI Developer Workflow
               </div>
               <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold text-white tracking-tight">
@@ -626,11 +626,11 @@ export default function LandingPage() {
       </section>
 
       {/* FalkorDB Graph Canvas Section */}
-      <section className="py-16 md:py-24 border-b border-amber-500/20 bg-[#09090b]">
+      <section className="py-16 md:py-24 border-b border-[#6CC6CB]/20 bg-[#080c0e]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-              <div className="text-xs font-mono uppercase tracking-wider text-amber-400 font-semibold">
+              <div className="text-xs font-mono uppercase tracking-wider text-[#6CC6CB] font-semibold">
                 FalkorDB Subgraph
               </div>
               <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold text-white tracking-tight">
@@ -642,7 +642,7 @@ export default function LandingPage() {
             </div>
             <Link
               href="/app/graph"
-              className="text-xs font-medium text-amber-200 hover:text-white flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-500/30 bg-amber-500/15 transition-colors"
+              className="text-xs font-medium text-[#EAE5C9] hover:text-white flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#6CC6CB]/30 bg-[#6CC6CB]/15 transition-colors"
             >
               <span>Full Screen Graph Explorer</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -654,10 +654,10 @@ export default function LandingPage() {
       </section>
 
       {/* 4-Step Technical Architecture */}
-      <section className="py-16 md:py-24 border-b border-amber-500/20 bg-[#0c0b12]">
+      <section className="py-16 md:py-24 border-b border-[#6CC6CB]/20 bg-[#060a0c]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mb-12">
-            <div className="text-xs font-mono uppercase tracking-wider text-amber-400 font-semibold">
+            <div className="text-xs font-mono uppercase tracking-wider text-[#6CC6CB] font-semibold">
               Pipeline Architecture
             </div>
             <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold text-white tracking-tight">
@@ -671,7 +671,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             <div className="craft-card p-6 flex flex-col justify-between space-y-4">
               <div className="space-y-3">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-300 font-mono text-xs font-bold">
+                <div className="w-8 h-8 rounded-lg bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB] font-mono text-xs font-bold">
                   01
                 </div>
                 <h3 className="text-sm font-bold text-white tracking-tight">AST & Symbol Parsing</h3>
@@ -679,14 +679,14 @@ export default function LandingPage() {
                   Parses Python ASTs, resolves internal import targets, and registers function and test case nodes with deterministic hashes into FalkorDB.
                 </p>
               </div>
-              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-amber-300/70">
+              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-[#EAE5C9]/80">
                 ripple index
               </div>
             </div>
 
             <div className="craft-card p-6 flex flex-col justify-between space-y-4">
               <div className="space-y-3">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-300 font-mono text-xs font-bold">
+                <div className="w-8 h-8 rounded-lg bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB] font-mono text-xs font-bold">
                   02
                 </div>
                 <h3 className="text-sm font-bold text-white tracking-tight">FalkorDB Graph Traversal</h3>
@@ -694,14 +694,14 @@ export default function LandingPage() {
                   Executes parameterized Cypher queries across incoming CALLS edges to discover indirect, multi-hop callers impacted by the change.
                 </p>
               </div>
-              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-amber-300/70">
+              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-[#EAE5C9]/80">
                 ripple impact
               </div>
             </div>
 
             <div className="craft-card p-6 flex flex-col justify-between space-y-4">
               <div className="space-y-3">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-300 font-mono text-xs font-bold">
+                <div className="w-8 h-8 rounded-lg bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB] font-mono text-xs font-bold">
                   03
                 </div>
                 <h3 className="text-sm font-bold text-white tracking-tight">Learned Prioritization</h3>
@@ -709,14 +709,14 @@ export default function LandingPage() {
                   Gradient boosted decision trees rank candidate tests by graph proximity, churn, coverage overlap, and failure probability under budget.
                 </p>
               </div>
-              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-amber-300/70">
+              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-[#EAE5C9]/80">
                 ripple plan --budget 300
               </div>
             </div>
 
             <div className="craft-card p-6 flex flex-col justify-between space-y-4">
               <div className="space-y-3">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-300 font-mono text-xs font-bold">
+                <div className="w-8 h-8 rounded-lg bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB] font-mono text-xs font-bold">
                   04
                 </div>
                 <h3 className="text-sm font-bold text-white tracking-tight">Counterfactual Verification</h3>
@@ -724,7 +724,7 @@ export default function LandingPage() {
                   Injects transient AST mutations into modified lines to verify the selected test plan catches injected faults before release approval.
                 </p>
               </div>
-              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-amber-300/70">
+              <div className="pt-3 border-t border-white/[0.06] text-[11px] font-mono text-[#EAE5C9]/80">
                 ripple verify --mutations 5
               </div>
             </div>
@@ -733,10 +733,10 @@ export default function LandingPage() {
       </section>
 
       {/* Benchmark Matrix */}
-      <section className="py-16 md:py-24 border-b border-amber-500/20 bg-[#09090b]">
+      <section className="py-16 md:py-24 border-b border-[#6CC6CB]/20 bg-[#080c0e]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mb-8">
-            <div className="text-xs font-mono uppercase tracking-wider text-amber-400 font-semibold">
+            <div className="text-xs font-mono uppercase tracking-wider text-[#6CC6CB] font-semibold">
               Evaluation & Benchmarks
             </div>
             <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold text-white tracking-tight">
@@ -750,7 +750,7 @@ export default function LandingPage() {
           <div className="craft-card overflow-hidden text-xs font-mono">
             <div className="overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="bg-[#111116] border-b border-amber-500/20 text-zinc-400">
+                <thead className="bg-[#0d1417] border-b border-[#6CC6CB]/20 text-zinc-400">
                   <tr>
                     <th className="py-3 px-5 font-semibold">Strategy</th>
                     <th className="py-3 px-5 font-semibold">Selection Ratio</th>
@@ -767,11 +767,11 @@ export default function LandingPage() {
                     <td className="py-3.5 px-5 text-emerald-400 font-bold">100.0%</td>
                     <td className="py-3.5 px-5 text-emerald-400">None (baseline)</td>
                   </tr>
-                  <tr className="bg-amber-500/[0.04] hover:bg-amber-500/[0.08] transition-colors">
-                    <td className="py-3.5 px-5 font-bold text-amber-400">change_file_heuristic</td>
+                  <tr className="bg-[#6CC6CB]/[0.04] hover:bg-[#6CC6CB]/[0.08] transition-colors">
+                    <td className="py-3.5 px-5 font-bold text-[#6CC6CB]">change_file_heuristic</td>
                     <td className="py-3.5 px-5">8.9% (4/41)</td>
                     <td className="py-3.5 px-5 text-zinc-400">3.7s</td>
-                    <td className="py-3.5 px-5 text-amber-400 font-bold">66.7%</td>
+                    <td className="py-3.5 px-5 text-[#6CC6CB] font-bold">66.7%</td>
                     <td className="py-3.5 px-5 text-amber-400">auth_token_verification_bug (MISSED)</td>
                   </tr>
                   <tr className="hover:bg-white/[0.02] transition-colors">
@@ -781,10 +781,10 @@ export default function LandingPage() {
                     <td className="py-3.5 px-5 text-emerald-400 font-bold">100.0%</td>
                     <td className="py-3.5 px-5 text-emerald-400">None (100% caught)</td>
                   </tr>
-                  <tr className="bg-amber-500/[0.1] hover:bg-amber-500/[0.15] transition-colors">
-                    <td className="py-3.5 px-5 font-bold text-amber-300">graph_plus_ml [Recommended]</td>
+                  <tr className="bg-[#6CC6CB]/[0.1] hover:bg-[#6CC6CB]/[0.15] transition-colors">
+                    <td className="py-3.5 px-5 font-bold text-[#EAE5C9]">graph_plus_ml [Recommended]</td>
                     <td className="py-3.5 px-5 font-bold text-white">11.4% (5/41)</td>
-                    <td className="py-3.5 px-5 text-amber-300 font-bold">5.6s (7.3x faster)</td>
+                    <td className="py-3.5 px-5 text-[#6CC6CB] font-bold">5.6s (7.3x faster)</td>
                     <td className="py-3.5 px-5 text-emerald-400 font-bold">100.0%</td>
                     <td className="py-3.5 px-5 text-emerald-400 font-bold">None (100% caught)</td>
                   </tr>
@@ -796,7 +796,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-amber-500/20 bg-zinc-950 py-10 text-xs font-mono text-zinc-500">
+      <footer className="mt-auto border-t border-[#6CC6CB]/20 bg-[#060a0c] py-10 text-xs font-mono text-zinc-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="text-white font-bold">RippleCI</span>

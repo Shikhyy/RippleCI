@@ -97,7 +97,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col md:flex-row relative font-sans">
+    <div className="min-h-screen bg-[#080c0e] text-zinc-100 flex flex-col md:flex-row relative font-sans">
       {/* Connect Repository Modal */}
       <ConnectRepoModal
         isOpen={isConnectModalOpen}
@@ -106,11 +106,11 @@ export default function DashboardPage() {
       />
 
       {/* Structural Sidebar */}
-      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-amber-500/20 bg-[#0c0b12]/90 backdrop-blur-md flex flex-col justify-between p-5 shrink-0 z-10">
+      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[#6CC6CB]/20 bg-[#060a0c]/90 backdrop-blur-md flex flex-col justify-between p-5 shrink-0 z-10">
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-7 h-7 rounded-lg bg-[#111116] border border-amber-500/30 flex items-center justify-center shadow-rim">
-              <svg className="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <div className="w-7 h-7 rounded-lg bg-[#0d1417] border border-[#6CC6CB]/30 flex items-center justify-center shadow-rim">
+              <svg className="w-4 h-4 text-[#6CC6CB]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="6" cy="12" r="3" />
                 <circle cx="18" cy="6" r="3" />
                 <circle cx="18" cy="18" r="3" />
@@ -119,18 +119,18 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-baseline gap-1.5">
               <span className="font-bold text-sm tracking-tight text-white group-hover:text-zinc-200 transition-colors">
-                Ripple<span className="text-amber-400">CI</span>
+                Ripple<span className="text-[#6CC6CB]">CI</span>
               </span>
-              <span className="text-[10px] font-mono text-amber-200/70">v0.1</span>
+              <span className="text-[10px] font-mono text-[#EAE5C9]/70">v0.1</span>
             </div>
           </Link>
 
           <nav className="space-y-1 text-xs">
             <Link
               href="/app"
-              className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-amber-500/20 text-amber-200 font-semibold border border-amber-500/40 shadow-sm transition-all"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[#6CC6CB]/20 text-[#EAE5C9] font-semibold border border-[#6CC6CB]/40 shadow-sm transition-all"
             >
-              <Layers className="w-4 h-4 text-amber-400" />
+              <Layers className="w-4 h-4 text-[#6CC6CB]" />
               <span>Overview</span>
             </Link>
 
@@ -152,19 +152,19 @@ export default function DashboardPage() {
 
             <button
               onClick={() => setIsConnectModalOpen(true)}
-              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-amber-300 hover:text-amber-200 hover:bg-amber-500/10 transition-all font-medium"
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#6CC6CB] hover:text-[#EAE5C9] hover:bg-[#6CC6CB]/10 transition-all font-medium"
             >
-              <Plus className="w-4 h-4 text-amber-400" />
+              <Plus className="w-4 h-4 text-[#6CC6CB]" />
               <span>Connect Repository</span>
             </button>
           </nav>
         </div>
 
         {/* FalkorDB Database Status Panel */}
-        <div className="mt-8 md:mt-0 p-3.5 rounded-xl border border-amber-500/25 bg-[#111116]/90 backdrop-blur-md text-xs space-y-1.5 shadow-card">
+        <div className="mt-8 md:mt-0 p-3.5 rounded-xl border border-[#6CC6CB]/25 bg-[#0d1417]/90 backdrop-blur-md text-xs space-y-1.5 shadow-card">
           <div className="flex items-center justify-between">
             <span className="text-zinc-400 font-medium flex items-center gap-1.5">
-              <Database className="w-3.5 h-3.5 text-amber-400" />
+              <Database className="w-3.5 h-3.5 text-[#6CC6CB]" />
               FalkorDB
             </span>
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -175,7 +175,7 @@ export default function DashboardPage() {
           <div className="text-[11px] font-mono text-zinc-400 truncate">
             {health.graph_url || "redis://localhost:6379"}
           </div>
-          <div className="text-[10px] font-mono text-amber-300/80">
+          <div className="text-[10px] font-mono text-[#EAE5C9]/80">
             Graph: rippleci_repo_graph
           </div>
         </div>
@@ -184,13 +184,13 @@ export default function DashboardPage() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 z-10">
         {/* Top Header */}
-        <header className="h-14 border-b border-amber-500/20 px-6 flex items-center justify-between glass-header">
+        <header className="h-14 border-b border-[#6CC6CB]/20 px-6 flex items-center justify-between glass-header">
           <div className="flex items-center gap-3">
             <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Repository:</span>
             <select
               value={selectedRepo}
               onChange={(e) => setSelectedRepo(e.target.value)}
-              className="bg-[#111116] border border-amber-500/25 rounded-lg px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-amber-400 transition-colors shadow-sm"
+              className="bg-[#0d1417] border border-[#6CC6CB]/25 rounded-lg px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-[#6CC6CB] transition-colors shadow-sm"
             >
               {repositories.map((repo) => (
                 <option key={repo.id} value={repo.id}>
@@ -201,7 +201,7 @@ export default function DashboardPage() {
 
             <button
               onClick={() => setIsConnectModalOpen(true)}
-              className="hidden sm:flex items-center gap-1 text-xs text-amber-300 hover:text-amber-200 px-2.5 py-1 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 transition-all font-mono"
+              className="hidden sm:flex items-center gap-1 text-xs text-[#6CC6CB] hover:text-[#EAE5C9] px-2.5 py-1 rounded-lg border border-[#6CC6CB]/30 bg-[#6CC6CB]/10 hover:bg-[#6CC6CB]/20 transition-all font-mono"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Connect Repo</span>
@@ -212,7 +212,7 @@ export default function DashboardPage() {
             <button
               onClick={triggerNewAnalysis}
               disabled={loading}
-              className="flex items-center gap-2 text-xs font-bold text-black bg-amber-500 hover:bg-amber-400 px-3.5 py-1.5 rounded-lg shadow-[0_1px_14px_rgba(245,158,11,0.4),inset_0_1px_0_rgba(254,243,199,0.4)] transition-all active:scale-[0.98] disabled:opacity-50"
+              className="flex items-center gap-2 text-xs font-bold text-[#061012] bg-gradient-to-r from-[#6CC6CB] to-[#5bb4b9] hover:from-[#7cd0d5] hover:to-[#6CC6CB] px-3.5 py-1.5 rounded-lg shadow-[0_1px_14px_rgba(108,198,203,0.4),inset_0_1px_0_rgba(234,229,201,0.4)] transition-all active:scale-[0.98] disabled:opacity-50"
             >
               <Play className={`w-3 h-3 ${loading ? "animate-spin" : ""}`} />
               <span>{loading ? "Analyzing Blast Radius..." : "Run Impact Analysis"}</span>
@@ -227,7 +227,7 @@ export default function DashboardPage() {
             <div className="craft-card p-5 space-y-2">
               <div className="flex items-center justify-between text-zinc-400">
                 <span className="text-[11px] font-mono uppercase tracking-wider">Indexed Symbols</span>
-                <Code2 className="w-4 h-4 text-amber-400" />
+                <Code2 className="w-4 h-4 text-[#6CC6CB]" />
               </div>
               <div className="text-2xl font-bold tracking-tight text-white font-mono">
                 {currentRepo?.symbols_count || 22}
@@ -238,7 +238,7 @@ export default function DashboardPage() {
             <div className="craft-card p-5 space-y-2">
               <div className="flex items-center justify-between text-zinc-400">
                 <span className="text-[11px] font-mono uppercase tracking-wider">FalkorDB Edges</span>
-                <Network className="w-4 h-4 text-amber-400" />
+                <Network className="w-4 h-4 text-[#6CC6CB]" />
               </div>
               <div className="text-2xl font-bold tracking-tight text-white font-mono">
                 {currentRepo?.edges_count || 41}
@@ -270,7 +270,7 @@ export default function DashboardPage() {
 
           {/* Pull Request Impact Analysis Runs */}
           <div className="craft-card overflow-hidden">
-            <div className="px-5 py-4 bg-[#111116] border-b border-amber-500/20 flex items-center justify-between">
+            <div className="px-5 py-4 bg-[#0d1417] border-b border-[#6CC6CB]/20 flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-bold text-white tracking-tight">
                   Pull Request Analysis Runs
@@ -279,14 +279,14 @@ export default function DashboardPage() {
                   Downstream caller impact, ML test prioritization, and counterfactual mutation verification.
                 </p>
               </div>
-              <span className="text-xs font-mono text-amber-300 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30">
+              <span className="text-xs font-mono text-[#6CC6CB] px-2.5 py-1 rounded-full bg-[#6CC6CB]/15 border border-[#6CC6CB]/30">
                 Target: main
               </span>
             </div>
 
             <div className="overflow-x-auto text-xs font-mono">
               <table className="w-full text-left">
-                <thead className="bg-[#09090b] border-b border-amber-500/20 text-zinc-400">
+                <thead className="bg-[#060a0c] border-b border-[#6CC6CB]/20 text-zinc-400">
                   <tr>
                     <th className="py-3 px-5 font-semibold">Run Identifier</th>
                     <th className="py-3 px-5 font-semibold">Revision Range</th>
@@ -308,10 +308,10 @@ export default function DashboardPage() {
                       <td className="py-3.5 px-5 text-zinc-400">
                         {r.base_ref}..{r.head_ref}
                       </td>
-                      <td className="py-3.5 px-5 text-amber-400">
+                      <td className="py-3.5 px-5 text-[#6CC6CB]">
                         {r.impact.changed_symbols.length} symbol(s)
                       </td>
-                      <td className="py-3.5 px-5 text-amber-200">
+                      <td className="py-3.5 px-5 text-[#EAE5C9]">
                         {r.impact.impacted_symbols.length} caller(s)
                       </td>
                       <td className="py-3.5 px-5 text-emerald-400">
@@ -334,7 +334,7 @@ export default function DashboardPage() {
                       <td className="py-3.5 px-5 text-right">
                         <Link
                           href={`/app/runs/${r.run_id}`}
-                          className="inline-flex items-center gap-1.5 text-xs text-amber-300 hover:text-white font-semibold transition-colors"
+                          className="inline-flex items-center gap-1.5 text-xs text-[#6CC6CB] hover:text-[#EAE5C9] font-semibold transition-colors"
                         >
                           <span>Inspect Report</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -349,7 +349,7 @@ export default function DashboardPage() {
 
           {/* Strategy Evaluation Benchmark */}
           <div className="craft-card overflow-hidden">
-            <div className="px-5 py-4 bg-[#111116] border-b border-amber-500/20 flex items-center justify-between">
+            <div className="px-5 py-4 bg-[#0d1417] border-b border-[#6CC6CB]/20 flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-bold text-white tracking-tight">
                   Regression Test Selection Benchmark (4 Strategies)
@@ -365,7 +365,7 @@ export default function DashboardPage() {
 
             <div className="overflow-x-auto text-xs font-mono">
               <table className="w-full text-left">
-                <thead className="bg-[#09090b] border-b border-amber-500/20 text-zinc-400">
+                <thead className="bg-[#060a0c] border-b border-[#6CC6CB]/20 text-zinc-400">
                   <tr>
                     <th className="py-3 px-5 font-semibold">Strategy</th>
                     <th className="py-3 px-5 font-semibold">Selection Ratio</th>
@@ -380,16 +380,16 @@ export default function DashboardPage() {
                       key={c.strategy}
                       className={
                         c.strategy === "graph_plus_ml"
-                          ? "bg-amber-500/[0.1] hover:bg-amber-500/[0.15] transition-colors"
+                          ? "bg-[#6CC6CB]/[0.1] hover:bg-[#6CC6CB]/[0.15] transition-colors"
                           : c.strategy === "change_file_heuristic"
-                          ? "bg-amber-500/[0.04] hover:bg-amber-500/[0.08] transition-colors"
+                          ? "bg-[#6CC6CB]/[0.04] hover:bg-[#6CC6CB]/[0.08] transition-colors"
                           : "hover:bg-white/[0.02] transition-colors"
                       }
                     >
                       <td className="py-3.5 px-5 font-bold text-white">
                         {c.strategy}
                         {c.strategy === "graph_plus_ml" && (
-                          <span className="ml-2 text-[10px] text-amber-200 bg-amber-500/30 px-1.5 py-0.5 rounded font-sans font-semibold">
+                          <span className="ml-2 text-[10px] text-[#061012] bg-[#6CC6CB] px-1.5 py-0.5 rounded font-sans font-semibold">
                             Recommended
                           </span>
                         )}
@@ -401,7 +401,7 @@ export default function DashboardPage() {
                         </div>
                       </td>
                       <td className="py-3.5 px-5 font-semibold">
-                        <span className={c.strategy === "graph_plus_ml" ? "text-amber-200 font-bold" : "text-zinc-300"}>
+                        <span className={c.strategy === "graph_plus_ml" ? "text-[#6CC6CB] font-bold" : "text-zinc-300"}>
                           {c.estimated_duration_s.toFixed(1)}s
                         </span>
                       </td>
