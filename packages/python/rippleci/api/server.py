@@ -1,5 +1,6 @@
 """FastAPI HTTP backend adapter exposing RippleCI services to the Web Companion and CI."""
 
+import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from fastapi import FastAPI, HTTPException
@@ -16,6 +17,7 @@ from rippleci.core.models import (
     VerificationReport,
 )
 from rippleci.graph.factory import create_graph_store
+from rippleci.graph.falkordb_store import FalkorGraphStore
 from rippleci.impact.diff import FileDiff
 from rippleci.sdk.project import RippleProject
 from rippleci.sdk.reporter import RippleReport
@@ -82,25 +84,66 @@ def _get_project_for_repo(repo_id: str) -> RippleProject:
 @app.get("/api/v1/health")
 def get_health():
     project = RippleProject.open(".")
+    is_falkor = isinstance(project.graph, FalkorGraphStore)
+    falkor_healthy = is_falkor and project.graph.is_healthy()
     return {
         "status": "ok",
         "version": __version__,
-        "falkordb_healthy": project.graph.is_healthy(),
+        "backend": "FalkorDB (Cypher Engine)" if is_falkor else "In-Memory AST Graph (Fallback)",
+        "falkordb_healthy": falkor_healthy,
+        "falkordb_connected": falkor_healthy,
         "graph_url": project.config.graph.url,
         "graph_name": project.config.graph.graph_name,
+        "requires_api_keys": False,
+        "api_keys": {
+            "falkordb": "Not required locally (connects to redis://localhost:6379 or FalkorDB docker)",
+            "github_token": "Optional (only needed for private repos or posting PR comments)",
+            "gemini_api_key": "Optional (only needed for LLM natural language PR explanations)",
+        },
     }
 
 
 @app.get("/api/v1/repositories")
 def get_repositories():
     if not _REPOSITORIES:
+        sample_path = Path("examples/sample-repository").resolve()
+        if sample_path.exists():
+            try:
+                sample_proj = RippleProject.open(sample_path)
+                sample_summary = sample_proj.indexer.index()
+                _REPOSITORIES["payments-core-service"] = {
+                    "id": "payments-core-service",
+                    "root": str(sample_path),
+                    "default_branch": "main",
+                    "languages": ["python"],
+                    "symbols_count": sample_summary.symbols_count,
+                    "test_cases_count": sample_summary.test_cases_count,
+                    "edges_count": sample_summary.call_edges_count + sample_summary.coverage_edges_count,
+                    "duration_ms": sample_summary.duration_ms,
+                }
+            except Exception:
+                pass
+
         default_proj = RippleProject.open(".")
-        _REPOSITORIES[default_proj.config.repository.id] = {
-            "id": default_proj.config.repository.id,
-            "root": str(default_proj.root),
-            "default_branch": default_proj.config.repository.default_branch,
-            "languages": default_proj.config.repository.languages,
-        }
+        try:
+            summary = default_proj.indexer.index()
+            _REPOSITORIES[default_proj.config.repository.id] = {
+                "id": default_proj.config.repository.id,
+                "root": str(default_proj.root),
+                "default_branch": default_proj.config.repository.default_branch,
+                "languages": default_proj.config.repository.languages,
+                "symbols_count": summary.symbols_count,
+                "test_cases_count": summary.test_cases_count,
+                "edges_count": summary.call_edges_count + summary.coverage_edges_count,
+                "duration_ms": summary.duration_ms,
+            }
+        except Exception:
+            _REPOSITORIES[default_proj.config.repository.id] = {
+                "id": default_proj.config.repository.id,
+                "root": str(default_proj.root),
+                "default_branch": default_proj.config.repository.default_branch,
+                "languages": default_proj.config.repository.languages,
+            }
     return list(_REPOSITORIES.values())
 
 
@@ -199,11 +242,57 @@ def run_verification(repo_id: str, req: VerificationRequest, run_id: Optional[st
     return verification
 
 
+class FullAnalysisRequest(BaseModel):
+    base: str = "HEAD~1"
+    head: str = "HEAD"
+    budget_seconds: float = 300.0
+    max_mutations: int = 5
+    file_diffs: Optional[List[Dict[str, Any]]] = None
+
+
+@app.post("/api/v1/repositories/{repo_id}/analyze")
+def run_full_analysis(repo_id: str, req: FullAnalysisRequest):
+    project = _get_project_for_repo(repo_id)
+    file_diffs = None
+    if req.file_diffs:
+        file_diffs = [FileDiff(**fd) for fd in req.file_diffs]
+
+    impact = project.analyzer.analyze(base=req.base, head=req.head, file_diffs=file_diffs)
+    plan = project.planner.plan(impact=impact, budget_seconds=req.budget_seconds)
+    verification = project.verifier.verify(plan=plan, max_mutations=req.max_mutations)
+    report = project.reporter.build(impact=impact, plan=plan, verification=verification)
+
+    _RUNS[impact.run_id] = report
+    return _dump_report(report)
+
+
+@app.get("/api/v1/runs")
+def list_runs(repo_id: Optional[str] = None):
+    # If no runs exist yet, seed a baseline run from the sample repository
+    if not _RUNS:
+        try:
+            sample_project = _get_project_for_repo("payments-core-service")
+            impact = sample_project.analyzer.analyze(base="HEAD~1", head="HEAD")
+            plan = sample_project.planner.plan(impact=impact, budget_seconds=180)
+            verification = sample_project.verifier.verify(plan=plan, max_mutations=3)
+            report = sample_project.reporter.build(impact=impact, plan=plan, verification=verification)
+            _RUNS[impact.run_id] = report
+        except Exception:
+            pass
+
+    results = []
+    for run in _RUNS.values():
+        dumped = _dump_report(run)
+        if not repo_id or dumped.get("repo_id") == repo_id:
+            results.append(dumped)
+    return results
+
+
 @app.get("/api/v1/runs/{run_id}")
 def get_run(run_id: str):
     if run_id not in _RUNS:
         raise HTTPException(status_code=404, detail=f"Run '{run_id}' not found.")
-    return _RUNS[run_id]
+    return _dump_report(_RUNS[run_id])
 
 
 @app.get("/api/v1/runs/{run_id}/graph")

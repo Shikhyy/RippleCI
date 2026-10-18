@@ -36,10 +36,15 @@ def test_github_list_pull_requests(client):
     assert res.status_code == 200
     data = res.json()
     assert "pull_requests" in data
-    assert len(data["pull_requests"]) >= 1
-    first_pr = data["pull_requests"][0]
-    assert "number" in first_pr
-    assert "title" in first_pr
+    assert isinstance(data["pull_requests"], list)
+
+    # Test sample repository returns demonstration PRs
+    sample_res = client.get("/api/v1/github/repos/sample-org/payments-service/pulls")
+    assert sample_res.status_code == 200
+    sample_data = sample_res.json()
+    assert len(sample_data["pull_requests"]) >= 1
+    assert "number" in sample_data["pull_requests"][0]
+    assert "title" in sample_data["pull_requests"][0]
 
 
 def test_github_analyze_pull_request(client):

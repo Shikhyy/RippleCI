@@ -246,6 +246,52 @@ export async function fetchHealth() {
   return { status: "ok", version: "0.1.0", falkordb_healthy: true, mode: "demo_fallback" };
 }
 
+export async function fetchRuns(repoId?: string): Promise<RunSummary[]> {
+  try {
+    const url = repoId ? `${API_BASE}/api/v1/runs?repo_id=${encodeURIComponent(repoId)}` : `${API_BASE}/api/v1/runs`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) return data;
+    }
+  } catch (e) {
+    // fallback
+  }
+  return [DEMO_RUN];
+}
+
+export async function runRepositoryAnalysis(
+  repoId: string,
+  base = "origin/main",
+  head = "HEAD",
+  budgetSeconds = 180,
+  maxMutations = 3
+): Promise<RunSummary> {
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/repositories/${encodeURIComponent(repoId)}/analyze`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        base,
+        head,
+        budget_seconds: budgetSeconds,
+        max_mutations: maxMutations,
+      }),
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    // fallback
+  }
+  return {
+    ...DEMO_RUN,
+    run_id: `run_${Date.now().toString(16).slice(-6)}`,
+    repo_id: repoId,
+    created_at: new Date().toISOString(),
+  };
+}
+
 export async function fetchRun(runId: string): Promise<RunSummary> {
   try {
     const res = await fetch(`${API_BASE}/api/v1/runs/${runId}`);

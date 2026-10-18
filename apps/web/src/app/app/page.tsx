@@ -36,9 +36,11 @@ import {
   fetchGitHubPullRequests,
   fetchHealth,
   fetchRepositories,
+  fetchRuns,
   GitHubPRAnalysisResult,
   GitHubPullRequest,
   postGitHubPRComment,
+  runRepositoryAnalysis,
   RunSummary,
 } from "@/lib/api";
 
@@ -70,6 +72,7 @@ export default function DashboardPage() {
   const [selectedRepo, setSelectedRepo] = useState<string>("payments-core-service");
   const [isConnectModalOpen, setIsConnectModalOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<"runs" | "github">("runs");
+  const [githubRepo, setGithubRepo] = useState<string>("Shikhyy/RippleCI");
   const [githubPRs, setGithubPRs] = useState<GitHubPullRequest[]>([]);
   const [analyzedPRs, setAnalyzedPRs] = useState<Record<number, GitHubPRAnalysisResult>>({});
   const [analyzingPR, setAnalyzingPR] = useState<number | null>(null);
@@ -87,8 +90,13 @@ export default function DashboardPage() {
         }
       }
     });
+    fetchRuns().then((loadedRuns) => {
+      if (loadedRuns && loadedRuns.length > 0) {
+        setRuns(loadedRuns);
+      }
+    });
     fetchGitHubPullRequests("Shikhyy", "RippleCI").then((prs) => {
-      if (prs && prs.length > 0) setGithubPRs(prs);
+      if (prs) setGithubPRs(prs);
     });
   }, []);
 
@@ -123,18 +131,18 @@ export default function DashboardPage() {
 
   const currentRepo = repositories.find((r) => r.id === selectedRepo) || repositories[0];
 
-  const triggerNewAnalysis = () => {
+  const triggerNewAnalysis = async () => {
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const newRun = await runRepositoryAnalysis(selectedRepo, "origin/main", "HEAD", 180, 3);
+      if (newRun) {
+        setRuns((prev) => [newRun, ...prev.filter((r) => r.run_id !== newRun.run_id)]);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
       setLoading(false);
-      const newRun: RunSummary = {
-        ...DEMO_RUN,
-        run_id: `run_${Date.now().toString(16).slice(-6)}`,
-        repo_id: selectedRepo,
-        created_at: new Date().toISOString(),
-      };
-      setRuns([newRun, ...runs]);
-    }, 900);
+    }
   };
 
   const handleRepositoryConnected = (newRepo: ConnectedRepository) => {
@@ -268,51 +276,98 @@ export default function DashboardPage() {
 
         {/* Dashboard Workspace */}
         <div className="p-6 sm:p-8 space-y-8 max-w-7xl">
-          {/* Telemetry Row */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="craft-card p-5 space-y-2">
-              <div className="flex items-center justify-between text-zinc-400">
-                <span className="text-[11px] font-mono uppercase tracking-wider">Indexed Symbols</span>
-                <Code2 className="w-4 h-4 text-[#6CC6CB]" />
-              </div>
-              <div className="text-2xl font-bold tracking-tight text-white font-mono">
-                {currentRepo?.symbols_count || 22}
-              </div>
-              <div className="text-xs text-zinc-400">10 files scanned into AST</div>
+          {/* FalkorDB Engine & Zero-Key Transparency Ribbon */}
+          <div className="p-3.5 rounded-xl bg-gradient-to-r from-[#0d1618] to-[#071012] border border-[#6CC6CB]/20 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs font-mono">
+            <div className="flex items-center gap-2.5">
+              <div className={`w-2.5 h-2.5 rounded-full ${health?.falkordb_healthy ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" : "bg-cyan-400"}`} />
+              <span className="text-zinc-300 font-semibold">Graph Engine:</span>
+              <span className="text-[#EAE5C9] font-bold">{health?.backend || "FalkorDB (Cypher Engine)"}</span>
+              <span className="text-zinc-500">({health?.graph_url || "redis://localhost:6379"})</span>
             </div>
 
-            <div className="craft-card p-5 space-y-2">
-              <div className="flex items-center justify-between text-zinc-400">
-                <span className="text-[11px] font-mono uppercase tracking-wider">FalkorDB Edges</span>
-                <Network className="w-4 h-4 text-[#6CC6CB]" />
+            <div className="flex items-center gap-4 text-[11px] text-zinc-400">
+              <div className="flex items-center gap-1.5">
+                <span className="text-emerald-400 font-bold">✓</span>
+                <span className="text-zinc-200">Zero API Keys Required</span>
               </div>
-              <div className="text-2xl font-bold tracking-tight text-white font-mono">
-                {currentRepo?.edges_count || 41}
+              <div className="hidden lg:flex items-center gap-2 text-zinc-500">
+                <span>•</span>
+                <span>FalkorDB: Local / Docker</span>
+                <span>•</span>
+                <span>GitHub: Keyless Public Mode</span>
               </div>
-              <div className="text-xs text-zinc-400">23 calls · 18 coverage</div>
-            </div>
-
-            <div className="craft-card p-5 space-y-2">
-              <div className="flex items-center justify-between text-zinc-400">
-                <span className="text-[11px] font-mono uppercase tracking-wider">Selection Efficiency</span>
-                <Zap className="w-4 h-4 text-emerald-400" />
-              </div>
-              <div className="text-2xl font-bold tracking-tight text-emerald-400 font-mono">11.4%</div>
-              <div className="text-xs text-zinc-400">7.3x faster execution</div>
-            </div>
-
-            <div className="craft-card p-5 space-y-2">
-              <div className="flex items-center justify-between text-zinc-400">
-                <span className="text-[11px] font-mono uppercase tracking-wider">Release State</span>
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              </div>
-              <div className="text-2xl font-bold tracking-tight text-white font-mono flex items-center gap-1.5">
-                <span className="text-emerald-400 text-lg">●</span>
-                <span className="text-base font-bold">VERIFIED SAFE</span>
-              </div>
-              <div className="text-xs text-zinc-400">100% mutation kill rate</div>
             </div>
           </div>
+
+          {/* Telemetry Row (Dynamically Derived) */}
+          {(() => {
+            const latestRun = runs[0] || DEMO_RUN;
+            const totalTests = currentRepo?.test_cases_count || benchmark?.total_suite_tests || 6;
+            const selectedTestsCount = latestRun.plan?.selected_tests?.length || 4;
+            const efficiency = ((selectedTestsCount / Math.max(1, totalTests)) * 100).toFixed(1);
+            const speedup = (totalTests / Math.max(1, selectedTestsCount)).toFixed(1);
+            const mutationScore = latestRun.verification?.mutation_score !== undefined
+              ? (latestRun.verification.mutation_score * 100).toFixed(0)
+              : "100";
+            const verdict = latestRun.recommendation || "RELEASE_SAFE";
+
+            return (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="craft-card p-5 space-y-2">
+                  <div className="flex items-center justify-between text-zinc-400">
+                    <span className="text-[11px] font-mono uppercase tracking-wider">Indexed Symbols</span>
+                    <Code2 className="w-4 h-4 text-[#6CC6CB]" />
+                  </div>
+                  <div className="text-2xl font-bold tracking-tight text-white font-mono">
+                    {currentRepo?.symbols_count || 22}
+                  </div>
+                  <div className="text-xs text-zinc-400">
+                    {currentRepo?.languages?.join(", ") || "Python"} AST extracted
+                  </div>
+                </div>
+
+                <div className="craft-card p-5 space-y-2">
+                  <div className="flex items-center justify-between text-zinc-400">
+                    <span className="text-[11px] font-mono uppercase tracking-wider">FalkorDB Edges</span>
+                    <Network className="w-4 h-4 text-[#6CC6CB]" />
+                  </div>
+                  <div className="text-2xl font-bold tracking-tight text-white font-mono">
+                    {currentRepo?.edges_count || 41}
+                  </div>
+                  <div className="text-xs text-zinc-400">
+                    CALLS & COVERS graph relationships
+                  </div>
+                </div>
+
+                <div className="craft-card p-5 space-y-2">
+                  <div className="flex items-center justify-between text-zinc-400">
+                    <span className="text-[11px] font-mono uppercase tracking-wider">Selection Efficiency</span>
+                    <Zap className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <div className="text-2xl font-bold tracking-tight text-emerald-400 font-mono">
+                    {efficiency}%
+                  </div>
+                  <div className="text-xs text-zinc-400">
+                    {speedup}x faster ({selectedTestsCount}/{totalTests} tests)
+                  </div>
+                </div>
+
+                <div className="craft-card p-5 space-y-2">
+                  <div className="flex items-center justify-between text-zinc-400">
+                    <span className="text-[11px] font-mono uppercase tracking-wider">Release State</span>
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <div className="text-2xl font-bold tracking-tight text-white font-mono flex items-center gap-1.5">
+                    <span className={verdict === "RELEASE_SAFE" ? "text-emerald-400 text-lg" : "text-amber-400 text-lg"}>●</span>
+                    <span className="text-base font-bold">{verdict}</span>
+                  </div>
+                  <div className="text-xs text-zinc-400">
+                    {mutationScore}% mutation kill rate
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Pull Request Impact Analysis & GitHub Integration */}
           <div className="craft-card overflow-hidden">
@@ -430,7 +485,7 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between text-xs font-mono text-zinc-400 bg-white/[0.02] p-3 rounded-xl border border-white/[0.06]">
                   <div className="flex items-center gap-2">
                     <Github className="w-4 h-4 text-[#6CC6CB]" />
-                    <span className="text-white font-semibold">Repository: Shikhyy/RippleCI</span>
+                    <span className="text-white font-semibold">Repository: {githubRepo}</span>
                     <span className="text-zinc-500">•</span>
                     <span>Direct GitHub Integration Active</span>
                   </div>
@@ -444,7 +499,32 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                <div className="space-y-3">
+                {githubPRs.length === 0 ? (
+                  <div className="p-8 text-center rounded-xl bg-black/30 border border-white/[0.06] space-y-3">
+                    <GitPullRequest className="w-8 h-8 text-zinc-600 mx-auto" />
+                    <div className="text-sm font-semibold text-white">No Open Pull Requests in {githubRepo}</div>
+                    <p className="text-xs text-zinc-400 max-w-md mx-auto">
+                      Repository <code className="text-[#6CC6CB]">{githubRepo}</code> has 0 open pull requests on GitHub right now.
+                      You can open a PR on GitHub or explore live PRs from an active repository.
+                    </p>
+                    <div className="flex items-center justify-center gap-2 pt-2">
+                      <button
+                        onClick={() => {
+                          setGithubRepo("fastapi/fastapi");
+                          setGithubLoading(true);
+                          fetchGitHubPullRequests("fastapi", "fastapi").then((prs) => {
+                            if (prs) setGithubPRs(prs);
+                            setGithubLoading(false);
+                          });
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-[#6CC6CB]/15 hover:bg-[#6CC6CB]/25 border border-[#6CC6CB]/30 text-[#EAE5C9] text-xs font-mono transition-colors"
+                      >
+                        ⚡ Load Live PRs from fastapi/fastapi
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
                   {githubPRs.map((pr) => {
                     const analysis = analyzedPRs[pr.number];
                     const isAnalyzing = analyzingPR === pr.number;
@@ -581,6 +661,7 @@ export default function DashboardPage() {
                     );
                   })}
                 </div>
+              )}
               </div>
             )}
           </div>

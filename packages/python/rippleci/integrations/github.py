@@ -70,14 +70,15 @@ class GitHubClient:
                 )
                 if res.status_code == 200:
                     items = res.json()
-                    if isinstance(items, list) and len(items) > 0:
+                    if isinstance(items, list):
                         return items
         except Exception:
             pass
 
-        # High-fidelity mock PRs for seamless offline demonstration
-        now = datetime.now(timezone.utc).isoformat()
-        return [
+        # Sample demonstration PRs only for sample-repository
+        if f"{owner}/{repo}".lower() in ("sample-org/payments-service", "examples/sample-repository", "demo/payments"):
+            now = datetime.now(timezone.utc).isoformat()
+            return [
             {
                 "id": 101,
                 "number": 142,
@@ -157,6 +158,8 @@ class GitHubClient:
                 "labels": [{"name": "reliability", "color": "10b981"}],
             },
         ]
+
+        return []
 
     def get_pull_request_diff(
         self, owner: str, repo: str, pull_number: int

@@ -83,7 +83,7 @@ export default function RunDetailsPage() {
               </span>
             </div>
             <p className="text-xs text-zinc-400 mt-1 font-mono">
-              Repository: {run.repo_id} · Branch: main · Commit: 8f12a9
+              Repository: {run.repo_id} · Range: {run.base_ref}..{run.head_ref} · Run: {run.run_id}
             </p>
           </div>
 
@@ -97,7 +97,7 @@ export default function RunDetailsPage() {
             <div>
               <div className="text-zinc-500 uppercase text-[10px] tracking-wider">Selected Tests</div>
               <div className="text-emerald-400 font-bold text-base mt-0.5">
-                {run.plan?.selected_tests.length || 4} / 13 tests
+                {run.plan?.selected_tests.length || 0} / {run.impact?.candidate_tests?.length || run.verification?.tests_executed_count || 6} tests
               </div>
             </div>
             <div>

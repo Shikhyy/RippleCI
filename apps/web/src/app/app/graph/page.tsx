@@ -1,18 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Database, Network, RefreshCw } from "lucide-react";
 import { GraphCanvas } from "@/components/GraphCanvas";
 import { DEMO_GRAPH_DATA, fetchGraph, GraphData } from "@/lib/api";
 
-export default function GraphExplorerPage() {
+function GraphExplorerContent() {
+  const searchParams = useSearchParams();
+  const runId = searchParams.get("run") || undefined;
+  const repoName = searchParams.get("repo") || "payments-core-service";
+
   const [graphData, setGraphData] = useState<GraphData>(DEMO_GRAPH_DATA);
   const [loading, setLoading] = useState<boolean>(false);
 
   const reloadGraph = () => {
     setLoading(true);
-    fetchGraph().then((data) => {
+    fetchGraph(runId).then((data) => {
       setGraphData(data);
       setLoading(false);
     });
@@ -20,7 +25,7 @@ export default function GraphExplorerPage() {
 
   useEffect(() => {
     reloadGraph();
-  }, []);
+  }, [runId]);
 
   return (
     <div className="min-h-screen bg-[#080c0e] text-zinc-100 flex flex-col font-sans">
@@ -42,6 +47,11 @@ export default function GraphExplorerPage() {
             <span className="text-[10px] font-mono text-[#6CC6CB] px-2 py-0.5 rounded bg-[#6CC6CB]/15 border border-[#6CC6CB]/30">
               Cypher Visualizer
             </span>
+            {runId && (
+              <span className="text-[10px] font-mono text-[#EAE5C9] px-2 py-0.5 rounded bg-white/[0.06] border border-white/[0.1]">
+                Run: {runId}
+              </span>
+            )}
           </div>
         </div>
 
@@ -60,11 +70,13 @@ export default function GraphExplorerPage() {
       {/* Main Canvas View */}
       <main className="flex-1 p-6 md:p-8 flex flex-col space-y-4 max-w-7xl mx-auto w-full">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-zinc-400 gap-3 p-4 rounded-xl border border-[#6CC6CB]/25 bg-[#0d1417]/90 backdrop-blur-md shadow-card">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Database className="w-3.5 h-3.5 text-[#6CC6CB]" />
-            <span>Repository Subgraph:</span>
-            <span className="text-white font-bold">payments-core-service</span>
-            <span className="text-[#EAE5C9]/70">(22 symbols · 41 edges)</span>
+            <span>Active Subgraph:</span>
+            <span className="text-white font-bold">{repoName}</span>
+            <span className="text-[#EAE5C9]/70">
+              ({graphData.nodes.length} nodes · {graphData.edges.length} edges)
+            </span>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-[11px]">
             <span className="flex items-center gap-1.5">
@@ -85,5 +97,13 @@ export default function GraphExplorerPage() {
         <GraphCanvas initialData={graphData} />
       </main>
     </div>
+  );
+}
+
+export default function GraphExplorerPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#080c0e] flex items-center justify-center text-xs font-mono text-[#6CC6CB]">Loading FalkorDB Graph...</div>}>
+      <GraphExplorerContent />
+    </Suspense>
   );
 }

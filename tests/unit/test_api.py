@@ -95,3 +95,24 @@ def test_api_connect_repository():
     assert res_list.status_code == 200
     repos = res_list.json()
     assert any(r["id"] == "sample-payments" for r in repos)
+
+
+def test_api_list_runs_and_analyze():
+    # 1. Run full analysis
+    res_analyze = client.post(
+        "/api/v1/repositories/sample-payments/analyze",
+        json={"base": "HEAD~1", "head": "HEAD", "budget_seconds": 180, "max_mutations": 3},
+    )
+    assert res_analyze.status_code == 200
+    report = res_analyze.json()
+    assert "run_id" in report
+    assert "recommendation" in report
+    assert "impact" in report
+    assert "plan" in report
+
+    # 2. List runs
+    res_runs = client.get("/api/v1/runs")
+    assert res_runs.status_code == 200
+    runs = res_runs.json()
+    assert len(runs) >= 1
+    assert any(r["run_id"] == report["run_id"] for r in runs)
