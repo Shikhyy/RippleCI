@@ -4,6 +4,14 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "RippleCI — Graph-Native Release Intelligence",
   description: "Understand the blast radius of code changes, prioritize regression tests, and verify releases with FalkorDB.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
