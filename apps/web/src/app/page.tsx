@@ -116,7 +116,7 @@ export default function LandingPage() {
       {/* React Bits Pro - Contour Tide (Ocean of particles rolling in waves across entire landing page) */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-95">
         <ContourTide
-          colors={["#383838", "#ffffff"]}
+          colors={["#181a1f", "#f4f4f5"]}
           backgroundColor="transparent"
           density={1.15}
           particleSize={1.4}

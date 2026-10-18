@@ -48,9 +48,9 @@ export default function RunDetailsPage() {
     <div className="min-h-screen bg-black text-white flex flex-col font-sans relative">
       {/* Ambient Glassmorphic Background Glow Orbs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-white/[0.03] blur-[140px]" />
-        <div className="absolute top-[40%] right-[5%] w-[550px] h-[550px] rounded-full bg-white/[0.02] blur-[150px]" />
-        <div className="absolute bottom-[-10%] left-[30%] w-[650px] h-[500px] rounded-full bg-white/[0.03] blur-[150px]" />
+        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-zinc-700/[0.08] blur-[140px]" />
+        <div className="absolute top-[40%] right-[5%] w-[550px] h-[550px] rounded-full bg-zinc-600/[0.06] blur-[150px]" />
+        <div className="absolute bottom-[-10%] left-[30%] w-[650px] h-[500px] rounded-full bg-zinc-800/[0.10] blur-[150px]" />
       </div>
 
       {/* Top Header */}

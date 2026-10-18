@@ -31,8 +31,8 @@ function GraphExplorerContent() {
     <div className="min-h-screen bg-black text-neutral-300 flex flex-col font-sans relative">
       {/* Ambient Glassmorphic Background Subtle Glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-40">
-        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-white/[0.04] blur-[140px]" />
-        <div className="absolute bottom-[-10%] right-[30%] w-[650px] h-[500px] rounded-full bg-white/[0.03] blur-[150px]" />
+        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-zinc-700/[0.08] blur-[140px]" />
+        <div className="absolute bottom-[-10%] right-[30%] w-[650px] h-[500px] rounded-full bg-zinc-800/[0.10] blur-[150px]" />
       </div>
 
       {/* Top Header */}

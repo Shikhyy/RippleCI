@@ -265,7 +265,14 @@ ${data.merge_recommendation}
   const activePRAnalysis = selectedPR ? analyzedPRs[selectedPR.number] : null;
 
   return (
-    <div className="min-h-screen bg-black text-neutral-300 flex flex-col md:flex-row relative font-sans">
+    <div className="min-h-screen bg-black text-neutral-300 flex flex-col md:flex-row relative font-sans overflow-x-hidden">
+      {/* Ambient Glassmorphic Background Glow Orbs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-[-5%] left-[25%] w-[600px] h-[600px] rounded-full bg-zinc-800/[0.08] blur-[150px]" />
+        <div className="absolute top-[45%] right-[10%] w-[500px] h-[500px] rounded-full bg-zinc-700/[0.05] blur-[160px]" />
+        <div className="absolute bottom-[-10%] left-[35%] w-[650px] h-[500px] rounded-full bg-zinc-900/[0.12] blur-[150px]" />
+      </div>
+
       {/* Connect Repository Modal */}
       <ConnectRepoModal
         isOpen={isConnectModalOpen}
