@@ -104,3 +104,27 @@ def test_execute_unknown_tool():
     result = execute_tool("unknown_tool_xyz", {})
     assert result["isError"] is True
     assert "Unknown tool" in result["content"][0]["text"]
+
+
+def test_connect_client_custom_path(tmp_path):
+    """Verify single-command agentic connector writes valid MCP configuration."""
+    from rippleci.mcp.connector import connect_client
+
+    custom_cfg = tmp_path / ".cursor" / "mcp.json"
+    results = connect_client("cursor", repo_path=SAMPLE_REPO, custom_config_path=custom_cfg)
+
+    assert len(results) == 1
+    assert results[0]["status"] == "connected"
+    assert custom_cfg.exists()
+
+    with open(custom_cfg, "r") as f:
+        data = json.load(f)
+
+    assert "mcpServers" in data
+    assert "rippleci" in data["mcpServers"]
+    server = data["mcpServers"]["rippleci"]
+    assert "command" in server
+    assert "args" in server
+    assert "mcp" in server["args"]
+    assert "serve" in server["args"]
+

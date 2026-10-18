@@ -581,6 +581,56 @@ def mcp_tools_cmd():
     console.print(table)
 
 
+@mcp_app.command("connect")
+def mcp_connect_cmd(
+    client: str = typer.Argument("all", help="Target AI agent client: 'cursor', 'claude', 'windsurf', 'vscode', or 'all'."),
+    repo_path: Optional[str] = typer.Option(".", "--path", "-p", help="Target repository directory."),
+    print_only: bool = typer.Option(False, "--print", "-P", help="Print config JSON to stdout without modifying files."),
+):
+    """Connect RippleCI to local AI agents (Cursor, Claude Desktop, Windsurf, VS Code) in a single command."""
+    from rippleci.mcp.connector import connect_client, build_server_config
+    target_dir = Path(repo_path).resolve() if repo_path else Path.cwd()
+
+    if print_only:
+        cfg = {"mcpServers": {"rippleci": build_server_config(repo_path=target_dir)}}
+        console.print(json.dumps(cfg, indent=2))
+        return
+
+    console.print(f"[bold cyan]Connecting RippleCI to AI agent(s):[/bold cyan] [bold white]{client}[/bold white]")
+    results = connect_client(client_name=client, repo_path=target_dir)
+
+    table = Table(title="Agentic Connection Results", border_style="cyan")
+    table.add_column("AI Agent Client", style="bold")
+    table.add_column("Status")
+    table.add_column("Config File Location")
+    table.add_column("Details")
+
+    for r in results:
+        status_style = (
+            "[bold green]CONNECTED[/bold green]"
+            if r["status"] == "connected"
+            else ("[bold red]ERROR[/bold red]" if r["status"] == "error" else "[dim]SKIPPED[/dim]")
+        )
+        table.add_row(
+            r["client"].upper(),
+            status_style,
+            r.get("config_path", "N/A"),
+            r.get("message", ""),
+        )
+
+    console.print(table)
+    console.print("\n[bold green]✓ Done![/bold green] Restart your AI editor (Cursor / Claude Desktop) to use RippleCI tools.\n")
+
+
+@app.command("connect")
+def connect_shortcut_cmd(
+    client: str = typer.Argument("all", help="Target AI agent client: 'cursor', 'claude', 'windsurf', 'vscode', or 'all'."),
+    repo_path: Optional[str] = typer.Option(".", "--path", "-p", help="Target repository directory."),
+):
+    """Direct agentic connection: link RippleCI with your AI agents in a single command."""
+    mcp_connect_cmd(client=client, repo_path=repo_path, print_only=False)
+
+
 @app.command("mcp-serve", hidden=True)
 def mcp_serve_shortcut(
     repo_path: Optional[str] = typer.Option(".", "--path", "-p", help="Target repository directory."),
