@@ -22,12 +22,14 @@ import {
   RefreshCw,
   Send,
   ShieldCheck,
+  Sparkles,
   Zap,
 } from "lucide-react";
 
 import { ConnectRepoModal } from "@/components/ConnectRepoModal";
 import { GraphCanvas } from "@/components/GraphCanvas";
 import {
+  AITriageResult,
   analyzeGitHubPullRequest,
   BenchmarkReport,
   ConnectedRepository,
@@ -44,6 +46,7 @@ import {
   GitHubPullRequest,
   GraphData,
   postGitHubPRComment,
+  requestAITriage,
   runRepositoryAnalysis,
   RunSummary,
 } from "@/lib/api";
@@ -109,6 +112,20 @@ export default function DashboardPage() {
   const [analyzingPR, setAnalyzingPR] = useState<number | null>(null);
   const [commentStatus, setCommentStatus] = useState<Record<number, string>>({});
   const [githubLoading, setGithubLoading] = useState<boolean>(false);
+  const [aiTriagePRs, setAiTriagePRs] = useState<Record<number, AITriageResult>>({});
+  const [aiTriageLoading, setAiTriageLoading] = useState<number | null>(null);
+
+  const handleTriggerAITriage = async (prNumber: number, runId?: string) => {
+    setAiTriageLoading(prNumber);
+    try {
+      const res = await requestAITriage(selectedRepoId, prNumber, runId);
+      setAiTriagePRs((prev) => ({ ...prev, [prNumber]: res }));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setAiTriageLoading(null);
+    }
+  };
 
   // Embedded Graph state
   const [activeGraph, setActiveGraph] = useState<GraphData>(DEMO_GRAPH_DATA);
@@ -686,6 +703,37 @@ export default function DashboardPage() {
                                     {(((analysis.mutation_score ?? analysis.report?.verification?.mutation_score) ?? 1) * 100).toFixed(0)}%
                                   </div>
                                 </div>
+                              </div>
+
+                              {/* AI Triage Intelligence (Groq Enabled) */}
+                              <div className="pt-1">
+                                {aiTriagePRs[pr.number] ? (
+                                  <div className="p-3.5 rounded-xl bg-black/60 border border-emerald-500/30 space-y-2 text-xs font-mono animate-in fade-in duration-200">
+                                    <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-white/[0.08] pb-1.5">
+                                      <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+                                        <Sparkles className="w-3.5 h-3.5" />
+                                        <span>{aiTriagePRs[pr.number].provider}</span>
+                                      </div>
+                                      <span className="text-zinc-500">{aiTriagePRs[pr.number].latency_ms}ms latency</span>
+                                    </div>
+                                    <div className="text-white font-bold">{aiTriagePRs[pr.number].triage.headline}</div>
+                                    <p className="text-zinc-400 text-[11px] leading-relaxed">
+                                      {aiTriagePRs[pr.number].triage.blast_radius_analysis}
+                                    </p>
+                                    <div className="text-[#6CC6CB] text-[11px]">
+                                      {aiTriagePRs[pr.number].triage.merge_recommendation}
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <button
+                                    onClick={() => handleTriggerAITriage(pr.number, analysis.run_id)}
+                                    disabled={aiTriageLoading === pr.number}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono transition-colors"
+                                  >
+                                    <Sparkles className={`w-3.5 h-3.5 ${aiTriageLoading === pr.number ? "animate-spin text-emerald-300" : ""}`} />
+                                    <span>{aiTriageLoading === pr.number ? "Synthesizing AI Triage..." : "Synthesize AI PR Triage"}</span>
+                                  </button>
+                                )}
                               </div>
 
                               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 text-xs">
