@@ -1,39 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import {
-  ArrowRight,
   Check,
   CheckCircle2,
   Copy,
   ExternalLink,
   FolderGit2,
   GitBranch,
-  GitCommit,
-  GitPullRequest,
   Github,
   Key,
   Layers,
-  MessageSquare,
-  Network,
-  Play,
   RefreshCw,
-  Send,
-  ShieldCheck,
   Terminal,
   X,
   Zap,
 } from "lucide-react";
 import {
-  analyzeGitHubPullRequest,
   connectGitHubRepo,
   connectRepository,
   ConnectedRepository,
-  fetchGitHubPullRequests,
-  GitHubPRAnalysisResult,
-  GitHubPullRequest,
-  postGitHubPRComment,
 } from "@/lib/api";
 
 interface ConnectRepoModalProps {
@@ -48,36 +34,67 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
   const [repoName, setRepoName] = useState<string>("payments-core-service");
   const [indexing, setIndexing] = useState<boolean>(false);
   const [indexLogs, setIndexLogs] = useState<string[]>([]);
-  const [connectedRepo, setConnectedRepo] = useState<ConnectedRepository | null>(null);
   const [copiedAction, setCopiedAction] = useState<boolean>(false);
   const [copiedSdk, setCopiedSdk] = useState<boolean>(false);
 
-  // Direct GitHub Integration State
-  const [githubRepo, setGithubRepo] = useState<string>("fastapi/fastapi");
+  // GitHub tab state
+  const [githubInput, setGithubInput] = useState<string>("fastapi/fastapi");
   const [githubToken, setGithubToken] = useState<string>("");
   const [githubLoading, setGithubLoading] = useState<boolean>(false);
-  const [githubPRs, setGithubPRs] = useState<GitHubPullRequest[]>([]);
-  const [analyzingPR, setAnalyzingPR] = useState<number | null>(null);
-  const [analyzedPRs, setAnalyzedPRs] = useState<Record<number, GitHubPRAnalysisResult>>({});
-  const [commentStatus, setCommentStatus] = useState<Record<number, string>>({});
-  const [showActionsYaml, setShowActionsYaml] = useState<boolean>(false);
+  const [connectSuccess, setConnectSuccess] = useState<string | null>(null);
 
   if (!isOpen) return null;
+
+  const getOwnerAndRepo = (inputStr: string) => {
+    const clean = inputStr
+      .trim()
+      .replace(/^https?:\/\/github\.com\//, "")
+      .replace(/\.git$/, "")
+      .replace(/\/+$/, "");
+    const parts = clean.split("/").filter((p) => p && !["pulls", "pull", "issues"].includes(p));
+    return {
+      clean: parts.slice(0, 2).join("/"),
+      owner: parts[0] || "fastapi",
+      repo: parts[1] || "fastapi",
+    };
+  };
+
+  const handleConnectGitHub = async (targetRepo?: string) => {
+    const toConnect = targetRepo || githubInput;
+    setGithubLoading(true);
+    setConnectSuccess(null);
+    const { clean, owner, repo } = getOwnerAndRepo(toConnect);
+
+    try {
+      const connected = await connectGitHubRepo(clean, githubToken);
+      setConnectSuccess(`Connected ${owner}/${repo}`);
+      if (onConnected) {
+        onConnected(connected);
+      }
+      setTimeout(() => {
+        setGithubLoading(false);
+        setConnectSuccess(null);
+        onClose();
+      }, 700);
+    } catch (e) {
+      setGithubLoading(false);
+    }
+  };
 
   const handleConnectLocal = async () => {
     setIndexing(true);
     setIndexLogs([
-      "➜ Resolving repository workspace at " + repoPath + "...",
+      `➜ Resolving repository workspace at ${repoPath}...`,
       "➜ Discovered Python project with pytest test suite.",
     ]);
 
     setTimeout(() => {
       setIndexLogs((prev) => [
         ...prev,
-        "➜ AST Parser: Extracting function definitions, class hierarchies, and imports...",
-        "➜ FalkorDB: Creating graph nodes for symbols and test cases...",
+        "➜ Tree-sitter AST Parser: Extracting symbols, class hierarchies, and imports...",
+        "➜ FalkorDB: Registering graph nodes and dependency relationships...",
       ]);
-    }, 400);
+    }, 350);
 
     try {
       const repo = await connectRepository(repoPath, repoName);
@@ -87,23 +104,30 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
           `➜ FalkorDB: Created ${repo.edges_count || 41} CALLS and COVERAGE edges.`,
           `✓ Success! Indexed ${repo.symbols_count || 22} symbols in ${repo.duration_ms || 142}ms.`,
         ]);
-        setConnectedRepo(repo);
-        setIndexing(false);
         if (onConnected) onConnected(repo);
-      }, 900);
+        setTimeout(() => {
+          setIndexing(false);
+          setIndexLogs([]);
+          onClose();
+        }, 700);
+      }, 800);
     } catch (e) {
       setIndexing(false);
     }
   };
 
   const copyGithubWorkflow = () => {
-    const yaml = `name: RippleCI Blast Radius
+    const yaml = `name: RippleCI Blast Radius Gate
 on:
   pull_request:
-    branches: [main]
+    branches: [main, master]
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
-  rippleci:
+  rippleci-verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -114,12 +138,12 @@ jobs:
           python-version: '3.12'
       - name: Install RippleCI
         run: pip install rippleci
-      - name: Index & Verify Blast Radius
+      - name: Index & Gate Pull Request
         run: |
           ripple index .
           ripple impact origin/\${{ github.base_ref }}..HEAD
           ripple plan --budget 180
-          ripple verify --mutations 3`;
+          ripple verify --mutations 5 --gate strict`;
     navigator.clipboard.writeText(yaml);
     setCopiedAction(true);
     setTimeout(() => setCopiedAction(false), 2000);
@@ -146,70 +170,9 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
     setTimeout(() => setCopiedSdk(false), 2000);
   };
 
-  const getOwnerAndRepo = () => {
-    const clean = githubRepo
-      .trim()
-      .replace(/^https?:\/\/github\.com\//, "")
-      .replace(/\.git$/, "")
-      .replace(/\/+$/, "");
-    const parts = clean.split("/").filter((p) => p && !["pulls", "pull", "issues"].includes(p));
-    return {
-      clean: parts.slice(0, 2).join("/"),
-      owner: parts[0] || "fastapi",
-      repo: parts[1] || "fastapi",
-    };
-  };
-
-  const handleFetchGitHubPRs = async () => {
-    setGithubLoading(true);
-    const { clean, owner, repo } = getOwnerAndRepo();
-
-    try {
-      const connected = await connectGitHubRepo(clean, githubToken);
-      setConnectedRepo(connected);
-      const prs = await fetchGitHubPullRequests(owner, repo, githubToken);
-      setGithubPRs(prs || []);
-      if (onConnected) onConnected(connected);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setGithubLoading(false);
-    }
-  };
-
-  const handleAnalyzePR = async (pr: GitHubPullRequest) => {
-    setAnalyzingPR(pr.number);
-    const { owner, repo } = getOwnerAndRepo();
-
-    try {
-      const res = await analyzeGitHubPullRequest(owner, repo, pr.number, githubToken);
-      setAnalyzedPRs((prev) => ({ ...prev, [pr.number]: res }));
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setAnalyzingPR(null);
-    }
-  };
-
-  const handlePostPRComment = async (prNumber: number) => {
-    setCommentStatus((prev) => ({ ...prev, [prNumber]: "posting" }));
-    const { owner, repo } = getOwnerAndRepo();
-    const runId = analyzedPRs[prNumber]?.run_id;
-
-    try {
-      const res = await postGitHubPRComment(owner, repo, prNumber, githubToken, runId);
-      setCommentStatus((prev) => ({
-        ...prev,
-        [prNumber]: res.status === "posted" ? "Posted to PR!" : "Simulated comment ready",
-      }));
-    } catch (e) {
-      setCommentStatus((prev) => ({ ...prev, [prNumber]: "Failed to post" }));
-    }
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-[#0a1012] border border-[#6CC6CB]/30 rounded-2xl shadow-[0_0_60px_-15px_rgba(108,198,203,0.3)] overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-xl bg-[#0a1012] border border-[#6CC6CB]/30 rounded-2xl shadow-[0_0_60px_-15px_rgba(108,198,203,0.3)] overflow-hidden flex flex-col max-h-[90vh]">
         {/* Modal Header */}
         <div className="p-5 border-b border-[#6CC6CB]/20 flex items-center justify-between bg-[#0e1619]">
           <div className="flex items-center gap-3">
@@ -243,7 +206,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
           >
             <Github className="w-3.5 h-3.5 text-[#6CC6CB]" />
             <span>GitHub (Direct)</span>
-            <span className="text-[9px] px-1 py-0.2 rounded-full bg-[#6CC6CB]/20 text-[#6CC6CB] font-mono border border-[#6CC6CB]/30">Live</span>
+            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#6CC6CB]/20 text-[#6CC6CB] font-mono border border-[#6CC6CB]/30">Live</span>
           </button>
           <button
             onClick={() => setActiveTab("local")}
@@ -264,7 +227,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
                 : "border-transparent text-zinc-400 hover:text-zinc-200"
             }`}
           >
-            <GitPullRequest className="w-3.5 h-3.5 text-[#6CC6CB]" />
+            <Layers className="w-3.5 h-3.5 text-[#6CC6CB]" />
             <span>CI/CD Actions</span>
           </button>
           <button
@@ -282,10 +245,104 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
 
         {/* Tab Content */}
         <div className="p-5 overflow-y-auto space-y-4">
+          {/* TAB 1: Direct GitHub Integration */}
+          {activeTab === "github" && (
+            <div className="space-y-4">
+              <div className="text-xs text-zinc-300 leading-relaxed">
+                Connect any public or private GitHub repository. RippleCI queries pull requests, maps the blast radius across AST callers, and prioritizes tests using FalkorDB.
+              </div>
+
+              {/* 1-Click Preset Quick-Pick */}
+              <div className="space-y-1.5">
+                <span className="text-[11px] font-mono uppercase text-zinc-400 tracking-wider">Popular Repositories:</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { id: "fastapi/fastapi", label: "⚡ fastapi" },
+                    { id: "pallets/flask", label: "⚡ flask" },
+                    { id: "psf/requests", label: "⚡ requests" },
+                    { id: "Shikhyy/RippleCI", label: "⚡ RippleCI" },
+                  ].map((preset) => (
+                    <button
+                      key={preset.id}
+                      onClick={() => {
+                        setGithubInput(preset.id);
+                        handleConnectGitHub(preset.id);
+                      }}
+                      className="text-xs font-mono px-2.5 py-1 rounded-lg bg-black/40 hover:bg-[#6CC6CB]/20 border border-[#6CC6CB]/30 text-[#EAE5C9] transition-all hover:border-[#6CC6CB]"
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Form Input */}
+              <div className="space-y-3 text-xs">
+                <div>
+                  <label className="block text-[11px] font-mono text-zinc-400 mb-1">
+                    Repository Identifier or URL:
+                  </label>
+                  <div className="relative">
+                    <Github className="w-4 h-4 absolute left-3 top-2.5 text-[#6CC6CB]" />
+                    <input
+                      type="text"
+                      value={githubInput}
+                      onChange={(e) => setGithubInput(e.target.value)}
+                      placeholder="e.g. fastapi/fastapi or https://github.com/..."
+                      className="w-full bg-[#111c20] border border-[#6CC6CB]/25 rounded-lg pl-9 pr-3 py-2 text-white font-mono focus:outline-none focus:border-[#6CC6CB] transition-colors text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-[11px] font-mono text-zinc-400">
+                      GitHub Personal Access Token (Optional):
+                    </label>
+                    <span className="text-[10px] text-zinc-500 font-mono">Zero keys needed for public repos</span>
+                  </div>
+                  <input
+                    type="password"
+                    value={githubToken}
+                    onChange={(e) => setGithubToken(e.target.value)}
+                    placeholder="ghp_... (only needed for private repositories)"
+                    className="w-full bg-[#111c20] border border-white/[0.1] rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-[#6CC6CB] transition-colors text-xs"
+                  />
+                </div>
+              </div>
+
+              {connectSuccess && (
+                <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>{connectSuccess} — opening dashboard...</span>
+                </div>
+              )}
+
+              <button
+                onClick={() => handleConnectGitHub()}
+                disabled={githubLoading || !githubInput.trim()}
+                className="w-full flex items-center justify-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-bold py-2.5 rounded-xl transition-all shadow-[0_1px_16px_rgba(108,198,203,0.45)] disabled:opacity-50 active:scale-[0.99] text-xs font-mono"
+              >
+                {githubLoading ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Connecting & Indexing PRs...</span>
+                  </>
+                ) : (
+                  <>
+                    <Github className="w-3.5 h-3.5" />
+                    <span>Connect Repository & Load PRs</span>
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+
+          {/* TAB 2: Local Workspace */}
           {activeTab === "local" && (
             <div className="space-y-4">
               <div className="text-xs text-zinc-300 leading-relaxed">
-                Connect a local repository folder. RippleCI will scan its Python source files, extract AST functions, and build the FalkorDB call graph in milliseconds.
+                Connect a local folder. RippleCI scans Python source files, extracts AST functions, and registers the FalkorDB call graph in milliseconds.
               </div>
 
               {/* Presets */}
@@ -317,7 +374,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div>
                   <label className="block text-[11px] font-mono text-zinc-400 mb-1">
-                    Repository Path (Relative or Absolute):
+                    Repository Path:
                   </label>
                   <input
                     type="text"
@@ -329,7 +386,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
                 </div>
                 <div>
                   <label className="block text-[11px] font-mono text-zinc-400 mb-1">
-                    Repository Name:
+                    Repository Identifier:
                   </label>
                   <input
                     type="text"
@@ -361,364 +418,40 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
                 </div>
               )}
 
-              {/* Connect Action */}
-              {!connectedRepo ? (
-                <button
-                  onClick={handleConnectLocal}
-                  disabled={indexing}
-                  className="w-full flex items-center justify-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-bold py-2.5 rounded-xl transition-all shadow-[0_1px_16px_rgba(108,198,203,0.45)] disabled:opacity-50 active:scale-[0.99] text-xs"
-                >
-                  <Play className={`w-3.5 h-3.5 ${indexing ? "animate-spin" : ""}`} />
-                  <span>{indexing ? "Indexing AST into FalkorDB..." : "Connect & Index Repository"}</span>
-                </button>
-              ) : (
-                <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span className="text-emerald-300 font-semibold">
-                      Connected: {connectedRepo.id}
-                    </span>
-                    <span className="text-zinc-400 text-[11px]">
-                      ({connectedRepo.symbols_count || 22} symbols · {connectedRepo.edges_count || 41} edges)
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Link
-                      href="/app/graph"
-                      onClick={onClose}
-                      className="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-medium text-[11px] transition-colors"
-                    >
-                      View Graph
-                    </Link>
-                    <button
-                      onClick={onClose}
-                      className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium text-[11px] transition-colors"
-                    >
-                      Done
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeTab === "github" && (
-            <div className="space-y-4 text-xs">
-              <div className="text-zinc-300 leading-relaxed">
-                Connect any GitHub repository to fetch active Pull Requests, map the FalkorDB AST blast radius on each PR diff, and post verification evidence directly to GitHub.
-              </div>
-
-              {/* Quick Presets */}
-              <div className="space-y-1.5">
-                <span className="text-[11px] font-mono uppercase text-zinc-400">Quick Presets:</span>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => {
-                      setGithubRepo("Shikhyy/RippleCI");
-                    }}
-                    className="text-xs font-mono px-2.5 py-1 rounded-lg bg-[#6CC6CB]/10 hover:bg-[#6CC6CB]/20 border border-[#6CC6CB]/30 text-[#EAE5C9] transition-colors"
-                  >
-                    ⚡ Shikhyy/RippleCI
-                  </button>
-                  <button
-                    onClick={() => {
-                      setGithubRepo("fastapi/fastapi");
-                    }}
-                    className="text-xs font-mono px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-zinc-300 transition-colors"
-                  >
-                    ⚡ fastapi/fastapi
-                  </button>
-                  <button
-                    onClick={() => {
-                      setGithubRepo("pallets/flask");
-                    }}
-                    className="text-xs font-mono px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-zinc-300 transition-colors"
-                  >
-                    ⚡ pallets/flask
-                  </button>
-                </div>
-              </div>
-
-              {/* Form Inputs */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[11px] font-mono text-zinc-400 mb-1">
-                    GitHub Repository (owner/repo):
-                  </label>
-                  <div className="relative">
-                    <Github className="w-3.5 h-3.5 absolute left-3 top-2.5 text-[#6CC6CB]" />
-                    <input
-                      type="text"
-                      value={githubRepo}
-                      onChange={(e) => setGithubRepo(e.target.value)}
-                      className="w-full bg-[#111c20] border border-[#6CC6CB]/25 rounded-lg pl-8 pr-3 py-2 text-white font-mono focus:outline-none focus:border-[#6CC6CB] transition-colors text-xs"
-                      placeholder="e.g. Shikhyy/RippleCI"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-[11px] font-mono text-zinc-400 mb-1 flex items-center justify-between">
-                    <span>Personal Access Token:</span>
-                    <span className="text-[10px] text-zinc-500">(Optional for public)</span>
-                  </label>
-                  <div className="relative">
-                    <Key className="w-3.5 h-3.5 absolute left-3 top-2.5 text-zinc-500" />
-                    <input
-                      type="password"
-                      value={githubToken}
-                      onChange={(e) => setGithubToken(e.target.value)}
-                      className="w-full bg-[#111c20] border border-white/[0.1] rounded-lg pl-8 pr-3 py-2 text-white font-mono focus:outline-none focus:border-[#6CC6CB] transition-colors text-xs placeholder:text-zinc-600"
-                      placeholder="ghp_... (or leave empty)"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Fetch Button */}
               <button
-                onClick={handleFetchGitHubPRs}
-                disabled={githubLoading || !githubRepo}
-                className="w-full flex items-center justify-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-bold py-2.5 rounded-xl transition-all shadow-[0_1px_16px_rgba(108,198,203,0.35)] disabled:opacity-50 active:scale-[0.99] text-xs"
+                onClick={handleConnectLocal}
+                disabled={indexing}
+                className="w-full flex items-center justify-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-bold py-2.5 rounded-xl transition-all shadow-[0_1px_16px_rgba(108,198,203,0.45)] disabled:opacity-50 active:scale-[0.99] text-xs font-mono"
               >
-                {githubLoading ? (
+                {indexing ? (
                   <>
                     <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                    <span>Connecting to GitHub API & Fetching PRs...</span>
+                    <span>Parsing AST & Indexing...</span>
                   </>
                 ) : (
                   <>
-                    <GitPullRequest className="w-3.5 h-3.5" />
-                    <span>Connect & Fetch Open Pull Requests</span>
+                    <Terminal className="w-3.5 h-3.5" />
+                    <span>Index & Connect Local Workspace</span>
                   </>
                 )}
               </button>
-
-              {/* Pull Requests List */}
-              {githubPRs.length > 0 && (
-                <div className="space-y-3 pt-2">
-                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 border-b border-white/[0.08] pb-1.5">
-                    <span className="flex items-center gap-1.5">
-                      <GitPullRequest className="w-3.5 h-3.5 text-[#6CC6CB]" />
-                      <span>Active Pull Requests in {githubRepo} ({githubPRs.length})</span>
-                    </span>
-                    <span className="text-[#6CC6CB]">FalkorDB Graph Ready</span>
-                  </div>
-
-                  <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1">
-                    {githubPRs.map((pr) => {
-                      const analysis = analyzedPRs[pr.number];
-                      const isAnalyzing = analyzingPR === pr.number;
-                      const commentState = commentStatus[pr.number];
-
-                      return (
-                        <div
-                          key={pr.number}
-                          className="p-3.5 rounded-xl bg-black/40 border border-[#6CC6CB]/20 hover:border-[#6CC6CB]/40 transition-all space-y-2.5"
-                        >
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span className="font-mono font-bold text-[#6CC6CB]">#{pr.number}</span>
-                                <span className="font-semibold text-white">{pr.title}</span>
-                                <a
-                                  href={pr.html_url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-zinc-500 hover:text-[#6CC6CB] transition-colors"
-                                  title="View on GitHub"
-                                >
-                                  <ExternalLink className="w-3 h-3" />
-                                </a>
-                              </div>
-                              <div className="flex items-center gap-3 text-[11px] text-zinc-400 font-mono">
-                                <span>@{pr.user?.login || "contributor"}</span>
-                                <span>•</span>
-                                <span className="flex items-center gap-1 text-zinc-300">
-                                  <GitBranch className="w-3 h-3 text-[#6CC6CB]" />
-                                  {pr.head?.ref || "head"} ➔ {pr.base?.ref || "main"}
-                                </span>
-                                {pr.additions !== undefined && (
-                                  <>
-                                    <span>•</span>
-                                    <span className="text-emerald-400">+{pr.additions}</span>
-                                    <span className="text-rose-400">-{pr.deletions}</span>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Analysis Action / Status */}
-                            <div>
-                              {!analysis && !isAnalyzing && (
-                                <button
-                                  onClick={() => handleAnalyzePR(pr)}
-                                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#6CC6CB]/15 hover:bg-[#6CC6CB]/25 border border-[#6CC6CB]/30 text-[#EAE5C9] font-medium text-xs transition-colors shadow-sm"
-                                >
-                                  <Zap className="w-3 h-3 text-[#6CC6CB]" />
-                                  <span>Analyze Blast Radius</span>
-                                </button>
-                              )}
-                              {isAnalyzing && (
-                                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-mono">
-                                  <RefreshCw className="w-3 h-3 animate-spin text-amber-400" />
-                                  <span>Tracing AST graph...</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Analysis Results Drawer */}
-                          {analysis && (
-                            <div className="pt-2 border-t border-white/[0.06] space-y-2">
-                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-                                <div className="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-                                  <div className="text-[10px] text-zinc-400 font-mono">VERDICT</div>
-                                  <div
-                                    className={`text-xs font-bold font-mono ${
-                                      (analysis.verdict || analysis.recommendation) === "ALLOW" ||
-                                      (analysis.verdict || analysis.recommendation) === "RELEASE_SAFE"
-                                        ? "text-emerald-400"
-                                        : "text-amber-400"
-                                    }`}
-                                  >
-                                    {analysis.verdict || analysis.recommendation || "RELEASE_SAFE"}
-                                  </div>
-                                </div>
-                                <div className="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-                                  <div className="text-[10px] text-zinc-400 font-mono">AST CALLERS</div>
-                                  <div className="text-xs font-bold text-white font-mono">
-                                    {analysis.callers_affected ?? (analysis.report?.impact?.impacted_symbols?.length || 2)} impacted
-                                  </div>
-                                </div>
-                                <div className="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-                                  <div className="text-[10px] text-zinc-400 font-mono">GBDT TESTS</div>
-                                  <div className="text-xs font-bold text-[#6CC6CB] font-mono">
-                                    {analysis.tests_selected ?? (analysis.report?.plan?.selected_tests?.length || 4)} ({analysis.estimated_duration_s ?? (analysis.report?.plan?.estimated_total_seconds || 4.8)}s)
-                                  </div>
-                                </div>
-                                <div className="p-2 rounded-lg bg-white/[0.03] border border-white/[0.06]">
-                                  <div className="text-[10px] text-zinc-400 font-mono">MUTATION SCORE</div>
-                                  <div className="text-xs font-bold text-emerald-400 font-mono">
-                                    {(((analysis.mutation_score ?? analysis.report?.verification?.mutation_score) ?? 1) * 100).toFixed(0)}%
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="flex items-center justify-between gap-2 pt-1 text-xs">
-                                <Link
-                                  href={`/app/graph?run=${analysis.run_id}`}
-                                  onClick={onClose}
-                                  className="flex items-center gap-1 text-[#6CC6CB] hover:underline font-mono text-[11px]"
-                                >
-                                  <Network className="w-3 h-3" />
-                                  <span>Explore FalkorDB Blast Graph ➔</span>
-                                </Link>
-
-                                <div className="flex items-center gap-2">
-                                  {commentState ? (
-                                    <span className="flex items-center gap-1 text-emerald-400 text-[11px] font-mono">
-                                      <CheckCircle2 className="w-3 h-3" />
-                                      {commentState}
-                                    </span>
-                                  ) : (
-                                    <button
-                                      onClick={() => handlePostPRComment(pr.number)}
-                                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] border border-white/[0.12] text-zinc-200 text-[11px] font-medium transition-colors"
-                                    >
-                                      <Send className="w-3 h-3 text-[#6CC6CB]" />
-                                      <span>Post Comment to PR</span>
-                                    </button>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* GitHub Actions Fallback Collapsible */}
-              <div className="pt-2 border-t border-white/[0.08]">
-                <button
-                  onClick={() => setShowActionsYaml(!showActionsYaml)}
-                  className="text-[11px] text-zinc-400 hover:text-[#6CC6CB] flex items-center gap-1 font-mono transition-colors"
-                >
-                  <span>{showActionsYaml ? "▼ Hide CI Workflow" : "▶ Prefer GitHub Actions CI automation? View .github/workflows/rippleci.yml"}</span>
-                </button>
-
-                {showActionsYaml && (
-                  <div className="mt-2 space-y-2">
-                    <div className="relative rounded-xl bg-black/70 border border-white/[0.08] p-4 font-mono text-[11px] overflow-x-auto text-zinc-300">
-                      <button
-                        onClick={copyGithubWorkflow}
-                        className="absolute top-3 right-3 flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[#6CC6CB]/20 hover:bg-[#6CC6CB]/30 text-[#EAE5C9] border border-[#6CC6CB]/30 transition-colors"
-                      >
-                        {copiedAction ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                        <span>{copiedAction ? "Copied" : "Copy YAML"}</span>
-                      </button>
-                      <pre>{`name: RippleCI Blast Radius
-on:
-  pull_request:
-    branches: [main]
-
-jobs:
-  rippleci:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install RippleCI
-        run: pip install rippleci
-      - name: Index & Verify Blast Radius
-        run: |
-          ripple index .
-          ripple impact origin/\${{ github.base_ref }}..HEAD
-          ripple plan --budget 180
-          ripple verify --mutations 3`}</pre>
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
           )}
 
+          {/* TAB 3: CI/CD Pipeline */}
           {activeTab === "cicd" && (
-            <div className="space-y-4 text-xs">
-              <div className="text-zinc-300 leading-relaxed">
-                Run RippleCI automatically on every pull request. Add this workflow to your repository to gate untested regressions and post evidence comments to PRs.
+            <div className="space-y-3">
+              <div className="text-xs text-zinc-300 leading-relaxed">
+                Add RippleCI to your repository workflow. Every PR runs prioritized regression tests and receives an evidence-backed status comment.
               </div>
 
-              {/* 3-Step Walkthrough */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 font-mono text-[11px]">
-                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] space-y-1">
-                  <div className="text-[#6CC6CB] font-bold">1. Workflow File</div>
-                  <div className="text-zinc-400">Create <code className="text-zinc-200">.github/workflows/rippleci.yml</code></div>
-                </div>
-                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] space-y-1">
-                  <div className="text-[#6CC6CB] font-bold">2. Paste YAML</div>
-                  <div className="text-zinc-400">Copy the verified configuration below</div>
-                </div>
-                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] space-y-1">
-                  <div className="text-[#6CC6CB] font-bold">3. Gated Merge</div>
-                  <div className="text-zinc-400">PRs get automated blast radius verification</div>
-                </div>
-              </div>
-
-              {/* Workflow YAML Viewer */}
-              <div className="relative rounded-xl bg-black/70 border border-[#6CC6CB]/20 p-4 font-mono text-[11px] overflow-x-auto text-zinc-300">
+              <div className="relative rounded-xl bg-black/60 border border-[#6CC6CB]/20 p-3.5 font-mono text-[11px] overflow-x-auto text-zinc-300">
                 <button
                   onClick={copyGithubWorkflow}
-                  className="absolute top-3 right-3 flex items-center gap-1 text-[10px] px-2.5 py-1 rounded-lg bg-[#6CC6CB]/20 hover:bg-[#6CC6CB]/30 text-[#EAE5C9] border border-[#6CC6CB]/30 transition-colors"
+                  className="absolute top-2.5 right-2.5 flex items-center gap-1 bg-[#6CC6CB]/20 hover:bg-[#6CC6CB]/30 border border-[#6CC6CB]/40 text-[#EAE5C9] text-[10px] px-2 py-1 rounded transition-colors"
                 >
                   {copiedAction ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                  <span>{copiedAction ? "Copied to Clipboard!" : "Copy YAML"}</span>
+                  <span>{copiedAction ? "Copied" : "Copy YAML"}</span>
                 </button>
                 <pre>{`name: RippleCI Blast Radius Gate
 on:
@@ -733,60 +466,54 @@ jobs:
   rippleci-verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Install RippleCI & Pytest
-        run: pip install rippleci pytest
-
-      - name: Index & Verify Blast Radius
-        env:
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+      - name: Install RippleCI
+        run: pip install rippleci
+      - name: Index & Gate Pull Request
         run: |
           ripple index .
           ripple impact origin/\${{ github.base_ref }}..HEAD
           ripple plan --budget 180
-          ripple verify --mutations 3`}</pre>
+          ripple verify --mutations 5 --gate strict`}</pre>
               </div>
             </div>
           )}
 
+          {/* TAB 4: Python SDK */}
           {activeTab === "sdk" && (
-            <div className="space-y-3 text-xs">
-              <p className="text-zinc-300 leading-relaxed">
-                Connect and manipulate repositories programmatically via the typed Python SDK:
-              </p>
+            <div className="space-y-3">
+              <div className="text-xs text-zinc-300 leading-relaxed">
+                Use the Python SDK programmatically across test harnesses, custom CLI tools, or release gates:
+              </div>
 
-              <div className="relative rounded-xl bg-black/70 border border-white/[0.08] p-4 font-mono text-[11px] overflow-x-auto text-zinc-300">
+              <div className="relative rounded-xl bg-black/60 border border-[#6CC6CB]/20 p-3.5 font-mono text-[11px] overflow-x-auto text-zinc-300">
                 <button
                   onClick={copySdkSnippet}
-                  className="absolute top-3 right-3 flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[#6CC6CB]/20 hover:bg-[#6CC6CB]/30 text-[#EAE5C9] border border-[#6CC6CB]/30 transition-colors"
+                  className="absolute top-2.5 right-2.5 flex items-center gap-1 bg-[#6CC6CB]/20 hover:bg-[#6CC6CB]/30 border border-[#6CC6CB]/40 text-[#EAE5C9] text-[10px] px-2 py-1 rounded transition-colors"
                 >
                   {copiedSdk ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
                   <span>{copiedSdk ? "Copied" : "Copy Python"}</span>
                 </button>
                 <pre>{`from rippleci.sdk.project import RippleProject
 
-# 1. Open any repository with automatic FalkorDB discovery
+# 1. Open repository with automatic FalkorDB discovery
 project = RippleProject.open(".")
 
 # 2. Build or refresh AST knowledge graph
 summary = project.indexer.index()
-print(f"Indexed {summary.symbols_count} symbols into FalkorDB")
+print(f"Indexed {summary.symbols_count} symbols")
 
 # 3. Analyze PR impact against base branch
 impact = project.analyzer.analyze(base="origin/main", head="HEAD")
 
 # 4. Generate budget-constrained test plan
 plan = project.planner.plan(impact=impact, budget_seconds=180)
-print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seconds:.1f}s)")`}</pre>
+print(f"Selected {len(plan.selected_tests)} tests")`}</pre>
               </div>
             </div>
           )}

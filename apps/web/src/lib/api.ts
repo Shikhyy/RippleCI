@@ -302,9 +302,14 @@ export async function fetchRun(runId: string): Promise<RunSummary> {
   return DEMO_RUN;
 }
 
-export async function fetchGraph(runId?: string): Promise<GraphData> {
+export async function fetchGraph(runId?: string, repoId?: string): Promise<GraphData> {
   try {
-    const url = runId ? `${API_BASE}/api/v1/runs/${runId}/graph` : `${API_BASE}/api/v1/runs/demo/graph`;
+    let url = `${API_BASE}/api/v1/graph`;
+    if (runId) {
+      url = `${API_BASE}/api/v1/runs/${runId}/graph`;
+    } else if (repoId) {
+      url = `${API_BASE}/api/v1/graph?repo_id=${encodeURIComponent(repoId)}`;
+    }
     const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
@@ -328,7 +333,7 @@ export async function fetchBenchmark(): Promise<BenchmarkReport> {
 
 export interface ConnectedRepository {
   id: string;
-  root: string;
+  root?: string;
   default_branch: string;
   languages: string[];
   symbols_count?: number;

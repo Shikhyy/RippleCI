@@ -17,7 +17,7 @@ function GraphExplorerContent() {
 
   const reloadGraph = () => {
     setLoading(true);
-    fetchGraph(runId).then((data) => {
+    fetchGraph(runId, repoName).then((data) => {
       setGraphData(data);
       setLoading(false);
     });
@@ -25,7 +25,7 @@ function GraphExplorerContent() {
 
   useEffect(() => {
     reloadGraph();
-  }, [runId]);
+  }, [runId, repoName]);
 
   return (
     <div className="min-h-screen bg-[#080c0e] text-zinc-100 flex flex-col font-sans">
