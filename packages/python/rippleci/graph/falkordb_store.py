@@ -257,11 +257,24 @@ class FalkorGraphStore:
         nodes: Dict[str, GraphNode] = {}
         edges: Dict[str, GraphEdge] = {}
 
+        target_sym_ids = list(symbol_ids)
+        target_test_ids = list(test_ids)
+
+        # If no filters specified, fetch top symbols and test cases up to limit
+        if not target_sym_ids and not target_test_ids:
+            try:
+                res_all_s = graph.query("MATCH (s:Symbol) RETURN s.id LIMIT 120")
+                target_sym_ids = [row[0] for row in res_all_s.result_set]
+                res_all_t = graph.query("MATCH (t:TestCase) RETURN t.id LIMIT 60")
+                target_test_ids = [row[0] for row in res_all_t.result_set]
+            except Exception:
+                pass
+
         # Fetch symbols
-        if symbol_ids:
+        if target_sym_ids:
             res_sym = graph.query(
                 "MATCH (s:Symbol) WHERE s.id IN $symbol_ids RETURN s.id, s.name, s.qualified_name, s.kind, s.file_path",
-                {"symbol_ids": symbol_ids},
+                {"symbol_ids": target_sym_ids},
             )
             for row in res_sym.result_set:
                 nodes[row[0]] = GraphNode(
@@ -272,10 +285,10 @@ class FalkorGraphStore:
                 )
 
         # Fetch tests
-        if test_ids:
+        if target_test_ids:
             res_tests = graph.query(
                 "MATCH (t:TestCase) WHERE t.id IN $test_ids RETURN t.id, t.name, t.node_id, t.file_path",
-                {"test_ids": test_ids},
+                {"test_ids": target_test_ids},
             )
             for row in res_tests.result_set:
                 nodes[row[0]] = GraphNode(
@@ -286,14 +299,14 @@ class FalkorGraphStore:
                 )
 
         # Fetch CALLS edges between fetched symbols
-        if symbol_ids:
+        if target_sym_ids:
             res_calls = graph.query(
                 """
                 MATCH (s1:Symbol)-[r:CALLS]->(s2:Symbol)
                 WHERE s1.id IN $symbol_ids AND s2.id IN $symbol_ids
                 RETURN s1.id, s2.id, r.source_kind
                 """,
-                {"symbol_ids": symbol_ids},
+                {"symbol_ids": target_sym_ids},
             )
             for row in res_calls.result_set:
                 edge_id = f"{row[0]}->{row[1]}:CALLS"
@@ -306,14 +319,14 @@ class FalkorGraphStore:
                 )
 
         # Fetch COVERS edges between fetched tests and symbols
-        if test_ids and symbol_ids:
+        if target_test_ids and target_sym_ids:
             res_cov = graph.query(
                 """
                 MATCH (t:TestCase)-[r:COVERS]->(s:Symbol)
                 WHERE t.id IN $test_ids AND s.id IN $symbol_ids
                 RETURN t.id, s.id, r.source_kind
                 """,
-                {"test_ids": test_ids, "symbol_ids": symbol_ids},
+                {"test_ids": target_test_ids, "symbol_ids": target_sym_ids},
             )
             for row in res_cov.result_set:
                 edge_id = f"{row[0]}->{row[1]}:COVERS"

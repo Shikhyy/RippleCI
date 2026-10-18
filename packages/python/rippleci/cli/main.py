@@ -489,6 +489,23 @@ def benchmark_cmd(
         raise typer.Exit(code=1)
 
 
+
+@app.command("serve")
+def serve_cmd(
+    host: str = typer.Option("127.0.0.1", "--host", "-h", help="Bind host for the API server."),
+    port: int = typer.Option(8000, "--port", "-p", help="Port for the API server."),
+    reload: bool = typer.Option(False, "--reload", "-r", help="Enable auto-reload for development."),
+):
+    """Start the RippleCI FastAPI backend server."""
+    try:
+        import uvicorn
+        console.print(f"[bold cyan]Starting RippleCI API server[/bold cyan] on [green]http://{host}:{port}[/green]...")
+        uvicorn.run("rippleci.api.server:app", host=host, port=port, reload=reload)
+    except Exception as e:
+        err_console.print(f"[bold red]Failed to start server:[/bold red] {e}")
+        raise typer.Exit(code=1)
+
+
 @graph_app.command("status")
 def graph_status_cmd():
     """Display connection status and entity counts in the FalkorDB graph."""

@@ -45,3 +45,33 @@ def test_sdk_end_to_end_workflow(sample_repo_path: Path):
 
     json_output = project.reporter.to_json(report)
     assert '"repo_id": "sample-repository"' in json_output
+
+
+def test_sdk_convenience_methods(sample_repo_path: Path):
+    project = RippleProject.open(sample_repo_path, force_memory_graph=True)
+    project.indexer.index()
+
+    # Test graph retrieval
+    graph_data = project.get_graph()
+    assert len(graph_data.nodes) > 0
+    assert len(graph_data.edges) > 0
+
+    # Test graph stats
+    stats = project.get_stats()
+    assert stats["symbols"] >= 8
+    assert stats["test_cases"] >= 10
+
+    # Test top-level imports
+    from rippleci import (
+        FileDiff,
+        ImpactReport,
+        RippleConfig,
+        RippleError,
+        RippleReport,
+        TestPlan,
+        VerificationReport,
+    )
+    assert RippleProject is not None
+    assert RippleConfig is not None
+    assert RippleError is not None
+

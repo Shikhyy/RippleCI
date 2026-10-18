@@ -24,6 +24,8 @@ import {
 } from "lucide-react";
 
 import { GraphCanvas } from "@/components/GraphCanvas";
+import { EvidencePathBreadcrumb } from "@/components/EvidencePathBreadcrumb";
+import { MutationScoreGauge } from "@/components/MutationScoreGauge";
 import { DEMO_GRAPH_DATA, DEMO_RUN, fetchRun, RunSummary } from "@/lib/api";
 
 export default function RunDetailsPage() {
@@ -342,16 +344,27 @@ export default function RunDetailsPage() {
                       </ul>
                     </div>
 
-                    <div className="p-3 rounded-lg border border-[#6CC6CB]/20 bg-[#080d0f] text-[11px] text-[#EAE5C9]/80 leading-relaxed">
+                    {/* Evidence Path Breadcrumb */}
+                    <EvidencePathBreadcrumb
+                      testName={selectedTest.name}
+                      testFile="tests/test_routing.py"
+                      targetSymbol={run.impact.changed_symbols[0]?.name || "verify_token"}
+                      targetFile={run.impact.changed_symbols[0]?.file_path || "src/auth.py"}
+                      intermediateCallers={run.impact.impacted_symbols.map((s) => s.symbol.name)}
+                      rankScore={selectedTest.rank_score}
+                      isDirect={selectedTest.rank === 1}
+                    />
+
+                    <div className="p-3 rounded-lg border border-[#6CC6CB]/20 bg-[#080d0f] text-[11px] text-[#EAE5C9]/80 leading-relaxed font-mono">
                       Prioritized by GBDT ranker due to immediate proximity in FalkorDB to modified AST symbols.
                     </div>
                   </div>
                 ) : (
-                  <div className="text-zinc-500">Select a test from the table to inspect graph attribution.</div>
+                  <div className="text-zinc-500 font-mono">Select a test from the table to inspect graph attribution.</div>
                 )}
               </div>
 
-              <div className="pt-3 border-t border-[#6CC6CB]/20 text-[11px] text-[#EAE5C9]/60">
+              <div className="pt-3 border-t border-[#6CC6CB]/20 text-[11px] text-[#EAE5C9]/60 font-mono">
                 FalkorDB Provenance Model
               </div>
             </div>
@@ -360,38 +373,21 @@ export default function RunDetailsPage() {
 
         {/* Tab 3: Bounded Mutation Verification */}
         {activeTab === "verification" && (
-          <div className="craft-card p-6 space-y-6 text-xs font-mono">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-4 bg-[#0d1417] rounded-xl border border-[#6CC6CB]/20 space-y-1">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Test Suite Result</div>
-                <div className="text-base font-bold text-emerald-400 mt-1 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>4 / 4 Passed</span>
-                </div>
+          <div className="space-y-6">
+            {run.verification ? (
+              <MutationScoreGauge
+                score={run.verification.mutation_score}
+                testedCount={run.verification.mutations_tested_count}
+                killedCount={run.verification.killed_mutations_count}
+                survivedCount={run.verification.survived_mutations_count}
+                wallTimeSeconds={run.verification.total_wall_time_seconds}
+                survivingMutants={run.verification.surviving_mutants}
+              />
+            ) : (
+              <div className="craft-card p-6 text-zinc-500 font-mono text-xs text-center">
+                No mutation verification data available for this run.
               </div>
-
-              <div className="p-4 bg-[#0d1417] rounded-xl border border-[#6CC6CB]/20 space-y-1">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Mutations Tested</div>
-                <div className="text-base font-bold text-white mt-1">5 Mutants</div>
-              </div>
-
-              <div className="p-4 bg-[#0d1417] rounded-xl border border-[#6CC6CB]/20 space-y-1">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Mutations Killed</div>
-                <div className="text-base font-bold text-[#6CC6CB] mt-1">5 / 5 (100%)</div>
-              </div>
-
-              <div className="p-4 bg-[#0d1417] rounded-xl border border-[#6CC6CB]/20 space-y-1">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Surviving Mutants</div>
-                <div className="text-base font-bold text-emerald-400 mt-1">0 (Safe)</div>
-              </div>
-            </div>
-
-            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-300 leading-relaxed flex items-start gap-3">
-              <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold text-white">Bounded Verification Passed:</span> All 5 transient AST mutations applied to modified lines were killed by the selected test plan. Zero blind spots were detected in this release candidate.
-              </div>
-            </div>
+            )}
           </div>
         )}
 

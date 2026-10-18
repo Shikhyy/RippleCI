@@ -15,25 +15,24 @@ const COMMAND_TABS: CommandTab[] = [
   {
     id: "impact",
     label: "ripple impact",
-    badge: "Graph Traversal",
+    badge: "FalkorDB Multi-Hop",
     command: "ripple impact origin/main..HEAD",
-    output: `RippleCI Impact Analysis  |  payments-core-service  |  origin/main..HEAD
+    output: `RippleCI Impact Analysis  |  fastapi/fastapi  |  origin/main..HEAD
 Changed Files: 1  |  Modified Symbols: 1  |  Downstream Callers: 2  |  Candidate Tests: 4
 
 Directly Modified Symbols:
-  [MODIFIED] verify_token (src/auth.py:9-16)
+  [MODIFIED] setup_lifespan (fastapi/routing.py:42-78)
 
-Downstream Callers (FalkorDB Multi-Hop Traversal):
-  [CALLER]   process_payment  (1 hop)   [src/payments.py:13]
-             Path: process_payment -> verify_token
-  [CALLER]   place_order      (2 hops)  [src/order_service.py:7]
-             Path: place_order -> process_payment -> verify_token
+Downstream Callers (FalkorDB Multi-Hop Cypher Traversal):
+  [CALLER]   APIRouter.include_router (1 hop)   [fastapi/routing.py:110]
+             Path: APIRouter.include_router -> setup_lifespan
+  [CALLER]   FastAPI.setup            (2 hops)  [fastapi/applications.py:90]
+             Path: FastAPI.setup -> APIRouter.include_router -> setup_lifespan
 
 Candidate Tests Connected via Graph:
-  [DIRECT]   test_verify_valid_token       (1 hop  | tests/test_auth.py:5)
-  [DIRECT]   test_verify_expired_token     (1 hop  | tests/test_auth.py:12)
-  [INDIRECT] test_process_payment_success  (2 hops | tests/test_payments.py:8)
-  [INDIRECT] test_place_order_success      (3 hops | tests/test_orders.py:10)
+  [DIRECT]   test_router_lifespan_state_propagation  (1 hop  | tests/test_routing.py:45)
+  [DIRECT]   test_dependency_injection_scope        (1 hop  | tests/test_dependencies.py:22)
+  [INDIRECT] test_fastapi_sub_application_mount     (2 hops | tests/test_sub_apps.py:18)
 
 Next: ripple plan --budget 300`,
   },
@@ -41,73 +40,56 @@ Next: ripple plan --budget 300`,
     id: "plan",
     label: "ripple plan",
     badge: "ML Prioritization",
-    command: "ripple plan --budget 300",
-    output: `Selected Test Plan (GBDT Ranker | Budget: 300.0s)
-┌──────┬───────────────────────────────┬───────┬──────────┬────────────────────────────────────────────┐
-│ Rank │ Test Case                     │ Score │ Duration │ Graph Evidence & Feature Attribution       │
-├──────┼───────────────────────────────┼───────┼──────────┼────────────────────────────────────────────┤
-│    1 │ test_verify_valid_token       │  0.96 │ 1.1s     │ Direct AST coverage; immediate neighbor    │
-│    2 │ test_verify_expired_token     │  0.92 │ 1.0s     │ Direct AST coverage; boundary condition    │
-│    3 │ test_process_payment_success  │  0.85 │ 1.4s     │ 1-hop caller; covers payment gateway path  │
-│    4 │ test_place_order_success      │  0.78 │ 1.3s     │ 2-hop caller; covers order checkout flow   │
-└──────┴───────────────────────────────┴───────┴──────────┴────────────────────────────────────────────┘
-Selected 4 tests  |  Estimated runtime: 4.8s  |  Omitted: 9 tests (budget preserved)`,
-  },
-  {
-    id: "investigate",
-    label: "ripple investigate",
-    badge: "Agent Reasoning",
-    command: "ripple investigate origin/main..HEAD",
-    output: `Autonomous Graph Reasoning Agent Execution Trace:
-  [tool:analyze_change]           -> 1 modified symbol (verify_token in src/auth.py)
-  [tool:trace_impact]             -> 2 downstream callers located via CALLS edges
-  [tool:retrieve_test_candidates] -> 4 tests mapped across AST & pytest nodes
-  [tool:rank_test_candidates]     -> 4 tests selected under 300s budget (4.8s est.)
-  [tool:check_verification_gaps]  -> coverage_sufficient (0 blind spots detected)
+    command: "ripple plan --budget 300 --model gbdt",
+    output: `RippleCI Test Plan  |  Budget: 300.0s  |  Model: GBDT Ranker (v0.1.0)
+Total Suite Tests: 18  |  Selected Tests: 4  |  Estimated Time: 5.4s  |  Suite Reduction: 78.4%
 
-Agent Verdict: VERIFIED_SAFE
-Recommendation: All modified symbols have verified coverage in the dependency graph.`,
+Rank  Score   Duration  Test Identifier
+[01]  0.982     1.2s    tests/test_routing.py::test_router_lifespan_state_propagation
+                        Reasons: direct_coverage (1.0), graph_hop_distance (0), churn_recency (0.91)
+[02]  0.941     0.8s    tests/test_dependencies.py::test_dependency_injection_scope
+                        Reasons: direct_coverage (1.0), historical_flakiness (0.02)
+[03]  0.915     2.1s    tests/test_sub_apps.py::test_fastapi_sub_application_mount
+                        Reasons: 2_hop_caller_coverage, high_centrality_symbol
+[04]  0.864     1.3s    tests/test_routing.py::test_lifespan_context_cleanup
+                        Reasons: direct_coverage (1.0)
+
+Decision: Selected subset achieves 99.4% estimated fault recall within 1.8% of time budget.`,
   },
   {
     id: "verify",
     label: "ripple verify",
-    badge: "Mutation Testing",
-    command: "ripple verify --mutations 5",
-    output: `Executing selected test plan with bounded mutation verification...
+    badge: "AST Mutation Verification",
+    command: "ripple verify --plan-id plan_auto --max-mutations 4",
+    output: `RippleCI Bounded Mutation Verification Engine
+Plan: 4 tests selected  |  Target Files: fastapi/routing.py  |  Subprocess Sandbox: Active
 
-Test Suite Execution:
-  ✓ tests/test_auth.py::test_verify_valid_token       PASSED  (1.08s)
-  ✓ tests/test_auth.py::test_verify_expired_token     PASSED  (0.98s)
-  ✓ tests/test_payments.py::test_process_payment_ok   PASSED  (1.36s)
-  ✓ tests/test_orders.py::test_place_order_ok         PASSED  (1.24s)
+Generating counterfactual AST mutants on modified lines:
+  [MUT-01] fastapi/routing.py:54  InvertNegation (not state -> state)        --> KILLED  (test_router_lifespan_state_propagation)
+  [MUT-02] fastapi/routing.py:62  SwapComparison (if resp is None -> is not) --> KILLED  (test_dependency_injection_scope)
+  [MUT-03] fastapi/routing.py:71  ReturnValueModifier (return self -> None)  --> KILLED  (test_router_lifespan_state_propagation)
+  [MUT-04] fastapi/routing.py:75  ExceptionSuppression                       --> KILLED  (test_fastapi_sub_application_mount)
 
-Bounded AST Mutation Verification:
-  [MUTANT 1] src/auth.py:12 (Compare: == -> !=)       KILLED by test_verify_valid_token
-  [MUTANT 2] src/auth.py:14 (UnaryOp: not -> identity) KILLED by test_verify_expired_token
-  [MUTANT 3] src/auth.py:15 (Constant: True -> False)  KILLED by test_verify_valid_token
-  [MUTANT 4] src/payments.py:18 (BinaryOp: + -> -)     KILLED by test_process_payment_ok
-  [MUTANT 5] src/order_service.py:12 (Return None)     KILLED by test_place_order_ok
-
-Verification Summary:
-  Mutations Tested: 5  |  Killed: 5  |  Survived: 0
-  Mutation Score:   100.0%
-  Verdict:          RELEASE_SAFE`,
+Verification Verdict:
+  Mutants Injected: 4  |  Mutants Killed: 4  |  Kill Rate: 100.0%
+  Blind Spots Detected: 0
+  Verdict: RELEASE_SAFE (Test suite reliably detects faults in modified surface)`,
   },
   {
-    id: "benchmark",
-    label: "ripple benchmark",
-    badge: "Empirical Grounding",
-    command: "ripple benchmark",
-    output: `Regression Test Selection Benchmark (4 Strategies | 3 Fault Injection Scenarios)
-┌───────────────────────┬─────────────────┬───────────┬──────────────┬──────────────────────────────────┐
-│ Strategy              │ Selection Ratio │ Avg. Time │ Fault Recall │ Missed Scenarios                 │
-├───────────────────────┼─────────────────┼───────────┼──────────────┼──────────────────────────────────┤
-│ full_suite            │ 100.0% (41/41)  │ 41.0s     │ 100.0%       │ None (baseline full execution)   │
-│ change_file_heuristic │   8.9% (4/41)   │  3.7s     │  66.7%       │ auth_token_verification_bug (FAIL│
-│ graph_only            │  11.4% (5/41)   │  5.6s     │ 100.0%       │ None (FalkorDB traversed callers)│
-│ graph_plus_ml         │  11.4% (5/41)   │  5.6s     │ 100.0%       │ None (optimal risk-ordered plan) │
-└───────────────────────┴─────────────────┴───────────┴──────────────┴──────────────────────────────────┘
-Result: graph_plus_ml achieves 7.3x speedup while preserving 100% fault recall.`,
+    id: "doctor",
+    label: "ripple doctor",
+    badge: "Graph Health Diagnostic",
+    command: "ripple doctor",
+    output: `RippleCI System Health & Graph Diagnostic
+FalkorDB Instance:   redis://127.0.0.1:6379  (HEALTHY, 1.4ms ping)
+FalkorDB Version:    v0.4.0
+Active Graph Name:   rippleci_workspace
+Indexed Symbols:     54 functions & classes
+Indexed Test Cases:  18 test definitions
+CALLS Relationships: 98 verified AST edges
+COVERS Coverage:     Verified coverage from coverage.py + AST proximity
+Deterministic Fallback: MemoryGraphStore (Standby Ready)
+Status: All Release Intelligence sub-systems operational.`,
   },
 ];
 
@@ -124,54 +106,65 @@ export function TerminalBlock() {
   };
 
   return (
-    <div className="craft-card overflow-hidden">
-      {/* Workbench Header */}
-      <div className="flex flex-wrap items-center justify-between px-3.5 py-2.5 bg-[#0d1417] border-b border-[#6CC6CB]/20 gap-2">
-        <div className="flex items-center gap-1.5 p-1 bg-[#060a0c] rounded-lg border border-white/[0.06] overflow-x-auto">
-          {COMMAND_TABS.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-3 py-1.5 rounded-md text-xs font-mono transition-all flex items-center gap-2 ${
-                activeTab === tab.id
-                  ? "bg-[#6CC6CB]/15 text-[#EAE5C9] font-semibold shadow-sm border border-[#6CC6CB]/40"
-                  : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
-              }`}
-            >
-              <span>{tab.label}</span>
-              <span
-                className={`text-[10px] px-1.5 py-0.2 rounded ${
-                  activeTab === tab.id
-                    ? "bg-[#6CC6CB]/25 text-[#6CC6CB] font-sans font-semibold"
-                    : "text-zinc-500 font-sans"
-                }`}
-              >
-                {tab.badge}
-              </span>
-            </button>
-          ))}
+    <div className="rounded-2xl border border-[#6CC6CB]/20 bg-[#060a0c] overflow-hidden shadow-2xl">
+      {/* Top Header */}
+      <div className="px-4 py-3 bg-[#0d1417] border-b border-[#6CC6CB]/20 flex flex-wrap items-center justify-between gap-3">
+        {/* Terminal dots */}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 mr-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-green-500/80 inline-block" />
+          </div>
+          <span className="text-xs font-mono text-zinc-400 font-semibold flex items-center gap-1.5">
+            <TerminalIcon className="w-3.5 h-3.5 text-[#6CC6CB]" />
+            <span>ripple-cli</span>
+          </span>
         </div>
 
+        {/* Command tabs */}
+        <div className="flex items-center gap-1 overflow-x-auto">
+          {COMMAND_TABS.map((tab) => {
+            const isActive = tab.id === activeTab;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-3 py-1 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 ${
+                  isActive
+                    ? "bg-[#6CC6CB]/20 text-[#EAE5C9] font-bold border border-[#6CC6CB]/40 shadow-[0_0_10px_rgba(108,198,203,0.15)]"
+                    : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
+                }`}
+              >
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Copy command button */}
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#6CC6CB]/25 hover:border-[#6CC6CB]/50 bg-[#0d1417] hover:bg-[#121b1f] text-[#EAE5C9] font-mono text-xs transition-all shrink-0 active:scale-[0.98]"
+          className="flex items-center gap-1.5 text-xs font-mono text-zinc-400 hover:text-white px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/[0.06] border border-white/[0.08] transition-all ml-auto sm:ml-0"
         >
-          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-[#6CC6CB]" />}
-          <span>{copied ? "Copied" : "Copy Command"}</span>
+          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+          <span>{copied ? "Copied" : "Copy"}</span>
         </button>
       </div>
 
-      {/* Command Prompt Line */}
-      <div className="px-4 py-3 bg-[#080d0f] border-b border-white/[0.06] font-mono text-xs flex items-center justify-between gap-2">
+      {/* Terminal prompt bar */}
+      <div className="px-5 py-2.5 bg-[#090d0f] border-b border-white/[0.04] flex items-center justify-between text-xs font-mono">
         <div className="flex items-center gap-2">
-          <span className="text-[#6CC6CB] select-none font-bold">$</span>
-          <span className="text-white font-medium">{current.command}</span>
+          <span className="text-[#6CC6CB] font-bold">$</span>
+          <span className="text-white font-semibold">{current.command}</span>
         </div>
-        <span className="text-[11px] font-mono text-[#EAE5C9]/70">exit 0 · deterministic</span>
+        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#6CC6CB]/15 text-[#6CC6CB] border border-[#6CC6CB]/25 hidden sm:inline">
+          {current.badge}
+        </span>
       </div>
 
-      {/* Output Console View */}
-      <div className="p-4 sm:p-5 font-mono text-xs text-zinc-300 leading-relaxed overflow-x-auto max-h-[380px] bg-[#060a0c]">
+      {/* Output Body */}
+      <div className="p-5 font-mono text-xs text-[#EAE5C9]/90 overflow-x-auto leading-relaxed max-h-[360px] scrollbar-thin">
         <pre className="whitespace-pre">{current.output}</pre>
       </div>
     </div>

@@ -189,6 +189,11 @@ class MemoryGraphStore:
         sym_set = set(symbol_ids)
         test_set = set(test_ids)
 
+        # If no filters specified, return all symbols and test cases up to safe display limits
+        if not sym_set and not test_set:
+            sym_set = set(list(self.symbols.keys())[:120])
+            test_set = set(list(self.test_cases.keys())[:60])
+
         for s_id in sym_set:
             if s_id in self.symbols:
                 s = self.symbols[s_id]

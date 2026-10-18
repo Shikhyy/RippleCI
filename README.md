@@ -1,7 +1,7 @@
 # RippleCI
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/)
 [![FalkorDB](https://img.shields.io/badge/graph-FalkorDB-red)](https://www.falkordb.com/)
 
 **RippleCI** is an open-source, graph-native release intelligence toolkit. It helps engineering teams understand the blast radius of code changes, select the regression tests that matter under a runtime budget, and verify test plans with evidence-backed recommendations.
@@ -69,7 +69,7 @@ RippleCI models entities and relationships directly in FalkorDB:
 
 ## Prerequisites
 
-- **Python:** 3.10+ (tested on Python 3.12 and 3.13)
+- **Python:** 3.10, 3.11, or 3.12 (Python 3.13+ not yet supported)
 - **FalkorDB:** Either run locally via Docker (`docker compose -f infra/docker-compose.yml up -d`) or connect to a remote instance.
 - **Git:** Available on system PATH.
 
@@ -178,6 +178,8 @@ ripple serve
 # Start Web Companion (port 3000)
 cd apps/web && pnpm dev
 ```
+
+**Note:** The web companion includes demo/mock data for popular repositories (fastapi, flask, requests) for demonstration purposes. For real AST analysis and graph visualization, connect a local repository via the "Local Workspace" tab in the UI.
 
 ---
 

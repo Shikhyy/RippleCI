@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: rippleci-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: RIPPLE_FALKORDB_URL
+        value: redis://localhost:6379
+      - key: GROQ_API_KEY
+        sync: false
