@@ -28,6 +28,7 @@ import { ConnectRepoModal } from "@/components/ConnectRepoModal";
 import { Navbar } from "@/components/Navbar";
 import { TerminalBlock } from "@/components/TerminalBlock";
 import { BlastRadiusCalculator } from "@/components/BlastRadiusCalculator";
+import { CanvasRevealEffectDemo3 } from "@/components/CanvasRevealEffectDemo3";
 
 const SDK_SNIPPETS = [
   {
@@ -208,60 +209,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 4-Step Graph Pipeline Architecture */}
-      <section className="py-20 border-b border-[#6CC6CB]/20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 tracking-tight">
-              How RippleCI Works
-            </h2>
-            <p className="text-zinc-400 max-w-xl mx-auto text-sm">
-              Four deterministic steps from commit diff to verified release decision
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-2xl border border-[#6CC6CB]/20 bg-[#0d1417]/70 backdrop-blur-xl space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#6CC6CB]/20 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB] font-mono font-bold">
-                01
-              </div>
-              <h3 className="text-base font-bold text-white">Index into FalkorDB</h3>
-              <p className="text-zinc-400 text-xs leading-relaxed">
-                Extract symbols, function calls, classes, and coverage.py execution traces into FalkorDB graph nodes and CALLS/COVERS edges.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl border border-[#6CC6CB]/20 bg-[#0d1417]/70 backdrop-blur-xl space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#6CC6CB]/20 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB] font-mono font-bold">
-                02
-              </div>
-              <h3 className="text-base font-bold text-white">Trace Blast Radius</h3>
-              <p className="text-zinc-400 text-xs leading-relaxed">
-                Parse PR unified diffs to identify modified symbols and execute Cypher multi-hop traversals to discover all downstream callers.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl border border-[#6CC6CB]/20 bg-[#0d1417]/70 backdrop-blur-xl space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#6CC6CB]/20 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB] font-mono font-bold">
-                03
-              </div>
-              <h3 className="text-base font-bold text-white">Prioritize with ML</h3>
-              <p className="text-zinc-400 text-xs leading-relaxed">
-                Gradient-boosted decision trees rank candidate tests using graph distance, code churn recency, and runtime history under budget.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl border border-[#6CC6CB]/20 bg-[#0d1417]/70 backdrop-blur-xl space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-[#6CC6CB]/20 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB] font-mono font-bold">
-                04
-              </div>
-              <h3 className="text-base font-bold text-white">Mutation Verification</h3>
-              <p className="text-zinc-400 text-xs leading-relaxed">
-                Inject counterfactual AST mutants into modified lines to empirically prove the selected tests catch bugs before merge.
-              </p>
-            </div>
-          </div>
-        </div>
+      {/* Aceternity Canvas Reveal Effect Architecture Showcase */}
+      <section className="border-b border-[#6CC6CB]/20 bg-[#060a0c]/80 relative overflow-hidden">
+        <CanvasRevealEffectDemo3 />
       </section>
 
       {/* Interactive CLI Terminal Section */}
