@@ -89,6 +89,34 @@ RETURN caller.name, hops, path_names, test.name
 ORDER BY hops ASC, test.name ASC
 LIMIT 50;`,
   },
+  {
+    id: "mcp",
+    label: "MCP Server (Cursor / Claude)",
+    filename: "claude_desktop_config.json",
+    code: `{
+  "mcpServers": {
+    "rippleci": {
+      "command": "ripple",
+      "args": ["mcp", "serve"],
+      "env": {
+        "FALKORDB_URL": "redis://localhost:6379"
+      }
+    }
+  }
+}
+
+# Start stdio MCP server for AI coding assistants:
+# $ ripple mcp serve
+#
+# 7 Connected FalkorDB Graph Tools:
+# ✓ ripple_index              -> Index codebase into FalkorDB
+# ✓ ripple_trace_blast_radius -> Multi-hop AST dependency traversal
+# ✓ ripple_prioritize_tests   -> GBDT budget-constrained test ranker
+# ✓ ripple_verify_mutations   -> In-memory bounded mutant counterfactuals
+# ✓ ripple_query_graph        -> Native openCypher query interface
+# ✓ ripple_explain_selection  -> Test selection provenance breadcrumbs
+# ✓ ripple_investigate_agent  -> Autonomous graph reasoning agent`,
+  },
 ];
 
 export default function LandingPage() {
@@ -157,11 +185,11 @@ export default function LandingPage() {
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center relative z-10">
             {/* Status Badge */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/20 bg-black/50 text-neutral-200 text-xs font-mono mb-8 backdrop-blur-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]">
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/20 bg-zinc-900/60 text-neutral-200 text-xs font-mono mb-8 backdrop-blur-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]">
               <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_8px_#ffffff]" />
-              <span>FalkorDB Graph-Native Release Intelligence</span>
+              <span>CLI · Python SDK · MCP Server · GitHub Action</span>
               <span className="text-white/30">|</span>
-              <span className="text-neutral-400">Open Source</span>
+              <span className="text-neutral-400">Powered by FalkorDB</span>
             </div>
 
             {/* Headline */}
@@ -174,7 +202,7 @@ export default function LandingPage() {
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg text-neutral-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-              Trace multi-hop blast radius across code changes, prioritize the 10% of tests that catch 100% of regressions under budget, and verify releases with counterfactual mutation testing.
+              Trace multi-hop blast radius across code changes, prioritize tests under strict budgets, verify releases with bounded mutations, and empower AI agents via Model Context Protocol (MCP).
             </p>
 
             {/* CTA Buttons */}
@@ -354,15 +382,15 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Programmatic Python SDK Code Snippets */}
+        {/* Programmatic Python SDK & MCP Code Snippets */}
         <section id="sdk" className="py-20 border-b border-white/10 bg-black/45 backdrop-blur-md">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 tracking-tight">
-                Type-Safe Python SDK
+                Python SDK & Model Context Protocol (MCP)
               </h2>
               <p className="text-neutral-400 max-w-xl mx-auto text-sm">
-                Clean, typed Python abstractions for programmatic integration into custom release infrastructure
+                Embed directly into custom Python CI pipelines or connect Cursor, Claude Desktop, and AI coding agents via stdio MCP
               </p>
             </div>
 

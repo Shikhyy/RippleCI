@@ -76,6 +76,25 @@ Verification Verdict:
   Verdict: RELEASE_SAFE (Test suite reliably detects faults in modified surface)`,
   },
   {
+    id: "mcp",
+    label: "ripple mcp serve",
+    badge: "AI Agent Protocol",
+    command: "ripple mcp serve",
+    output: `[rippleci-mcp] Starting RippleCI Model Context Protocol Server v0.1.0 on stdio...
+[rippleci-mcp] Connected to FalkorDB at redis://localhost:6379 (graph: ripple_fastapi)
+[rippleci-mcp] Handshake ready. Protocol version: 2024-11-05
+[rippleci-mcp] Registered 7 graph intelligence tools for AI coding assistants:
+  ✓ ripple_index              -> Index codebase into FalkorDB
+  ✓ ripple_trace_blast_radius -> Multi-hop AST dependency traversal
+  ✓ ripple_prioritize_tests   -> GBDT budget-constrained test ranker
+  ✓ ripple_verify_mutations   -> In-memory bounded mutant counterfactuals
+  ✓ ripple_query_graph        -> Native openCypher query interface
+  ✓ ripple_explain_selection  -> Test selection provenance breadcrumbs
+  ✓ ripple_investigate_agent  -> Autonomous graph reasoning agent
+
+Ready for requests from Cursor, Claude Desktop, Antigravity, and GitHub Copilot.`,
+  },
+  {
     id: "doctor",
     label: "ripple doctor",
     badge: "Graph Health Diagnostic",
