@@ -287,11 +287,11 @@ ${data.merge_recommendation}
       />
 
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[#6B6E3A]/20 bg-[#0B0D10]/90 backdrop-blur-md flex flex-col justify-between p-5 shrink-0 z-10">
+      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[#E5A952]/20 bg-[#0B0D10]/90 backdrop-blur-md flex flex-col justify-between p-5 shrink-0 z-10">
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl bg-[#121A2B] border border-[#6B6E3A]/30 flex items-center justify-center shadow-[0_0_15px_rgba(108,198,203,0.2)]">
-              <svg className="w-4 h-4 text-[#6B6E3A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <div className="w-8 h-8 rounded-xl bg-[#121A2B] border border-[#E5A952]/30 flex items-center justify-center shadow-[0_0_15px_rgba(229,169,82,0.2)]">
+              <svg className="w-4 h-4 text-[#E5A952]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="6" cy="12" r="3" />
                 <circle cx="18" cy="6" r="3" />
                 <circle cx="18" cy="18" r="3" />
@@ -300,7 +300,7 @@ ${data.merge_recommendation}
             </div>
             <div className="flex items-baseline gap-1">
               <span className="font-extrabold text-base tracking-tight text-white">
-                Ripple<span className="text-[#6B6E3A]">CI</span>
+                Ripple<span className="text-[#E5A952]">CI</span>
               </span>
               <span className="text-[10px] font-mono text-[#C9C4B8]/80 font-bold px-1.5 py-0.5 rounded bg-white/[0.05]">
                 v0.1.0
@@ -314,11 +314,11 @@ ${data.merge_recommendation}
               onClick={() => setActiveTab("prs")}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
                 activeTab === "prs"
-                  ? "bg-[#6B6E3A]/20 text-[#C9C4B8] font-bold border border-[#6B6E3A]/40 shadow-[0_0_12px_rgba(108,198,203,0.15)]"
+                  ? "bg-[#E5A952]/20 text-[#C9C4B8] font-bold border border-[#E5A952]/40 shadow-[0_0_12px_rgba(229,169,82,0.15)]"
                   : "text-[#C9C4B8]/70 hover:text-white hover:bg-white/[0.04]"
               }`}
             >
-              <GitPullRequest className="w-4 h-4 text-[#6B6E3A]" />
+              <GitPullRequest className="w-4 h-4 text-[#E5A952]" />
               <span>PR Blast Radius</span>
               {githubPRs.length > 0 && (
                 <span className="ml-auto px-1.5 py-0.5 rounded text-[10px] font-mono bg-white/[0.08] text-[#C9C4B8]">
@@ -331,11 +331,11 @@ ${data.merge_recommendation}
               onClick={() => setActiveTab("graph")}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
                 activeTab === "graph"
-                  ? "bg-[#6B6E3A]/20 text-[#C9C4B8] font-bold border border-[#6B6E3A]/40 shadow-[0_0_12px_rgba(108,198,203,0.15)]"
+                  ? "bg-[#E5A952]/20 text-[#C9C4B8] font-bold border border-[#E5A952]/40 shadow-[0_0_12px_rgba(229,169,82,0.15)]"
                   : "text-[#C9C4B8]/70 hover:text-white hover:bg-white/[0.04]"
               }`}
             >
-              <Network className="w-4 h-4 text-[#6B6E3A]" />
+              <Network className="w-4 h-4 text-[#E5A952]" />
               <span>Interactive Graph</span>
             </button>
 
@@ -343,11 +343,11 @@ ${data.merge_recommendation}
               onClick={() => setActiveTab("simulator")}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
                 activeTab === "simulator"
-                  ? "bg-[#6B6E3A]/20 text-[#C9C4B8] font-bold border border-[#6B6E3A]/40 shadow-[0_0_12px_rgba(108,198,203,0.15)]"
+                  ? "bg-[#E5A952]/20 text-[#C9C4B8] font-bold border border-[#E5A952]/40 shadow-[0_0_12px_rgba(229,169,82,0.15)]"
                   : "text-[#C9C4B8]/70 hover:text-white hover:bg-white/[0.04]"
               }`}
             >
-              <Sliders className="w-4 h-4 text-[#6B6E3A]" />
+              <Sliders className="w-4 h-4 text-[#E5A952]" />
               <span>Impact Simulator</span>
             </button>
 
@@ -355,11 +355,11 @@ ${data.merge_recommendation}
               onClick={() => setActiveTab("benchmark")}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
                 activeTab === "benchmark"
-                  ? "bg-[#6B6E3A]/20 text-[#C9C4B8] font-bold border border-[#6B6E3A]/40 shadow-[0_0_12px_rgba(108,198,203,0.15)]"
+                  ? "bg-[#E5A952]/20 text-[#C9C4B8] font-bold border border-[#E5A952]/40 shadow-[0_0_12px_rgba(229,169,82,0.15)]"
                   : "text-[#C9C4B8]/70 hover:text-white hover:bg-white/[0.04]"
               }`}
             >
-              <BarChart3 className="w-4 h-4 text-[#6B6E3A]" />
+              <BarChart3 className="w-4 h-4 text-[#E5A952]" />
               <span>Strategy Benchmark</span>
             </button>
 
@@ -367,29 +367,29 @@ ${data.merge_recommendation}
               onClick={() => setActiveTab("runs")}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
                 activeTab === "runs"
-                  ? "bg-[#6B6E3A]/20 text-[#C9C4B8] font-bold border border-[#6B6E3A]/40 shadow-[0_0_12px_rgba(108,198,203,0.15)]"
+                  ? "bg-[#E5A952]/20 text-[#C9C4B8] font-bold border border-[#E5A952]/40 shadow-[0_0_12px_rgba(229,169,82,0.15)]"
                   : "text-[#C9C4B8]/70 hover:text-white hover:bg-white/[0.04]"
               }`}
             >
-              <Layers className="w-4 h-4 text-[#6B6E3A]" />
+              <Layers className="w-4 h-4 text-[#E5A952]" />
               <span>Release Runs</span>
             </button>
 
             <button
               onClick={() => setIsConnectModalOpen(true)}
-              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#6B6E3A] hover:text-[#C9C4B8] hover:bg-[#6B6E3A]/10 transition-all font-medium text-left mt-2 border border-[#6B6E3A]/20"
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#E5A952] hover:text-[#C9C4B8] hover:bg-[#E5A952]/10 transition-all font-medium text-left mt-2 border border-[#E5A952]/20"
             >
-              <Plus className="w-4 h-4 text-[#6B6E3A]" />
+              <Plus className="w-4 h-4 text-[#E5A952]" />
               <span>Connect Repository</span>
             </button>
           </nav>
         </div>
 
         {/* Engine Status Pod */}
-        <div className="p-4 rounded-2xl border border-[#6B6E3A]/25 bg-[#121A2B]/90 backdrop-blur-xl text-xs space-y-2 mt-6">
+        <div className="p-4 rounded-2xl border border-[#E5A952]/25 bg-[#121A2B]/90 backdrop-blur-xl text-xs space-y-2 mt-6">
           <div className="flex items-center justify-between">
             <span className="text-[#C9C4B8] font-medium flex items-center gap-1.5">
-              <Database className="w-3.5 h-3.5 text-[#6B6E3A]" />
+              <Database className="w-3.5 h-3.5 text-[#E5A952]" />
               <span>FalkorDB Engine</span>
             </span>
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold font-mono bg-[#2E4A32]/20 text-[#C9C4B8] border border-[#2E4A32]/25">
@@ -402,7 +402,7 @@ ${data.merge_recommendation}
           </div>
           <div className="flex items-center justify-between text-[10px] font-mono text-[#C9C4B8]/50 pt-1 border-t border-white/[0.04]">
             <span>AST Multi-Hop</span>
-            <span className="text-[#6B6E3A]">Active</span>
+            <span className="text-[#E5A952]">Active</span>
           </div>
         </div>
       </aside>
@@ -410,7 +410,7 @@ ${data.merge_recommendation}
       {/* Main Workspace Area */}
       <main className="flex-1 flex flex-col min-w-0 z-10">
         {/* Cockpit Top Bar */}
-        <header className="h-16 border-b border-[#6B6E3A]/20 px-6 flex items-center justify-between bg-[#0B0D10]/80 backdrop-blur-md">
+        <header className="h-16 border-b border-[#E5A952]/20 px-6 flex items-center justify-between bg-[#0B0D10]/80 backdrop-blur-md">
           <div className="flex items-center gap-3">
             <span className="text-xs font-mono text-[#C9C4B8]/70 uppercase tracking-wider hidden sm:inline">
               Repository:
@@ -421,7 +421,7 @@ ${data.merge_recommendation}
               <select
                 value={selectedRepoId}
                 onChange={(e) => handleSelectRepository(e.target.value)}
-                className="bg-[#121A2B] border border-[#6B6E3A]/30 rounded-xl px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-[#6B6E3A] transition-colors cursor-pointer appearance-none pr-8"
+                className="bg-[#121A2B] border border-[#E5A952]/30 rounded-xl px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-[#E5A952] transition-colors cursor-pointer appearance-none pr-8"
               >
                 {repositories.map((repo) => (
                   <option key={repo.id} value={repo.id}>
@@ -434,7 +434,7 @@ ${data.merge_recommendation}
 
             <button
               onClick={() => setIsConnectModalOpen(true)}
-              className="flex items-center gap-1 text-xs text-[#6B6E3A] hover:text-[#C9C4B8] px-2.5 py-1.5 rounded-xl border border-[#6B6E3A]/30 bg-[#6B6E3A]/10 hover:bg-[#6B6E3A]/20 transition-all font-mono"
+              className="flex items-center gap-1 text-xs text-[#E5A952] hover:text-[#C9C4B8] px-2.5 py-1.5 rounded-xl border border-[#E5A952]/30 bg-[#E5A952]/10 hover:bg-[#E5A952]/20 transition-all font-mono"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Connect</span>
@@ -452,7 +452,7 @@ ${data.merge_recommendation}
                   onClick={() => handleSelectRepository(preset.id)}
                   className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all ${
                     isActive
-                      ? "bg-[#6B6E3A]/20 text-[#C9C4B8] border border-[#6B6E3A] font-bold"
+                      ? "bg-[#E5A952]/20 text-[#C9C4B8] border border-[#E5A952] font-bold"
                       : "bg-black/40 text-[#C9C4B8]/70 hover:text-white border border-white/[0.06]"
                   }`}
                 >
@@ -469,15 +469,15 @@ ${data.merge_recommendation}
           {activeTab === "prs" && (
             <div className="space-y-6">
               {/* Repository Architecture Overview */}
-              <div className="p-5 rounded-2xl border border-[#6B6E3A]/20 bg-[#121A2B]/80 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="p-5 rounded-2xl border border-[#E5A952]/20 bg-[#121A2B]/80 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-3.5">
-                  <div className="w-12 h-12 rounded-2xl bg-[#0B0D10] border border-[#6B6E3A]/30 flex items-center justify-center text-[#6B6E3A] shadow-[0_0_15px_rgba(108,198,203,0.15)]">
+                  <div className="w-12 h-12 rounded-2xl bg-[#0B0D10] border border-[#E5A952]/30 flex items-center justify-center text-[#E5A952] shadow-[0_0_15px_rgba(229,169,82,0.15)]">
                     <Github className="w-6 h-6" />
                   </div>
                   <div>
                     <h1 className="text-xl font-bold text-white tracking-tight">{selectedRepoId}</h1>
                     <div className="flex items-center gap-3 text-xs font-mono text-[#C9C4B8]/70 mt-1">
-                      <span className="flex items-center gap-1 text-[#6B6E3A]">
+                      <span className="flex items-center gap-1 text-[#E5A952]">
                         <GitBranch className="w-3.5 h-3.5" />
                         {currentRepo.default_branch || "main"}
                       </span>
@@ -494,9 +494,9 @@ ${data.merge_recommendation}
                 <div className="flex items-center gap-2">
                   <Link
                     href={`/app/graph?repo=${encodeURIComponent(selectedRepoId)}`}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#6B6E3A]/30 bg-[#0B0D10] text-xs font-mono text-[#C9C4B8] hover:text-white hover:border-[#6B6E3A] transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#E5A952]/30 bg-[#0B0D10] text-xs font-mono text-[#C9C4B8] hover:text-white hover:border-[#E5A952] transition-all"
                   >
-                    <Network className="w-3.5 h-3.5 text-[#6B6E3A]" />
+                    <Network className="w-3.5 h-3.5 text-[#E5A952]" />
                     <span>View Graph Canvas</span>
                   </Link>
                 </div>
@@ -528,12 +528,12 @@ ${data.merge_recommendation}
                           }}
                           className={`p-4 rounded-xl border cursor-pointer transition-all ${
                             isSelected
-                              ? "bg-[#6B6E3A]/15 border-[#6B6E3A] shadow-[0_0_15px_rgba(108,198,203,0.2)]"
-                              : "bg-[#121A2B]/70 border-white/[0.08] hover:border-[#6B6E3A]/40"
+                              ? "bg-[#E5A952]/15 border-[#E5A952] shadow-[0_0_15px_rgba(229,169,82,0.2)]"
+                              : "bg-[#121A2B]/70 border-white/[0.08] hover:border-[#E5A952]/40"
                           }`}
                         >
                           <div className="flex items-center justify-between text-xs font-mono">
-                            <span className="text-[#6B6E3A] font-bold">#{pr.number}</span>
+                            <span className="text-[#E5A952] font-bold">#{pr.number}</span>
                             <span className="text-[10px] text-[#C9C4B8]/50 font-mono">
                               {pr.head?.ref || "feature-branch"}
                             </span>
@@ -544,7 +544,7 @@ ${data.merge_recommendation}
                           <div className="flex items-center justify-between text-[11px] font-mono text-[#C9C4B8]/70 mt-3 pt-2 border-t border-white/[0.05]">
                             <span>by @{pr.user?.login || "contributor"}</span>
                             {isCurrentlyAnalyzing ? (
-                              <span className="text-[#6B6E3A] font-bold flex items-center gap-1">
+                              <span className="text-[#E5A952] font-bold flex items-center gap-1">
                                 <RefreshCw className="w-3 h-3 animate-spin" />
                                 <span>Tracing...</span>
                               </span>
@@ -568,10 +568,10 @@ ${data.merge_recommendation}
                   {selectedPR ? (
                     <>
                       {/* Active PR Header & AI Triage Action */}
-                      <div className="p-5 rounded-2xl border border-[#6B6E3A]/25 bg-[#121A2B]/80 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="p-5 rounded-2xl border border-[#E5A952]/25 bg-[#121A2B]/80 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-[#6B6E3A]/20 text-[#6B6E3A] border border-[#6B6E3A]/30">
+                            <span className="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-[#E5A952]/20 text-[#E5A952] border border-[#E5A952]/30">
                               PR #{selectedPR.number}
                             </span>
                             <span className="text-xs font-mono text-[#C9C4B8]/70">
@@ -586,7 +586,7 @@ ${data.merge_recommendation}
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleOpenTriage(selectedPR)}
-                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#6B6E3A] to-[#7E8245] text-[#0B0D10] font-mono font-bold text-xs shadow-[0_0_20px_rgba(108,198,203,0.3)] hover:brightness-110 active:scale-[0.98] transition-all"
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#E5A952] to-[#F5BD66] text-[#0B0D10] font-mono font-bold text-xs shadow-[0_0_20px_rgba(229,169,82,0.3)] hover:brightness-110 active:scale-[0.98] transition-all"
                           >
                             <Sparkles className="w-4 h-4" />
                             <span>Run AI PR Triage</span>
@@ -596,8 +596,8 @@ ${data.merge_recommendation}
 
                       {/* Blast Radius Details */}
                       {analyzingPR === selectedPR.number ? (
-                        <div className="p-12 rounded-2xl border border-[#6B6E3A]/20 bg-[#121A2B]/50 flex flex-col items-center justify-center space-y-3">
-                          <RefreshCw className="w-8 h-8 text-[#6B6E3A] animate-spin" />
+                        <div className="p-12 rounded-2xl border border-[#E5A952]/20 bg-[#121A2B]/50 flex flex-col items-center justify-center space-y-3">
+                          <RefreshCw className="w-8 h-8 text-[#E5A952] animate-spin" />
                           <div className="text-xs font-mono text-[#C9C4B8]">
                             Traversing AST call graph in FalkorDB...
                           </div>
@@ -611,7 +611,7 @@ ${data.merge_recommendation}
                               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                                 <div className="p-4 rounded-xl bg-black/40 border border-white/[0.06] font-mono space-y-1">
                                   <span className="text-[10px] text-[#C9C4B8]/70 uppercase">Directly Modified</span>
-                                  <div className="text-2xl font-bold text-[#6B6E3A]">
+                                  <div className="text-2xl font-bold text-[#E5A952]">
                                     {report.impact.changed_symbols.length}
                                   </div>
                                   <div className="text-[10px] text-[#C9C4B8]/50">0-hop symbols</div>
@@ -675,12 +675,12 @@ ${data.merge_recommendation}
 
                               {/* Prioritized Test Suite Table */}
                               {report.plan && (
-                                <div className="p-5 rounded-2xl border border-[#6B6E3A]/20 bg-[#121A2B]/80 backdrop-blur-xl space-y-3">
+                                <div className="p-5 rounded-2xl border border-[#E5A952]/20 bg-[#121A2B]/80 backdrop-blur-xl space-y-3">
                                   <div className="flex items-center justify-between text-xs font-mono">
                                     <span className="font-bold text-white uppercase tracking-wider">
                                       ML-Ranked Regression Suite
                                     </span>
-                                    <span className="text-[#6B6E3A]">
+                                    <span className="text-[#E5A952]">
                                       Model: {report.plan.ranker_type.toUpperCase()}
                                     </span>
                                   </div>
@@ -692,7 +692,7 @@ ${data.merge_recommendation}
                                         className="p-3 rounded-xl bg-black/40 border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono"
                                       >
                                         <div className="flex items-center gap-3">
-                                          <span className="w-6 h-6 rounded-lg bg-[#6B6E3A]/20 text-[#6B6E3A] flex items-center justify-center font-bold text-xs">
+                                          <span className="w-6 h-6 rounded-lg bg-[#E5A952]/20 text-[#E5A952] flex items-center justify-center font-bold text-xs">
                                             #{test.rank}
                                           </span>
                                           <div>
@@ -746,7 +746,7 @@ ${data.merge_recommendation}
 
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono text-[#C9C4B8]/70">
-                    Active Subgraph: <span className="text-[#6B6E3A] font-bold">{selectedRepoId}</span>
+                    Active Subgraph: <span className="text-[#E5A952] font-bold">{selectedRepoId}</span>
                   </span>
                 </div>
               </div>
@@ -765,7 +765,7 @@ ${data.merge_recommendation}
           {/* TAB 4: BENCHMARK & STRATEGY EVALUATOR */}
           {activeTab === "benchmark" && (
             <div className="space-y-6">
-              <div className="p-6 rounded-2xl border border-[#6B6E3A]/20 bg-[#121A2B]/80 backdrop-blur-xl space-y-6">
+              <div className="p-6 rounded-2xl border border-[#E5A952]/20 bg-[#121A2B]/80 backdrop-blur-xl space-y-6">
                 <div>
                   <h2 className="text-lg font-bold text-white tracking-tight">
                     Strategy Benchmark & Fault Recall Evaluation
@@ -800,12 +800,12 @@ ${data.merge_recommendation}
                             <tr
                               key={key}
                               className={`transition-colors ${
-                                isRipple ? "bg-[#6B6E3A]/10 text-white font-bold" : "text-[#C9C4B8] hover:bg-white/[0.02]"
+                                isRipple ? "bg-[#E5A952]/10 text-white font-bold" : "text-[#C9C4B8] hover:bg-white/[0.02]"
                               }`}
                             >
                               <td className="py-3.5 pr-4 flex items-center gap-2">
-                                {isRipple && <span className="w-2 h-2 rounded-full bg-[#6B6E3A] animate-pulse" />}
-                                <span className={isRipple ? "text-[#6B6E3A]" : "text-white"}>
+                                {isRipple && <span className="w-2 h-2 rounded-full bg-[#E5A952] animate-pulse" />}
+                                <span className={isRipple ? "text-[#E5A952]" : "text-white"}>
                                   {strat.strategy}
                                 </span>
                               </td>
@@ -829,7 +829,7 @@ ${data.merge_recommendation}
                               </td>
                               <td className="py-3.5">
                                 {isRipple ? (
-                                  <span className="text-[#6B6E3A] font-bold">RECOMMENDED</span>
+                                  <span className="text-[#E5A952] font-bold">RECOMMENDED</span>
                                 ) : isFull ? (
                                   <span className="text-[#C9C4B8]/50">Baseline (Slow)</span>
                                 ) : (
@@ -865,15 +865,15 @@ ${data.merge_recommendation}
                   <Link
                     key={r.run_id}
                     href={`/app/runs/${r.run_id}`}
-                    className="p-5 rounded-2xl border border-white/[0.08] hover:border-[#6B6E3A]/50 bg-[#121A2B]/80 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all group"
+                    className="p-5 rounded-2xl border border-white/[0.08] hover:border-[#E5A952]/50 bg-[#121A2B]/80 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all group"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="w-10 h-10 rounded-xl bg-[#0B0D10] border border-white/[0.1] group-hover:border-[#6B6E3A]/50 flex items-center justify-center text-[#6B6E3A]">
+                      <div className="w-10 h-10 rounded-xl bg-[#0B0D10] border border-white/[0.1] group-hover:border-[#E5A952]/50 flex items-center justify-center text-[#E5A952]">
                         <Layers className="w-5 h-5" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-white font-mono group-hover:text-[#6B6E3A] transition-colors">
+                          <span className="text-sm font-bold text-white font-mono group-hover:text-[#E5A952] transition-colors">
                             {r.run_id}
                           </span>
                           <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#2E4A32]/25 text-[#C9C4B8] border border-[#2E4A32]/50">

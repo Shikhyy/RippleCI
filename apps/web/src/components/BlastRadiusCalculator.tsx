@@ -187,7 +187,7 @@ export function BlastRadiusCalculator() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#6B6E3A]/20 border border-[#6B6E3A]/40 flex items-center justify-center text-[#6B6E3A]">
+            <div className="w-8 h-8 rounded-xl bg-[#E5A952]/20 border border-[#E5A952]/40 flex items-center justify-center text-[#E5A952]">
               <Sliders className="w-4 h-4" />
             </div>
             <h3 className="text-base font-bold text-white tracking-tight">
@@ -207,7 +207,7 @@ export function BlastRadiusCalculator() {
               onClick={() => setSelectedId(s.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
                 selectedId === s.id
-                  ? "bg-[#6B6E3A]/25 text-[#C9C4B8] border border-[#6B6E3A] font-bold shadow-[0_0_12px_rgba(107,110,58,0.25)]"
+                  ? "bg-[#E5A952]/25 text-[#C9C4B8] border border-[#E5A952] font-bold shadow-[0_0_12px_rgba(229,169,82,0.25)]"
                   : "bg-[#0B0D10]/60 text-[#C9C4B8]/60 hover:text-white border border-[#1B3B3F]"
               }`}
             >
@@ -248,7 +248,7 @@ export function BlastRadiusCalculator() {
       <div className="space-y-2 p-4 rounded-xl bg-[#0B0D10]/60 border border-[#1B3B3F]">
         <div className="flex items-center justify-between text-xs font-mono">
           <span className="text-[#C9C4B8] font-medium flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-[#6B6E3A]" />
+            <Clock className="w-3.5 h-3.5 text-[#E5A952]" />
             <span>CI Runtime Budget Constraint:</span>
           </span>
           <span className="text-[#C9C4B8] font-bold text-sm">{budgetSeconds} seconds</span>
@@ -260,7 +260,7 @@ export function BlastRadiusCalculator() {
           step={10}
           value={budgetSeconds}
           onChange={(e) => setBudgetSeconds(Number(e.target.value))}
-          className="w-full accent-[#6B6E3A] bg-[#121A2B] h-2 rounded-lg cursor-pointer"
+          className="w-full accent-[#E5A952] bg-[#121A2B] h-2 rounded-lg cursor-pointer"
         />
         <div className="flex justify-between text-[10px] font-mono text-[#C9C4B8]/50">
           <span>10s (Rapid PR Gate)</span>
@@ -293,7 +293,7 @@ export function BlastRadiusCalculator() {
 
         <div className="p-3.5 rounded-xl bg-[#0B0D10]/60 border border-[#1B3B3F] space-y-1 font-mono">
           <span className="text-[10px] text-[#C9C4B8]/60 uppercase">Fault Recall</span>
-          <div className="text-2xl font-bold text-[#6B6E3A]">{faultRecallEstimate}%</div>
+          <div className="text-2xl font-bold text-[#E5A952]">{faultRecallEstimate}%</div>
           <div className="text-[10px] text-[#C9C4B8]/60">empirical accuracy</div>
         </div>
       </div>
@@ -310,7 +310,7 @@ export function BlastRadiusCalculator() {
               className="p-3 rounded-xl bg-[#0B0D10]/60 border border-[#1B3B3F] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono"
             >
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-md bg-[#6B6E3A]/20 text-[#6B6E3A] border border-[#6B6E3A]/40 flex items-center justify-center text-[10px] font-bold">
+                <span className="w-5 h-5 rounded-md bg-[#E5A952]/20 text-[#E5A952] border border-[#E5A952]/40 flex items-center justify-center text-[10px] font-bold">
                   {idx + 1}
                 </span>
                 <div>
@@ -321,7 +321,7 @@ export function BlastRadiusCalculator() {
 
               <div className="flex items-center gap-4 text-[11px] shrink-0 ml-7 sm:ml-0">
                 <span className="text-[#C9C4B8]/70">{t.duration.toFixed(1)}s</span>
-                <span className="text-[#6B6E3A] font-bold">
+                <span className="text-[#E5A952] font-bold">
                   ML: {(t.score * 100).toFixed(1)}%
                 </span>
               </div>

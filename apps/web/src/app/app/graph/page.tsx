@@ -31,7 +31,7 @@ function GraphExplorerContent() {
     <div className="min-h-screen bg-[#0B0D10] text-[#C9C4B8] flex flex-col font-sans relative">
       {/* Ambient Glassmorphic Background Glow Orbs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-[#6B6E3A]/[0.10] blur-[140px]" />
+        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-[#E5A952]/[0.10] blur-[140px]" />
         <div className="absolute top-[40%] right-[5%] w-[550px] h-[550px] rounded-full bg-[#1B3B3F]/[0.25] blur-[150px]" />
         <div className="absolute bottom-[-10%] left-[30%] w-[650px] h-[500px] rounded-full bg-[#5B4A5F]/[0.15] blur-[150px]" />
       </div>
@@ -51,7 +51,7 @@ function GraphExplorerContent() {
 
           <div className="flex items-center gap-2">
             <span className="font-semibold text-xs text-white">FalkorDB Graph Explorer</span>
-            <span className="text-[10px] font-mono text-[#C9C4B8] px-2 py-0.5 rounded bg-[#6B6E3A]/20 border border-[#6B6E3A]/40">
+            <span className="text-[10px] font-mono text-[#C9C4B8] px-2 py-0.5 rounded bg-[#E5A952]/20 border border-[#E5A952]/40">
               Cypher Visualizer
             </span>
             {runId && (
@@ -66,9 +66,9 @@ function GraphExplorerContent() {
           <button
             onClick={reloadGraph}
             disabled={loading}
-            className="flex items-center gap-1.5 text-xs text-[#C9C4B8] hover:text-white bg-[#121A2B] hover:bg-[#1B3B3F] border border-[#1B3B3F] hover:border-[#6B6E3A] px-3 py-1.5 rounded-lg transition-all shadow-sm active:scale-[0.98] backdrop-blur-md"
+            className="flex items-center gap-1.5 text-xs text-[#C9C4B8] hover:text-white bg-[#121A2B] hover:bg-[#1B3B3F] border border-[#1B3B3F] hover:border-[#E5A952] px-3 py-1.5 rounded-lg transition-all shadow-sm active:scale-[0.98] backdrop-blur-md"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#6B6E3A]" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#E5A952]" : ""}`} />
             <span>Refresh Subgraph</span>
           </button>
         </div>
@@ -78,7 +78,7 @@ function GraphExplorerContent() {
       <main className="flex-1 p-6 md:p-8 flex flex-col space-y-4 max-w-7xl mx-auto w-full z-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-[#C9C4B8]/70 gap-3 p-4 rounded-xl border border-[#1B3B3F] bg-[#121A2B]/85 backdrop-blur-xl shadow-card glass-panel">
           <div className="flex items-center gap-2 flex-wrap">
-            <Database className="w-3.5 h-3.5 text-[#6B6E3A]" />
+            <Database className="w-3.5 h-3.5 text-[#E5A952]" />
             <span>Active Subgraph:</span>
             <span className="text-white font-bold">{repoName}</span>
             <span className="text-[#C9C4B8]/60">
@@ -111,7 +111,7 @@ function GraphExplorerContent() {
 
 export default function GraphExplorerPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0B0D10] flex items-center justify-center text-xs font-mono text-[#6B6E3A]">Loading FalkorDB Graph...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#0B0D10] flex items-center justify-center text-xs font-mono text-[#E5A952]">Loading FalkorDB Graph...</div>}>
       <GraphExplorerContent />
     </Suspense>
   );

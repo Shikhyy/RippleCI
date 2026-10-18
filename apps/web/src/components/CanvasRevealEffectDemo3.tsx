@@ -10,13 +10,13 @@ export function CanvasRevealEffectDemo3() {
     <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
       {/* Section Header */}
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#6B6E3A]/40 bg-[#121A2B] text-[#C9C4B8] font-mono text-xs uppercase tracking-wider mb-4">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#6B6E3A] animate-pulse" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#E5A952]/40 bg-[#121A2B] text-[#C9C4B8] font-mono text-xs uppercase tracking-wider mb-4">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#E5A952] animate-pulse" />
           The Triad Architecture
         </div>
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
           Engineered for{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9C4B8] via-[#6B6E3A] to-[#8B5E3C]">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9C4B8] via-[#E5A952] to-[#8B5E3C]">
             Deterministic Safety
           </span>
         </h2>
@@ -41,7 +41,7 @@ export function CanvasRevealEffectDemo3() {
             containerClassName="bg-[#1B3B3F]/40"
             colors={[
               [27, 59, 63],    // TEAL SHADOW
-              [107, 110, 58],  // OLIVE DRIFT
+              [229, 169, 82],  // AMBER GOLD
               [201, 196, 184], // MOON STONE
             ]}
             dotSize={2.5}
@@ -55,13 +55,13 @@ export function CanvasRevealEffectDemo3() {
           description="Ranks affected tests using graph centrality, historical flake probability, and execution duration. Shrinks full-suite runs by 90%+ within your CI budget."
           metricLabel="Fault Recall Rate"
           metricValue="100.0%"
-          icon={<Cpu className="h-10 w-10 text-[#6B6E3A]" />}
+          icon={<Cpu className="h-10 w-10 text-[#E5A952]" />}
         >
           <CanvasRevealEffect
             animationSpeed={2.2}
             containerClassName="bg-[#8B5E3C]/20"
             colors={[
-              [107, 110, 58],  // OLIVE DRIFT
+              [229, 169, 82],  // AMBER GOLD
               [139, 94, 60],   // CINNAMON EARTH
               [201, 196, 184], // MOON STONE
             ]}
@@ -95,7 +95,7 @@ export function CanvasRevealEffectDemo3() {
       <div className="mt-14 text-center">
         <Link
           href="/app"
-          className="inline-flex items-center gap-3 px-6 py-3.5 rounded-xl text-sm font-extrabold bg-[#6B6E3A] hover:bg-[#7E8245] text-[#0B0D10] shadow-lg shadow-[#6B6E3A]/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          className="inline-flex items-center gap-3 px-6 py-3.5 rounded-xl text-sm font-extrabold bg-[#E5A952] hover:bg-[#F5BD66] text-[#0B0D10] shadow-lg shadow-[#E5A952]/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
         >
           <span>Launch Interactive Cockpit Demo</span>
           <ArrowRight className="w-4 h-4" />
@@ -130,13 +130,13 @@ const Card: React.FC<CardProps> = ({
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="border border-[#1B3B3F] hover:border-[#6B6E3A]/70 group/canvas-card flex flex-col justify-between max-w-sm w-full mx-auto p-6 relative min-h-[440px] rounded-2xl overflow-hidden bg-[#121A2B]/85 backdrop-blur-md transition-all duration-300 shadow-card"
+      className="border border-[#1B3B3F] hover:border-[#E5A952]/70 group/canvas-card flex flex-col justify-between max-w-sm w-full mx-auto p-6 relative min-h-[440px] rounded-2xl overflow-hidden bg-[#121A2B]/85 backdrop-blur-md transition-all duration-300 shadow-card"
     >
       {/* Corner crosshairs matching Aceternity Demo-3 aesthetic */}
-      <CrosshairIcon className="absolute h-5 w-5 -top-2.5 -left-2.5 text-[#1B3B3F] group-hover/canvas-card:text-[#6B6E3A] transition-colors duration-300" />
-      <CrosshairIcon className="absolute h-5 w-5 -bottom-2.5 -left-2.5 text-[#1B3B3F] group-hover/canvas-card:text-[#6B6E3A] transition-colors duration-300" />
-      <CrosshairIcon className="absolute h-5 w-5 -top-2.5 -right-2.5 text-[#1B3B3F] group-hover/canvas-card:text-[#6B6E3A] transition-colors duration-300" />
-      <CrosshairIcon className="absolute h-5 w-5 -bottom-2.5 -right-2.5 text-[#1B3B3F] group-hover/canvas-card:text-[#6B6E3A] transition-colors duration-300" />
+      <CrosshairIcon className="absolute h-5 w-5 -top-2.5 -left-2.5 text-[#1B3B3F] group-hover/canvas-card:text-[#E5A952] transition-colors duration-300" />
+      <CrosshairIcon className="absolute h-5 w-5 -bottom-2.5 -left-2.5 text-[#1B3B3F] group-hover/canvas-card:text-[#E5A952] transition-colors duration-300" />
+      <CrosshairIcon className="absolute h-5 w-5 -top-2.5 -right-2.5 text-[#1B3B3F] group-hover/canvas-card:text-[#E5A952] transition-colors duration-300" />
+      <CrosshairIcon className="absolute h-5 w-5 -bottom-2.5 -right-2.5 text-[#1B3B3F] group-hover/canvas-card:text-[#E5A952] transition-colors duration-300" />
 
       {/* Dynamic Animated Canvas Layer on Hover */}
       <div
@@ -155,11 +155,11 @@ const Card: React.FC<CardProps> = ({
             <span className="font-mono text-[11px] font-semibold text-[#C9C4B8]/80 bg-[#0B0D10]/80 px-2.5 py-1 rounded-md border border-[#1B3B3F]">
               {badge}
             </span>
-            <div className="w-2 h-2 rounded-full bg-[#1B3B3F] group-hover/canvas-card:bg-[#6B6E3A] transition-colors duration-300" />
+            <div className="w-2 h-2 rounded-full bg-[#1B3B3F] group-hover/canvas-card:bg-[#E5A952] transition-colors duration-300" />
           </div>
 
           {/* Central Animated Icon */}
-          <div className="mb-6 flex items-center justify-center p-4 rounded-xl bg-[#0B0D10]/80 border border-[#1B3B3F] group-hover/canvas-card:border-[#6B6E3A]/50 group-hover/canvas-card:bg-[#0B0D10] transition-all duration-300 w-16 h-16 shadow-inner">
+          <div className="mb-6 flex items-center justify-center p-4 rounded-xl bg-[#0B0D10]/80 border border-[#1B3B3F] group-hover/canvas-card:border-[#E5A952]/50 group-hover/canvas-card:bg-[#0B0D10] transition-all duration-300 w-16 h-16 shadow-inner">
             {icon}
           </div>
 

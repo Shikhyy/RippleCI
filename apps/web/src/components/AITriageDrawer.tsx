@@ -80,7 +80,7 @@ ${data.merge_recommendation}
         {/* Header */}
         <div className="p-5 border-b border-[#1B3B3F] flex items-center justify-between bg-[#0B0D10]/80">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#6B6E3A]/20 border border-[#6B6E3A]/40 flex items-center justify-center text-[#6B6E3A]">
+            <div className="w-8 h-8 rounded-xl bg-[#E5A952]/20 border border-[#E5A952]/40 flex items-center justify-center text-[#E5A952]">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
@@ -112,7 +112,7 @@ ${data.merge_recommendation}
         <div className="p-6 overflow-y-auto space-y-5 text-xs font-sans">
           {loading ? (
             <div className="py-12 flex flex-col items-center justify-center space-y-3">
-              <div className="w-8 h-8 rounded-full border-2 border-[#6B6E3A] border-t-transparent animate-spin" />
+              <div className="w-8 h-8 rounded-full border-2 border-[#E5A952] border-t-transparent animate-spin" />
               <div className="text-xs font-mono text-[#C9C4B8]/70 animate-pulse">
                 Synthesizing FalkorDB AST blast radius and Groq LPU reasoning...
               </div>
@@ -197,7 +197,7 @@ ${data.merge_recommendation}
           <button
             onClick={handleCopyMarkdown}
             disabled={!data}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#1B3B3F] bg-[#121A2B] text-xs font-mono text-[#C9C4B8] hover:text-white hover:border-[#6B6E3A] transition-all disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#1B3B3F] bg-[#121A2B] text-xs font-mono text-[#C9C4B8] hover:text-white hover:border-[#E5A952] transition-all disabled:opacity-50"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-[#2E4A32]" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copied ? "Copied Markdown" : "Copy PR Comment Markdown"}</span>
@@ -210,7 +210,7 @@ ${data.merge_recommendation}
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
                 commentPosted
                   ? "bg-[#2E4A32]/30 text-[#C9C4B8] border border-[#2E4A32]/50"
-                  : "bg-[#6B6E3A] text-[#0B0D10] hover:bg-[#7E8245] active:scale-[0.98]"
+                  : "bg-[#E5A952] text-[#0B0D10] hover:bg-[#F5BD66] active:scale-[0.98]"
               }`}
             >
               {commentPosted ? (

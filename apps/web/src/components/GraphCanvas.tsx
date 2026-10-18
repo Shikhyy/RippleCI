@@ -110,11 +110,11 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
         ? "border-[#5B4A5F] bg-[#121A2B] text-[#C9C4B8] hover:border-[#5B4A5F]/90 shadow-[0_0_12px_rgba(91,74,95,0.25)]"
         : isTest
         ? "border-[#2E4A32] bg-[#2E4A32]/25 text-[#C9C4B8] hover:border-[#2E4A32]/90 shadow-[0_0_12px_rgba(46,74,50,0.25)]"
-        : "border-[#1B3B3F] bg-[#121A2B] text-[#C9C4B8]/80 hover:border-[#6B6E3A]/40";
+        : "border-[#1B3B3F] bg-[#121A2B] text-[#C9C4B8]/80 hover:border-[#E5A952]/40";
 
       if (isSelected) {
         borderClass =
-          "ring-2 ring-[#6B6E3A] border-[#6B6E3A] bg-[#6B6E3A]/25 shadow-[0_0_25px_rgba(107,110,58,0.45)]";
+          "ring-2 ring-[#E5A952] border-[#E5A952] bg-[#E5A952]/25 shadow-[0_0_25px_rgba(229,169,82,0.45)]";
       }
 
       return {
@@ -278,7 +278,7 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
                 onClick={() => setKindFilter(f.id)}
                 className={`text-[10px] font-mono px-2 py-0.5 rounded transition-all ${
                   kindFilter === f.id
-                    ? "bg-[#6B6E3A]/25 text-[#C9C4B8] border border-[#6B6E3A]/60 font-bold"
+                    ? "bg-[#E5A952]/25 text-[#C9C4B8] border border-[#E5A952]/60 font-bold"
                     : "text-[#C9C4B8]/60 hover:text-white hover:bg-white/[0.04]"
                 }`}
               >
@@ -325,7 +325,7 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
         minZoom={0.25}
         maxZoom={1.75}
       >
-        <Background color="rgba(107, 110, 58, 0.12)" gap={24} size={1} />
+        <Background color="rgba(229,169,82, 0.12)" gap={24} size={1} />
         <Controls className="!bg-[#121A2B] !border-[#1B3B3F] !text-[#C9C4B8] !rounded-xl fill-[#C9C4B8] shadow-xl" />
         <MiniMap
           nodeColor={(node) => {
@@ -387,7 +387,7 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
                 <div>
                   <div className="text-[10px] font-mono text-[#C9C4B8]/50 uppercase tracking-wider">Source Location</div>
                   <div className="font-mono text-xs text-[#C9C4B8] mt-1 flex items-center gap-1.5 bg-[#0B0D10]/80 p-2 rounded-lg border border-[#1B3B3F]">
-                    <FileCode className="w-3.5 h-3.5 text-[#6B6E3A] shrink-0" />
+                    <FileCode className="w-3.5 h-3.5 text-[#E5A952] shrink-0" />
                     <span className="truncate">{selectedNode.data.file_path}</span>
                     {selectedNode.data.lines && (
                       <span className="text-[#C9C4B8] font-semibold shrink-0">:{selectedNode.data.lines}</span>
@@ -421,7 +421,7 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
                   <span>FalkorDB Cypher Query</span>
                   <button
                     onClick={() => handleCopyCypher(activeCypher)}
-                    className="flex items-center gap-1 text-[#6B6E3A] hover:text-[#C9C4B8] transition-colors"
+                    className="flex items-center gap-1 text-[#E5A952] hover:text-[#C9C4B8] transition-colors"
                   >
                     {copiedCypher ? <Check className="w-3 h-3 text-[#2E4A32]" /> : <Copy className="w-3 h-3" />}
                     <span>{copiedCypher ? "Copied" : "Copy"}</span>
@@ -436,7 +436,7 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
 
           <div className="pt-3 border-t border-[#1B3B3F] flex justify-between items-center text-[11px] text-[#C9C4B8]/70">
             <span className="flex items-center gap-1.5">
-              <Database className="w-3.5 h-3.5 text-[#6B6E3A]" />
+              <Database className="w-3.5 h-3.5 text-[#E5A952]" />
               <span>FalkorDB Graph</span>
             </span>
             <span className="font-mono text-[#C9C4B8] uppercase">{selectedNode.kind}</span>

@@ -125,7 +125,7 @@ export function MutationScoreGauge({
             {wallTimeSeconds > 0 ? `${wallTimeSeconds.toFixed(1)}s` : "< 1.0s"}
           </div>
           <div className="text-[10px] font-mono text-[#C9C4B8]/80 mt-3 flex items-center gap-1">
-            <Cpu className="w-3 h-3 text-[#6B6E3A]" />
+            <Cpu className="w-3 h-3 text-[#E5A952]" />
             <span>Isolated subprocess sandbox</span>
           </div>
         </div>

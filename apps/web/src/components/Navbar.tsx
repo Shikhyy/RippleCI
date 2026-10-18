@@ -15,7 +15,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-7 h-7 rounded-lg bg-[#121A2B] border border-[#1B3B3F] flex items-center justify-center shadow-rim">
-              <svg className="w-4 h-4 text-[#6B6E3A] group-hover:text-[#C9C4B8] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg className="w-4 h-4 text-[#E5A952] group-hover:text-[#C9C4B8] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="6" cy="12" r="3" />
                 <circle cx="18" cy="6" r="3" />
                 <circle cx="18" cy="18" r="3" />
@@ -23,7 +23,7 @@ export function Navbar() {
               </svg>
             </div>
             <span className="font-semibold text-sm tracking-tight text-white group-hover:text-[#C9C4B8] transition-colors">
-              Ripple<span className="text-[#6B6E3A] font-bold">CI</span>
+              Ripple<span className="text-[#E5A952] font-bold">CI</span>
             </span>
           </Link>
           <div className="hidden sm:flex items-center gap-1.5 pl-2.5 border-l border-white/[0.08]">
@@ -38,7 +38,7 @@ export function Navbar() {
             href="/app"
             className={`px-3 py-1.5 rounded-lg transition-all ${
               pathname === "/app"
-                ? "bg-[#6B6E3A]/20 text-[#C9C4B8] border border-[#6B6E3A]/50 font-semibold shadow-sm"
+                ? "bg-[#E5A952]/20 text-[#C9C4B8] border border-[#E5A952]/50 font-semibold shadow-sm"
                 : "hover:text-white hover:bg-white/[0.04]"
             }`}
           >
@@ -48,7 +48,7 @@ export function Navbar() {
             href="/app/graph"
             className={`px-3 py-1.5 rounded-lg transition-all ${
               pathname === "/app/graph"
-                ? "bg-[#6B6E3A]/20 text-[#C9C4B8] border border-[#6B6E3A]/50 font-semibold shadow-sm"
+                ? "bg-[#E5A952]/20 text-[#C9C4B8] border border-[#E5A952]/50 font-semibold shadow-sm"
                 : "hover:text-white hover:bg-white/[0.04]"
             }`}
           >
@@ -64,7 +64,7 @@ export function Navbar() {
             href="/app/runs/run_prod_8f12a9"
             className={`px-3 py-1.5 rounded-lg transition-all ${
               pathname?.startsWith("/app/runs")
-                ? "bg-[#6B6E3A]/20 text-[#C9C4B8] border border-[#6B6E3A]/50 font-semibold shadow-sm"
+                ? "bg-[#E5A952]/20 text-[#C9C4B8] border border-[#E5A952]/50 font-semibold shadow-sm"
                 : "hover:text-white hover:bg-white/[0.04]"
             }`}
           >
@@ -87,7 +87,7 @@ export function Navbar() {
             href="https://github.com/Shikhyy/RippleCI.git"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-1.5 text-xs text-[#C9C4B8] hover:text-white px-2.5 py-1.5 rounded-lg border border-[#1B3B3F] hover:border-[#6B6E3A]/50 bg-[#121A2B] transition-all font-medium"
+            className="flex items-center gap-1.5 text-xs text-[#C9C4B8] hover:text-white px-2.5 py-1.5 rounded-lg border border-[#1B3B3F] hover:border-[#E5A952]/50 bg-[#121A2B] transition-all font-medium"
           >
             <Github className="w-3.5 h-3.5 text-[#C9C4B8]/70" />
             <span className="hidden sm:inline">GitHub</span>
@@ -95,7 +95,7 @@ export function Navbar() {
 
           <Link
             href="/app"
-            className="flex items-center gap-1 text-xs font-bold text-[#0B0D10] bg-[#6B6E3A] hover:bg-[#7E8245] px-3.5 py-1.5 rounded-lg transition-all shadow-[0_1px_16px_rgba(107,110,58,0.45),inset_0_1px_0_rgba(201,196,184,0.3)] active:scale-[0.98]"
+            className="flex items-center gap-1 text-xs font-bold text-[#0B0D10] bg-[#E5A952] hover:bg-[#F5BD66] px-3.5 py-1.5 rounded-lg transition-all shadow-[0_1px_16px_rgba(229,169,82,0.45),inset_0_1px_0_rgba(201,196,184,0.3)] active:scale-[0.98]"
           >
             <span>Launch Workbench</span>
           </Link>

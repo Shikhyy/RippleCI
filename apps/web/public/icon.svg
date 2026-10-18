@@ -4,12 +4,12 @@
       <stop offset="0%" stop-color="#121A2B" />
       <stop offset="100%" stop-color="#0B0D10" />
     </linearGradient>
-    <linearGradient id="olive-glow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8E934F" />
-      <stop offset="100%" stop-color="#6B6E3A" />
+    <linearGradient id="amber-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FAD48E" />
+      <stop offset="100%" stop-color="#E5A952" />
     </linearGradient>
     <radialGradient id="pulse" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#6B6E3A" stop-opacity="0.65" />
+      <stop offset="0%" stop-color="#E5A952" stop-opacity="0.65" />
       <stop offset="60%" stop-color="#1B3B3F" stop-opacity="0.3" />
       <stop offset="100%" stop-color="#0B0D10" stop-opacity="0" />
     </radialGradient>
@@ -20,7 +20,7 @@
 
   <!-- Radiating Ripple Waves -->
   <circle cx="16" cy="16" r="11" fill="none" stroke="#1B3B3F" stroke-width="0.9" stroke-dasharray="2 2" stroke-opacity="0.8" />
-  <circle cx="16" cy="16" r="8" fill="none" stroke="#6B6E3A" stroke-width="1.1" stroke-opacity="0.65" />
+  <circle cx="16" cy="16" r="8" fill="none" stroke="#E5A952" stroke-width="1.1" stroke-opacity="0.65" />
   <circle cx="16" cy="16" r="5" fill="url(#pulse)" />
 
   <!-- Graph Dependency Edges -->
@@ -34,6 +34,6 @@
   <circle cx="21" cy="21" r="2.0" fill="#2E4A32" stroke="#0B0D10" stroke-width="0.8" />
 
   <!-- Core Origin Node (Moon Stone & Olive Glow) -->
-  <circle cx="16" cy="16" r="3.2" fill="url(#olive-glow)" />
+  <circle cx="16" cy="16" r="3.2" fill="url(#amber-glow)" />
   <circle cx="16" cy="16" r="1.5" fill="#C9C4B8" />
 </svg>

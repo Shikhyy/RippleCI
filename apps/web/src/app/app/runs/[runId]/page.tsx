@@ -48,7 +48,7 @@ export default function RunDetailsPage() {
     <div className="min-h-screen bg-[#0B0D10] text-[#C9C4B8] flex flex-col font-sans relative">
       {/* Ambient Glassmorphic Background Glow Orbs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-[#6B6E3A]/[0.10] blur-[140px]" />
+        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-[#E5A952]/[0.10] blur-[140px]" />
         <div className="absolute top-[40%] right-[5%] w-[550px] h-[550px] rounded-full bg-[#1B3B3F]/[0.25] blur-[150px]" />
         <div className="absolute bottom-[-10%] left-[30%] w-[650px] h-[500px] rounded-full bg-[#5B4A5F]/[0.15] blur-[150px]" />
       </div>
@@ -111,7 +111,7 @@ export default function RunDetailsPage() {
             </div>
             <div>
               <div className="text-[#C9C4B8]/50 uppercase text-[10px] tracking-wider">Mutation Score</div>
-              <div className="text-[#6B6E3A] font-bold text-base mt-0.5">
+              <div className="text-[#E5A952] font-bold text-base mt-0.5">
                 {(run.verification?.mutation_score ? run.verification.mutation_score * 100 : 100).toFixed(0)}%
               </div>
             </div>
@@ -124,7 +124,7 @@ export default function RunDetailsPage() {
             onClick={() => setActiveTab("impact")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === "impact"
-                ? "bg-[#6B6E3A]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#6B6E3A]/50"
+                ? "bg-[#E5A952]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#E5A952]/50"
                 : "text-[#C9C4B8]/60 hover:text-white"
             }`}
           >
@@ -135,7 +135,7 @@ export default function RunDetailsPage() {
             onClick={() => setActiveTab("plan")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === "plan"
-                ? "bg-[#6B6E3A]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#6B6E3A]/50"
+                ? "bg-[#E5A952]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#E5A952]/50"
                 : "text-[#C9C4B8]/60 hover:text-white"
             }`}
           >
@@ -146,7 +146,7 @@ export default function RunDetailsPage() {
             onClick={() => setActiveTab("verification")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === "verification"
-                ? "bg-[#6B6E3A]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#6B6E3A]/50"
+                ? "bg-[#E5A952]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#E5A952]/50"
                 : "text-[#C9C4B8]/60 hover:text-white"
             }`}
           >
@@ -157,7 +157,7 @@ export default function RunDetailsPage() {
             onClick={() => setActiveTab("agent")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === "agent"
-                ? "bg-[#6B6E3A]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#6B6E3A]/50"
+                ? "bg-[#E5A952]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#E5A952]/50"
                 : "text-[#C9C4B8]/60 hover:text-white"
             }`}
           >
@@ -168,7 +168,7 @@ export default function RunDetailsPage() {
             onClick={() => setActiveTab("graph")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === "graph"
-                ? "bg-[#6B6E3A]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#6B6E3A]/50"
+                ? "bg-[#E5A952]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#E5A952]/50"
                 : "text-[#C9C4B8]/60 hover:text-white"
             }`}
           >
@@ -285,7 +285,7 @@ export default function RunDetailsPage() {
                         onClick={() => setSelectedTest(t)}
                         className={`cursor-pointer transition-colors ${
                           selectedTest?.name === t.name
-                            ? "bg-[#6B6E3A]/20 text-white"
+                            ? "bg-[#E5A952]/20 text-white"
                             : "hover:bg-[#0B0D10]/50"
                         }`}
                       >
@@ -293,7 +293,7 @@ export default function RunDetailsPage() {
                         <td className="py-3.5 px-5 text-[#2E4A32] font-bold">{t.name}</td>
                         <td className="py-3.5 px-5 text-[#C9C4B8] font-bold">{t.rank_score.toFixed(2)}</td>
                         <td className="py-3.5 px-5 text-[#C9C4B8]/70">{t.estimated_duration_seconds.toFixed(1)}s</td>
-                        <td className="py-3.5 px-5 text-right text-[#6B6E3A]">
+                        <td className="py-3.5 px-5 text-right text-[#E5A952]">
                           <ChevronRight className="w-4 h-4 inline" />
                         </td>
                       </tr>
@@ -337,7 +337,7 @@ export default function RunDetailsPage() {
                       <ul className="mt-1.5 space-y-1.5 text-xs text-[#C9C4B8]">
                         {selectedTest.reasons.map((r: string, idx: number) => (
                           <li key={idx} className="flex items-start gap-2">
-                            <span className="text-[#6B6E3A] shrink-0 font-bold">•</span>
+                            <span className="text-[#E5A952] shrink-0 font-bold">•</span>
                             <span>{r}</span>
                           </li>
                         ))}
@@ -418,7 +418,7 @@ export default function RunDetailsPage() {
                       key={idx}
                       className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[#0B0D10]/80 border border-[#1B3B3F] text-[#C9C4B8]"
                     >
-                      <span className="w-5 h-5 rounded-md bg-[#6B6E3A]/20 border border-[#6B6E3A]/40 text-[#6B6E3A] flex items-center justify-center text-[10px] font-bold shrink-0">
+                      <span className="w-5 h-5 rounded-md bg-[#E5A952]/20 border border-[#E5A952]/40 text-[#E5A952] flex items-center justify-center text-[10px] font-bold shrink-0">
                         {idx + 1}
                       </span>
                       <span className="text-[#C9C4B8] font-semibold">{parts[0]}</span>

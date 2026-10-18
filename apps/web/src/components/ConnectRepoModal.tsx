@@ -115,7 +115,7 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
         {/* Modal Header */}
         <div className="p-5 border-b border-[#1B3B3F] flex items-center justify-between bg-[#0B0D10]/80">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#6B6E3A]/20 border border-[#6B6E3A]/40 flex items-center justify-center text-[#6B6E3A]">
+            <div className="w-9 h-9 rounded-xl bg-[#E5A952]/20 border border-[#E5A952]/40 flex items-center justify-center text-[#E5A952]">
               <FolderGit2 className="w-5 h-5" />
             </div>
             <div>
@@ -139,22 +139,22 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
             onClick={() => setActiveTab("github")}
             className={`pb-2.5 px-2 border-b-2 flex items-center gap-1.5 transition-all ${
               activeTab === "github"
-                ? "border-[#6B6E3A] text-[#C9C4B8] font-semibold"
+                ? "border-[#E5A952] text-[#C9C4B8] font-semibold"
                 : "border-transparent text-[#C9C4B8]/50 hover:text-zinc-200"
             }`}
           >
-            <Github className="w-3.5 h-3.5 text-[#6B6E3A]" />
+            <Github className="w-3.5 h-3.5 text-[#E5A952]" />
             <span>GitHub</span>
           </button>
           <button
             onClick={() => setActiveTab("local")}
             className={`pb-2.5 px-2 border-b-2 flex items-center gap-1.5 transition-all ${
               activeTab === "local"
-                ? "border-[#6B6E3A] text-[#C9C4B8] font-semibold"
+                ? "border-[#E5A952] text-[#C9C4B8] font-semibold"
                 : "border-transparent text-[#C9C4B8]/50 hover:text-zinc-200"
             }`}
           >
-            <Terminal className="w-3.5 h-3.5 text-[#6B6E3A]" />
+            <Terminal className="w-3.5 h-3.5 text-[#E5A952]" />
             <span>Local</span>
           </button>
         </div>
@@ -183,7 +183,7 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
                         setGithubInput(preset.id);
                         handleConnectGitHub(preset.id);
                       }}
-                      className="text-xs font-mono px-2.5 py-1 rounded-lg bg-[#0B0D10]/70 hover:bg-[#6B6E3A]/20 border border-[#1B3B3F] text-[#C9C4B8] transition-all hover:border-[#6B6E3A]"
+                      className="text-xs font-mono px-2.5 py-1 rounded-lg bg-[#0B0D10]/70 hover:bg-[#E5A952]/20 border border-[#1B3B3F] text-[#C9C4B8] transition-all hover:border-[#E5A952]"
                     >
                       {preset.label}
                     </button>
@@ -201,13 +201,13 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
                     Repository Identifier or URL:
                   </label>
                   <div className="relative">
-                    <Github className="w-4 h-4 absolute left-3 top-2.5 text-[#6B6E3A]" />
+                    <Github className="w-4 h-4 absolute left-3 top-2.5 text-[#E5A952]" />
                     <input
                       type="text"
                       value={githubInput}
                       onChange={(e) => setGithubInput(e.target.value)}
                       placeholder="e.g. fastapi/fastapi or https://github.com/..."
-                      className="w-full bg-[#0B0D10]/80 border border-[#1B3B3F] rounded-lg pl-9 pr-3 py-2 text-white font-mono focus:outline-none focus:border-[#6B6E3A] transition-colors text-xs"
+                      className="w-full bg-[#0B0D10]/80 border border-[#1B3B3F] rounded-lg pl-9 pr-3 py-2 text-white font-mono focus:outline-none focus:border-[#E5A952] transition-colors text-xs"
                     />
                   </div>
                 </div>
@@ -223,7 +223,7 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
               <button
                 onClick={() => handleConnectGitHub()}
                 disabled={githubLoading || !githubInput.trim()}
-                className="w-full flex items-center justify-center gap-2 bg-[#6B6E3A] hover:bg-[#7E8245] text-[#0B0D10] font-bold py-2.5 rounded-xl transition-all shadow-lg disabled:opacity-50 active:scale-[0.99] text-xs font-mono"
+                className="w-full flex items-center justify-center gap-2 bg-[#E5A952] hover:bg-[#F5BD66] text-[#0B0D10] font-bold py-2.5 rounded-xl transition-all shadow-lg disabled:opacity-50 active:scale-[0.99] text-xs font-mono"
               >
                 {githubLoading ? (
                   <>
@@ -256,7 +256,7 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
                     type="text"
                     value={repoPath}
                     onChange={(e) => setRepoPath(e.target.value)}
-                    className="w-full bg-[#0B0D10]/80 border border-[#1B3B3F] rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-[#6B6E3A] text-xs"
+                    className="w-full bg-[#0B0D10]/80 border border-[#1B3B3F] rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-[#E5A952] text-xs"
                   />
                 </div>
 
@@ -268,7 +268,7 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
                     type="text"
                     value={repoName}
                     onChange={(e) => setRepoName(e.target.value)}
-                    className="w-full bg-[#0B0D10]/80 border border-[#1B3B3F] rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-[#6B6E3A] text-xs"
+                    className="w-full bg-[#0B0D10]/80 border border-[#1B3B3F] rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-[#E5A952] text-xs"
                   />
                 </div>
               </div>
@@ -276,7 +276,7 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
               {/* Progress Terminal Window */}
               {indexing && (
                 <div className="p-3 bg-[#0B0D10] rounded-xl border border-[#1B3B3F] font-mono text-[11px] text-[#C9C4B8]/90 space-y-1">
-                  <div className="text-[#6B6E3A] font-bold flex items-center gap-1.5">
+                  <div className="text-[#E5A952] font-bold flex items-center gap-1.5">
                     <RefreshCw className="w-3.5 h-3.5 animate-spin" />
                     <span>Indexing in progress...</span>
                   </div>
@@ -289,7 +289,7 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
               <button
                 onClick={handleConnectLocal}
                 disabled={indexing || !repoPath.trim()}
-                className="w-full flex items-center justify-center gap-2 bg-[#6B6E3A] hover:bg-[#7E8245] text-[#0B0D10] font-bold py-2.5 rounded-xl transition-all shadow-lg disabled:opacity-50 active:scale-[0.99] text-xs font-mono"
+                className="w-full flex items-center justify-center gap-2 bg-[#E5A952] hover:bg-[#F5BD66] text-[#0B0D10] font-bold py-2.5 rounded-xl transition-all shadow-lg disabled:opacity-50 active:scale-[0.99] text-xs font-mono"
               >
                 {indexing ? (
                   <>

@@ -113,11 +113,11 @@ export function TerminalBlock() {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 mr-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#8B5E3C] inline-block" />
-            <span className="w-2.5 h-2.5 rounded-full bg-[#6B6E3A] inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#E5A952] inline-block" />
             <span className="w-2.5 h-2.5 rounded-full bg-[#2E4A32] inline-block" />
           </div>
           <span className="text-xs font-mono text-[#C9C4B8]/80 font-semibold flex items-center gap-1.5">
-            <TerminalIcon className="w-3.5 h-3.5 text-[#6B6E3A]" />
+            <TerminalIcon className="w-3.5 h-3.5 text-[#E5A952]" />
             <span>ripple-cli</span>
           </span>
         </div>
@@ -132,7 +132,7 @@ export function TerminalBlock() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-3 py-1 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 ${
                   isActive
-                    ? "bg-[#6B6E3A]/25 text-[#C9C4B8] font-bold border border-[#6B6E3A]/60 shadow-[0_0_10px_rgba(107,110,58,0.25)]"
+                    ? "bg-[#E5A952]/25 text-[#C9C4B8] font-bold border border-[#E5A952]/60 shadow-[0_0_10px_rgba(229,169,82,0.25)]"
                     : "text-[#C9C4B8]/60 hover:text-white hover:bg-white/[0.04]"
                 }`}
               >
@@ -155,7 +155,7 @@ export function TerminalBlock() {
       {/* Terminal prompt bar */}
       <div className="px-5 py-2.5 bg-[#0B0D10]/90 border-b border-[#1B3B3F]/70 flex items-center justify-between text-xs font-mono">
         <div className="flex items-center gap-2">
-          <span className="text-[#6B6E3A] font-bold">$</span>
+          <span className="text-[#E5A952] font-bold">$</span>
           <span className="text-white font-semibold">{current.command}</span>
         </div>
         <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#1B3B3F]/70 text-[#C9C4B8] border border-[#1B3B3F] hidden sm:inline">

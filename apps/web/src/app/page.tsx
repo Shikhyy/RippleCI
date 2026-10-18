@@ -111,7 +111,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0B0D10] text-[#C9C4B8] font-sans relative selection:bg-[#6B6E3A]/40 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#0B0D10] text-[#C9C4B8] font-sans relative selection:bg-[#E5A952]/40 selection:text-white">
       <Navbar />
 
       {/* Connect Repository Modal */}
@@ -126,12 +126,12 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(#1B3B3F_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-40" />
 
         {/* Soft Ambient Spotlight */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-[#6B6E3A]/15 via-[#1B3B3F]/20 to-transparent blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-[#E5A952]/15 via-[#1B3B3F]/20 to-transparent blur-3xl pointer-events-none" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center relative z-10">
           {/* Status Badge */}
-          <div className="inline-flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-[#6B6E3A]/40 bg-[#121A2B] text-[#C9C4B8] text-xs font-mono mb-8 backdrop-blur-md shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#6B6E3A] animate-pulse" />
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-[#E5A952]/40 bg-[#121A2B] text-[#C9C4B8] text-xs font-mono mb-8 backdrop-blur-md shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#E5A952] animate-pulse" />
             <span>FalkorDB Graph-Native Release Intelligence</span>
             <span className="text-[#C9C4B8]/40">|</span>
             <span className="text-[#C9C4B8]/70">Open Source</span>
@@ -140,7 +140,7 @@ export default function LandingPage() {
           {/* Headline */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08] max-w-4xl mx-auto mb-6">
             Understand what could break,<br className="hidden sm:inline" />{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#C9C4B8] to-[#6B6E3A]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#C9C4B8] to-[#E5A952]">
               before you ship.
             </span>
           </h1>
@@ -154,7 +154,7 @@ export default function LandingPage() {
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs sm:text-sm font-mono mb-14">
             <Link
               href="/app"
-              className="flex items-center gap-2 bg-[#6B6E3A] hover:bg-[#7E8245] text-[#0B0D10] font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(107,110,58,0.4)] hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center gap-2 bg-[#E5A952] hover:bg-[#F5BD66] text-[#0B0D10] font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(229,169,82,0.4)] hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>Launch Web Companion</span>
               <ArrowRight className="w-4 h-4" />
@@ -162,9 +162,9 @@ export default function LandingPage() {
 
             <button
               onClick={() => setIsConnectModalOpen(true)}
-              className="flex items-center gap-2 bg-[#121A2B] hover:bg-[#1B3B3F] text-white border border-[#1B3B3F] px-5 py-3.5 rounded-xl transition-all font-semibold hover:border-[#6B6E3A] hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center gap-2 bg-[#121A2B] hover:bg-[#1B3B3F] text-white border border-[#1B3B3F] px-5 py-3.5 rounded-xl transition-all font-semibold hover:border-[#E5A952] hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Github className="w-4 h-4 text-[#6B6E3A]" />
+              <Github className="w-4 h-4 text-[#E5A952]" />
               <span>Connect Repository</span>
             </button>
 
@@ -173,7 +173,7 @@ export default function LandingPage() {
               className="flex items-center gap-2 bg-[#0B0D10]/80 hover:bg-white/[0.06] text-[#C9C4B8] border border-[#1B3B3F] px-4 py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>pip install rippleci</span>
-              {copiedPip ? <Check className="w-4 h-4 text-[#2E4A32]" /> : <Copy className="w-4 h-4 text-[#6B6E3A]" />}
+              {copiedPip ? <Check className="w-4 h-4 text-[#2E4A32]" /> : <Copy className="w-4 h-4 text-[#E5A952]" />}
             </button>
           </div>
 
@@ -183,7 +183,7 @@ export default function LandingPage() {
             <div className="flex items-center justify-between px-4 py-3 border-b border-[#1B3B3F] bg-[#0B0D10]">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-[#8B5E3C]" />
-                <span className="w-3 h-3 rounded-full bg-[#6B6E3A]" />
+                <span className="w-3 h-3 rounded-full bg-[#E5A952]" />
                 <span className="w-3 h-3 rounded-full bg-[#2E4A32]" />
                 <span className="ml-2 font-mono text-xs text-[#C9C4B8]/60">git diff --cached (auth/tokens.py)</span>
               </div>
@@ -252,7 +252,7 @@ export default function LandingPage() {
                     </div>
                     <div className="flex justify-between items-center text-[#C9C4B8]">
                       <span>Mutants Killed:</span>
-                      <span className="text-[#6B6E3A] font-bold">4 / 4 (100%)</span>
+                      <span className="text-[#E5A952] font-bold">4 / 4 (100%)</span>
                     </div>
                     <div className="flex justify-between items-center text-[#C9C4B8]">
                       <span>Fault Recall:</span>
@@ -290,8 +290,8 @@ export default function LandingPage() {
       <section className="py-20 border-b border-[#1B3B3F] bg-[#0B0D10]/80">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#6B6E3A]/40 bg-[#121A2B] text-[#C9C4B8] text-xs font-mono mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-[#6B6E3A]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#E5A952]/40 bg-[#121A2B] text-[#C9C4B8] text-xs font-mono mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-[#E5A952]" />
               <span>Live Interactive Simulator</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 tracking-tight">
@@ -349,7 +349,7 @@ export default function LandingPage() {
                     onClick={() => setActiveSnippetTab(snippet.id)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
                       activeSnippetTab === snippet.id
-                        ? "bg-[#6B6E3A]/25 text-[#C9C4B8] font-bold border border-[#6B6E3A]/60 shadow-[0_0_10px_rgba(107,110,58,0.25)]"
+                        ? "bg-[#E5A952]/25 text-[#C9C4B8] font-bold border border-[#E5A952]/60 shadow-[0_0_10px_rgba(229,169,82,0.25)]"
                         : "text-[#C9C4B8]/60 hover:text-white hover:bg-white/[0.04]"
                     }`}
                   >
@@ -385,7 +385,7 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight mb-6">
             Stop waiting on slow CI suites.<br />
-            <span className="text-[#6B6E3A]">Verify PRs with connected evidence.</span>
+            <span className="text-[#E5A952]">Verify PRs with connected evidence.</span>
           </h2>
           <p className="text-[#C9C4B8]/70 max-w-xl mx-auto mb-10 text-sm">
             Connect any GitHub repository with zero configuration or install the typed Python package to get started in under a minute.
@@ -393,7 +393,7 @@ export default function LandingPage() {
           <div className="flex flex-wrap items-center justify-center gap-4 font-mono text-xs sm:text-sm">
             <Link
               href="/app"
-              className="bg-[#6B6E3A] hover:bg-[#7E8245] text-[#0B0D10] font-extrabold px-7 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(107,110,58,0.45)] active:scale-[0.98]"
+              className="bg-[#E5A952] hover:bg-[#F5BD66] text-[#0B0D10] font-extrabold px-7 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(229,169,82,0.45)] active:scale-[0.98]"
             >
               Open Web Companion
             </Link>
@@ -411,7 +411,7 @@ export default function LandingPage() {
       <footer className="border-t border-[#1B3B3F] py-8 bg-[#0B0D10] text-xs font-mono text-[#C9C4B8]/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-white">Ripple<span className="text-[#6B6E3A]">CI</span></span>
+            <span className="font-bold text-white">Ripple<span className="text-[#E5A952]">CI</span></span>
             <span>•</span>
             <span>Graph-Native Release Intelligence Toolkit</span>
           </div>

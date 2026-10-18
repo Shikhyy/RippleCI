@@ -60,7 +60,7 @@ export function EvidencePathBreadcrumb({
     <div className="rounded-xl border border-[#1B3B3F] bg-[#121A2B]/85 backdrop-blur-xl p-4 space-y-3 shadow-card">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg bg-[#6B6E3A]/20 border border-[#6B6E3A]/40 flex items-center justify-center text-[#6B6E3A]">
+          <div className="w-6 h-6 rounded-lg bg-[#E5A952]/20 border border-[#E5A952]/40 flex items-center justify-center text-[#E5A952]">
             <Layers className="w-3.5 h-3.5 text-[#C9C4B8]" />
           </div>
           <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
@@ -80,7 +80,7 @@ export function EvidencePathBreadcrumb({
         {rankScore !== undefined && (
           <div className="flex items-center gap-1.5 text-xs font-mono">
             <span className="text-[#C9C4B8]/60 text-[10px] uppercase">ML Score:</span>
-            <span className="text-[#6B6E3A] font-bold">{(rankScore * 100).toFixed(1)}%</span>
+            <span className="text-[#E5A952] font-bold">{(rankScore * 100).toFixed(1)}%</span>
           </div>
         )}
       </div>
@@ -123,7 +123,7 @@ export function EvidencePathBreadcrumb({
 
               {!isLast && (
                 <div className="flex items-center text-[#C9C4B8]/40 shrink-0 px-1">
-                  <ChevronRight className="w-3.5 h-3.5 text-[#6B6E3A]" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#E5A952]" />
                 </div>
               )}
             </React.Fragment>
@@ -142,7 +142,7 @@ export function EvidencePathBreadcrumb({
         </span>
         <button
           onClick={() => setExpanded(!expanded)}
-          className="text-[#6B6E3A] hover:underline"
+          className="text-[#E5A952] hover:underline"
         >
           {expanded ? "Hide Details" : "View Cypher Trace"}
         </button>
@@ -150,7 +150,7 @@ export function EvidencePathBreadcrumb({
 
       {expanded && (
         <div className="p-2.5 rounded-lg bg-[#0B0D10] border border-[#1B3B3F] font-mono text-[10px] text-[#C9C4B8]/90 space-y-1">
-          <div className="text-[#6B6E3A] font-bold">FalkorDB Cypher Trace:</div>
+          <div className="text-[#E5A952] font-bold">FalkorDB Cypher Trace:</div>
           <div className="overflow-x-auto whitespace-pre">
             {`MATCH (t:TestCase {name: '${testName}'})-[:COVERS]->(caller)-[:CALLS*0..${intermediateCallers.length}]->(s:Symbol {name: '${targetSymbol}'})\nRETURN t, caller, s;`}
           </div>
