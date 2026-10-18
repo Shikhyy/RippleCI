@@ -76,3 +76,28 @@ def test_verification_engine_with_mutations(sample_repo_path: Path):
     # Check that at least one mutant was killed by the test suite
     assert report.killed_mutations_count >= 1
     assert report.recommendation in ("release_safe", "review_required")
+
+
+def test_verification_engine_with_empty_plan(sample_repo_path: Path):
+    config = RippleConfig()
+    store = MemoryGraphStore()
+    engine = VerificationEngine(sample_repo_path, config, store)
+
+    plan = TestPlan(
+        plan_id="plan_empty_test",
+        run_id="run_empty_test",
+        repo_id="sample-python-service",
+        budget_seconds=300.0,
+        estimated_total_seconds=0.0,
+        ranker_type="HeuristicRanker",
+        ranker_version="1.0",
+        selected_tests=[],
+        created_at="2026-10-17T00:00:00Z",
+    )
+
+    report = engine.verify(plan=plan)
+
+    assert report.tests_executed_count == 0
+    assert report.all_passed is True
+    assert report.recommendation == "release_safe"
+

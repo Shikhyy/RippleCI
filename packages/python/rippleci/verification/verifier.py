@@ -48,7 +48,7 @@ class VerificationEngine:
         test_results = self.runner.run_tests(selected_node_ids)
         passed_count = sum(1 for t in test_results if t.status == "passed")
         failed_count = sum(1 for t in test_results if t.status in ("failed", "error", "timed_out"))
-        all_passed = (failed_count == 0 and len(test_results) > 0)
+        all_passed = (failed_count == 0)
 
         # 2. Record real test results in graph
         try:

@@ -323,7 +323,12 @@ def verify_cmd(
         table.add_column("Metric", style="bold")
         table.add_column("Result")
 
-        all_p = "[bold green]YES[/bold green]" if verification.all_passed else "[bold red]NO (FAILURES DETECTED)[/bold red]"
+        if verification.tests_executed_count == 0:
+            all_p = "[bold green]YES (NO TESTS REQUIRED)[/bold green]"
+        elif verification.all_passed:
+            all_p = "[bold green]YES[/bold green]"
+        else:
+            all_p = "[bold red]NO (FAILURES DETECTED)[/bold red]"
         table.add_row("All Tests Passed", all_p)
         table.add_row("Tests Executed", f"{verification.tests_passed_count}/{verification.tests_executed_count} passed")
         table.add_row("Mutations Tested", str(verification.mutations_tested_count))
@@ -339,7 +344,7 @@ def verify_cmd(
             for sm in verification.surviving_mutants:
                 console.print(f"  ! {sm.file_path}:{sm.line} ({sm.operator})")
 
-        if not verification.all_passed:
+        if not verification.all_passed or verification.recommendation == "release_blocked":
             raise typer.Exit(code=5)
     except typer.Exit:
         raise
