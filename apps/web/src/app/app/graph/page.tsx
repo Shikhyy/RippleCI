@@ -28,34 +28,34 @@ function GraphExplorerContent() {
   }, [runId, repoName]);
 
   return (
-    <div className="min-h-screen bg-[#080c0e] text-zinc-100 flex flex-col font-sans relative">
+    <div className="min-h-screen bg-[#0B0D10] text-[#C9C4B8] flex flex-col font-sans relative">
       {/* Ambient Glassmorphic Background Glow Orbs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-[#6CC6CB]/[0.08] blur-[140px]" />
-        <div className="absolute top-[40%] right-[5%] w-[550px] h-[550px] rounded-full bg-[#EAE5C9]/[0.05] blur-[150px]" />
-        <div className="absolute bottom-[-10%] left-[30%] w-[650px] h-[500px] rounded-full bg-[#6CC6CB]/[0.07] blur-[150px]" />
+        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-[#6B6E3A]/[0.10] blur-[140px]" />
+        <div className="absolute top-[40%] right-[5%] w-[550px] h-[550px] rounded-full bg-[#1B3B3F]/[0.25] blur-[150px]" />
+        <div className="absolute bottom-[-10%] left-[30%] w-[650px] h-[500px] rounded-full bg-[#5B4A5F]/[0.15] blur-[150px]" />
       </div>
 
       {/* Top Header */}
-      <header className="h-14 border-b border-[#6CC6CB]/20 px-6 flex items-center justify-between glass-header z-10">
+      <header className="h-14 border-b border-[#1B3B3F] px-6 flex items-center justify-between glass-header z-10">
         <div className="flex items-center gap-3">
           <Link
             href="/app"
-            className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-xs text-[#C9C4B8]/60 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Dashboard</span>
           </Link>
 
-          <span className="text-zinc-600">/</span>
+          <span className="text-[#C9C4B8]/30">/</span>
 
           <div className="flex items-center gap-2">
             <span className="font-semibold text-xs text-white">FalkorDB Graph Explorer</span>
-            <span className="text-[10px] font-mono text-[#6CC6CB] px-2 py-0.5 rounded bg-[#6CC6CB]/15 border border-[#6CC6CB]/30">
+            <span className="text-[10px] font-mono text-[#C9C4B8] px-2 py-0.5 rounded bg-[#6B6E3A]/20 border border-[#6B6E3A]/40">
               Cypher Visualizer
             </span>
             {runId && (
-              <span className="text-[10px] font-mono text-[#EAE5C9] px-2 py-0.5 rounded bg-white/[0.06] border border-white/[0.1]">
+              <span className="text-[10px] font-mono text-[#C9C4B8] px-2 py-0.5 rounded bg-[#121A2B] border border-[#1B3B3F]">
                 Run: {runId}
               </span>
             )}
@@ -66,9 +66,9 @@ function GraphExplorerContent() {
           <button
             onClick={reloadGraph}
             disabled={loading}
-            className="flex items-center gap-1.5 text-xs text-[#EAE5C9] hover:text-white bg-[#0d1417]/80 hover:bg-[#121b1f] border border-[#6CC6CB]/30 hover:border-[#6CC6CB]/60 px-3 py-1.5 rounded-lg transition-all shadow-sm active:scale-[0.98] backdrop-blur-md"
+            className="flex items-center gap-1.5 text-xs text-[#C9C4B8] hover:text-white bg-[#121A2B] hover:bg-[#1B3B3F] border border-[#1B3B3F] hover:border-[#6B6E3A] px-3 py-1.5 rounded-lg transition-all shadow-sm active:scale-[0.98] backdrop-blur-md"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#6CC6CB]" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#6B6E3A]" : ""}`} />
             <span>Refresh Subgraph</span>
           </button>
         </div>
@@ -76,32 +76,34 @@ function GraphExplorerContent() {
 
       {/* Main Canvas View */}
       <main className="flex-1 p-6 md:p-8 flex flex-col space-y-4 max-w-7xl mx-auto w-full z-10">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-zinc-400 gap-3 p-4 rounded-xl border border-[#6CC6CB]/25 bg-[#0d1417]/80 backdrop-blur-xl shadow-card glass-panel">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-[#C9C4B8]/70 gap-3 p-4 rounded-xl border border-[#1B3B3F] bg-[#121A2B]/85 backdrop-blur-xl shadow-card glass-panel">
           <div className="flex items-center gap-2 flex-wrap">
-            <Database className="w-3.5 h-3.5 text-[#6CC6CB]" />
+            <Database className="w-3.5 h-3.5 text-[#6B6E3A]" />
             <span>Active Subgraph:</span>
             <span className="text-white font-bold">{repoName}</span>
-            <span className="text-[#EAE5C9]/70">
+            <span className="text-[#C9C4B8]/60">
               ({graphData.nodes.length} nodes · {graphData.edges.length} edges)
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-[11px]">
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#6CC6CB]" />
-              <span>Directly Modified</span>
+              <span className="w-2 h-2 rounded-full bg-[#8B5E3C]" />
+              <span className="text-[#C9C4B8]">Directly Modified</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#EAE5C9]" />
-              <span className="text-[#EAE5C9]">Downstream Caller</span>
+              <span className="w-2 h-2 rounded-full bg-[#5B4A5F]" />
+              <span className="text-[#C9C4B8]">Downstream Caller</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span>Verified Test Case</span>
+              <span className="w-2 h-2 rounded-full bg-[#2E4A32]" />
+              <span className="text-[#C9C4B8]">Verified Test Case</span>
             </span>
           </div>
         </div>
 
-        <GraphCanvas initialData={graphData} />
+        <div className="flex-1 min-h-[550px] shadow-2xl rounded-2xl overflow-hidden border border-[#1B3B3F]">
+          <GraphCanvas initialData={graphData} height="650px" repoId={repoName} />
+        </div>
       </main>
     </div>
   );
@@ -109,7 +111,7 @@ function GraphExplorerContent() {
 
 export default function GraphExplorerPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#080c0e] flex items-center justify-center text-xs font-mono text-[#6CC6CB]">Loading FalkorDB Graph...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#0B0D10] flex items-center justify-center text-xs font-mono text-[#6B6E3A]">Loading FalkorDB Graph...</div>}>
       <GraphExplorerContent />
     </Suspense>
   );

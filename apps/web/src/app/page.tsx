@@ -111,7 +111,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#080c0e] text-zinc-100 font-sans relative selection:bg-[#6CC6CB]/30 selection:text-[#EAE5C9]">
+    <div className="min-h-screen flex flex-col bg-[#0B0D10] text-[#C9C4B8] font-sans relative selection:bg-[#6B6E3A]/40 selection:text-white">
       <Navbar />
 
       {/* Connect Repository Modal */}
@@ -121,32 +121,32 @@ export default function LandingPage() {
       />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 border-b border-[#6CC6CB]/20 overflow-hidden">
+      <section className="relative pt-32 pb-20 border-b border-[#1B3B3F] overflow-hidden">
         {/* Subtle Architectural Grid Background */}
-        <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-40" />
+        <div className="absolute inset-0 bg-[radial-gradient(#1B3B3F_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-40" />
 
         {/* Soft Ambient Spotlight */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-cyan-500/10 via-sky-500/5 to-transparent blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-[#6B6E3A]/15 via-[#1B3B3F]/20 to-transparent blur-3xl pointer-events-none" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center relative z-10">
           {/* Status Badge */}
-          <div className="inline-flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/30 text-cyan-300 text-xs font-mono mb-8 backdrop-blur-md">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-[#6B6E3A]/40 bg-[#121A2B] text-[#C9C4B8] text-xs font-mono mb-8 backdrop-blur-md shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#6B6E3A] animate-pulse" />
             <span>FalkorDB Graph-Native Release Intelligence</span>
-            <span className="text-slate-600">|</span>
-            <span className="text-slate-400">Open Source</span>
+            <span className="text-[#C9C4B8]/40">|</span>
+            <span className="text-[#C9C4B8]/70">Open Source</span>
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08] max-w-4xl mx-auto mb-6">
             Understand what could break,<br className="hidden sm:inline" />{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-cyan-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#C9C4B8] to-[#6B6E3A]">
               before you ship.
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-[#C9C4B8]/80 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
             Trace multi-hop blast radius across code changes, prioritize the 10% of tests that catch 100% of regressions under budget, and verify releases with counterfactual mutation testing.
           </p>
 
@@ -154,7 +154,7 @@ export default function LandingPage() {
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs sm:text-sm font-mono mb-14">
             <Link
               href="/app"
-              className="flex items-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(108,198,203,0.35)] hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center gap-2 bg-[#6B6E3A] hover:bg-[#7E8245] text-[#0B0D10] font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(107,110,58,0.4)] hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>Launch Web Companion</span>
               <ArrowRight className="w-4 h-4" />
@@ -162,73 +162,73 @@ export default function LandingPage() {
 
             <button
               onClick={() => setIsConnectModalOpen(true)}
-              className="flex items-center gap-2 bg-[#0d1417] hover:bg-[#121b1f] text-white border border-[#6CC6CB]/30 px-5 py-3.5 rounded-xl transition-all font-semibold hover:border-cyan-400 hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center gap-2 bg-[#121A2B] hover:bg-[#1B3B3F] text-white border border-[#1B3B3F] px-5 py-3.5 rounded-xl transition-all font-semibold hover:border-[#6B6E3A] hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Github className="w-4 h-4 text-[#6CC6CB]" />
+              <Github className="w-4 h-4 text-[#6B6E3A]" />
               <span>Connect Repository</span>
             </button>
 
             <button
               onClick={handleCopyPip}
-              className="flex items-center gap-2 bg-black/50 hover:bg-white/[0.06] text-[#EAE5C9] border border-white/[0.12] px-4 py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center gap-2 bg-[#0B0D10]/80 hover:bg-white/[0.06] text-[#C9C4B8] border border-[#1B3B3F] px-4 py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>pip install rippleci</span>
-              {copiedPip ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-[#6CC6CB]" />}
+              {copiedPip ? <Check className="w-4 h-4 text-[#2E4A32]" /> : <Copy className="w-4 h-4 text-[#6B6E3A]" />}
             </button>
           </div>
 
           {/* Hero Interactive Proof Visual: Grounded Live AST Traversal */}
-          <div className="max-w-4xl mx-auto text-left rounded-2xl border border-slate-800 bg-[#0a0f12]/90 backdrop-blur-xl shadow-2xl overflow-hidden mb-12">
+          <div className="max-w-4xl mx-auto text-left rounded-2xl border border-[#1B3B3F] bg-[#121A2B]/85 backdrop-blur-xl shadow-card overflow-hidden mb-12">
             {/* Window Titlebar */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800/80 bg-[#070b0d]">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[#1B3B3F] bg-[#0B0D10]">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-rose-500/80" />
-                <span className="w-3 h-3 rounded-full bg-amber-500/80" />
-                <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                <span className="ml-2 font-mono text-xs text-slate-400">git diff --cached (auth/tokens.py)</span>
+                <span className="w-3 h-3 rounded-full bg-[#8B5E3C]" />
+                <span className="w-3 h-3 rounded-full bg-[#6B6E3A]" />
+                <span className="w-3 h-3 rounded-full bg-[#2E4A32]" />
+                <span className="ml-2 font-mono text-xs text-[#C9C4B8]/60">git diff --cached (auth/tokens.py)</span>
               </div>
-              <div className="flex items-center gap-2 font-mono text-xs text-cyan-400 bg-cyan-950/40 px-2.5 py-0.5 rounded border border-cyan-800/40">
+              <div className="flex items-center gap-2 font-mono text-xs text-[#C9C4B8] bg-[#1B3B3F]/60 px-2.5 py-0.5 rounded border border-[#1B3B3F]">
                 <span>FalkorDB Cypher</span>
-                <span className="text-slate-500">•</span>
+                <span className="text-[#C9C4B8]/40">•</span>
                 <span>14.2ms</span>
               </div>
             </div>
 
             {/* Split Content: Diff -> Provenance -> Verdict */}
-            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-800/80 font-mono text-xs">
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#1B3B3F] font-mono text-xs">
               {/* Column 1: Diff Snippet */}
-              <div className="p-4 space-y-2 bg-[#090d10]">
-                <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mb-2">
+              <div className="p-4 space-y-2 bg-[#0B0D10]/80">
+                <div className="text-[11px] text-[#C9C4B8]/60 font-semibold uppercase tracking-wider mb-2">
                   01 // Modified AST Symbol
                 </div>
-                <div className="bg-black/60 rounded-lg p-3 space-y-1 font-mono text-[11px] border border-slate-800/60 overflow-x-auto">
-                  <div className="text-slate-500">@@ -40,3 +40,3 @@</div>
-                  <div className="text-rose-400 bg-rose-950/20 px-1 rounded">- def verify_token(token):</div>
-                  <div className="text-emerald-400 bg-emerald-950/20 px-1 rounded">+ def verify_token(token, max_age=3600):</div>
+                <div className="bg-[#0B0D10] rounded-lg p-3 space-y-1 font-mono text-[11px] border border-[#1B3B3F] overflow-x-auto">
+                  <div className="text-[#C9C4B8]/50">@@ -40,3 +40,3 @@</div>
+                  <div className="text-[#8B5E3C] bg-[#8B5E3C]/20 px-1 rounded">- def verify_token(token):</div>
+                  <div className="text-[#C9C4B8] bg-[#2E4A32]/30 px-1 rounded">+ def verify_token(token, max_age=3600):</div>
                 </div>
-                <div className="text-[11px] text-slate-400 flex items-center justify-between pt-1">
-                  <span>Symbol: <code className="text-cyan-300">verify_token</code></span>
-                  <span className="text-emerald-400 font-bold">1 Modified</span>
+                <div className="text-[11px] text-[#C9C4B8]/70 flex items-center justify-between pt-1">
+                  <span>Symbol: <code className="text-[#8B5E3C]">verify_token</code></span>
+                  <span className="text-[#2E4A32] font-bold">1 Modified</span>
                 </div>
               </div>
 
               {/* Column 2: Graph Provenance Chain */}
-              <div className="p-4 space-y-2 bg-[#0a0f12]">
-                <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mb-2">
+              <div className="p-4 space-y-2 bg-[#121A2B]/80">
+                <div className="text-[11px] text-[#C9C4B8]/60 font-semibold uppercase tracking-wider mb-2">
                   02 // Cypher Multi-Hop Trace
                 </div>
                 <div className="space-y-2">
-                  <div className="p-2 rounded bg-slate-900/60 border border-slate-800 flex items-center justify-between">
-                    <span className="text-slate-300">verify_token</span>
-                    <span className="text-slate-500 text-[10px]">HOP 0</span>
+                  <div className="p-2 rounded bg-[#0B0D10] border border-[#1B3B3F] flex items-center justify-between">
+                    <span className="text-[#C9C4B8]">verify_token</span>
+                    <span className="text-[#C9C4B8]/50 text-[10px]">HOP 0</span>
                   </div>
-                  <div className="flex justify-center text-cyan-400 text-[10px]">▼ [:CALLS]</div>
-                  <div className="p-2 rounded bg-slate-900/60 border border-slate-800 flex items-center justify-between">
-                    <span className="text-slate-300">dispatch_auth</span>
-                    <span className="text-slate-500 text-[10px]">HOP 1</span>
+                  <div className="flex justify-center text-[#5B4A5F] text-[10px]">▼ [:CALLS]</div>
+                  <div className="p-2 rounded bg-[#0B0D10] border border-[#1B3B3F] flex items-center justify-between">
+                    <span className="text-[#C9C4B8]">dispatch_auth</span>
+                    <span className="text-[#C9C4B8]/50 text-[10px]">HOP 1</span>
                   </div>
-                  <div className="flex justify-center text-cyan-400 text-[10px]">▼ [:COVERS]</div>
-                  <div className="p-2 rounded bg-cyan-950/30 border border-cyan-500/30 text-cyan-300 flex items-center justify-between font-bold">
+                  <div className="flex justify-center text-[#2E4A32] text-[10px]">▼ [:COVERS]</div>
+                  <div className="p-2 rounded bg-[#2E4A32]/25 border border-[#2E4A32]/50 text-[#C9C4B8] flex items-center justify-between font-bold">
                     <span>test_expired_token</span>
                     <span className="text-[10px]">SELECTED</span>
                   </div>
@@ -236,32 +236,32 @@ export default function LandingPage() {
               </div>
 
               {/* Column 3: Bounded Verification Decision */}
-              <div className="p-4 space-y-3 bg-[#090d10] flex flex-col justify-between">
+              <div className="p-4 space-y-3 bg-[#0B0D10]/80 flex flex-col justify-between">
                 <div>
-                  <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mb-2">
+                  <div className="text-[11px] text-[#C9C4B8]/60 font-semibold uppercase tracking-wider mb-2">
                     03 // Verification Verdict
                   </div>
                   <div className="space-y-2 pt-1">
-                    <div className="flex justify-between items-center text-slate-300">
+                    <div className="flex justify-between items-center text-[#C9C4B8]">
                       <span>Suite Reduction:</span>
-                      <span className="text-emerald-400 font-bold">96.0% saved</span>
+                      <span className="text-[#2E4A32] font-bold">96.0% saved</span>
                     </div>
-                    <div className="flex justify-between items-center text-slate-300">
+                    <div className="flex justify-between items-center text-[#C9C4B8]">
                       <span>Selected Tests:</span>
                       <span className="text-white">2 / 54</span>
                     </div>
-                    <div className="flex justify-between items-center text-slate-300">
+                    <div className="flex justify-between items-center text-[#C9C4B8]">
                       <span>Mutants Killed:</span>
-                      <span className="text-cyan-400 font-bold">4 / 4 (100%)</span>
+                      <span className="text-[#6B6E3A] font-bold">4 / 4 (100%)</span>
                     </div>
-                    <div className="flex justify-between items-center text-slate-300">
+                    <div className="flex justify-between items-center text-[#C9C4B8]">
                       <span>Fault Recall:</span>
-                      <span className="text-emerald-400 font-bold">100.0%</span>
+                      <span className="text-[#2E4A32] font-bold">100.0%</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-2.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-400 text-center font-bold text-xs">
+                <div className="p-2.5 rounded-xl bg-[#2E4A32]/25 border border-[#2E4A32]/50 text-[#C9C4B8] text-center font-bold text-xs">
                   VERDICT: RELEASE_SAFE
                 </div>
               </div>
@@ -269,17 +269,17 @@ export default function LandingPage() {
           </div>
 
           {/* Trust Value Points */}
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-slate-400">
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-[#C9C4B8]/70">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-[#2E4A32]" />
               <span>80%+ CI Runtime Saved</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-[#2E4A32]" />
               <span>99.4% Empirical Fault Recall</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-[#2E4A32]" />
               <span>Zero Credentials Required</span>
             </div>
           </div>
@@ -287,17 +287,17 @@ export default function LandingPage() {
       </section>
 
       {/* Interactive Blast Radius Engine Demo */}
-      <section className="py-20 border-b border-[#6CC6CB]/20 bg-[#060a0c]/60">
+      <section className="py-20 border-b border-[#1B3B3F] bg-[#0B0D10]/80">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#6CC6CB]/30 bg-[#0d1417] text-[#6CC6CB] text-xs font-mono mb-3">
-              <Sparkles className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#6B6E3A]/40 bg-[#121A2B] text-[#C9C4B8] text-xs font-mono mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-[#6B6E3A]" />
               <span>Live Interactive Simulator</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 tracking-tight">
               Test-Drive the Prioritization Engine
             </h2>
-            <p className="text-zinc-400 max-w-xl mx-auto text-sm">
+            <p className="text-[#C9C4B8]/70 max-w-xl mx-auto text-sm">
               Adjust runtime budgets and pick code targets to see how FalkorDB graph traversal and ML rankers prioritize regression suites in real time.
             </p>
           </div>
@@ -307,18 +307,18 @@ export default function LandingPage() {
       </section>
 
       {/* Aceternity Canvas Reveal Effect Architecture Showcase */}
-      <section className="border-b border-[#6CC6CB]/20 bg-[#060a0c]/80 relative overflow-hidden">
+      <section className="border-b border-[#1B3B3F] bg-[#0B0D10] relative overflow-hidden">
         <CanvasRevealEffectDemo3 />
       </section>
 
       {/* Interactive CLI Terminal Section */}
-      <section className="py-20 border-b border-[#6CC6CB]/20 bg-[#060a0c]/60">
+      <section className="py-20 border-b border-[#1B3B3F] bg-[#0B0D10]/80">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 tracking-tight">
               Developer-First CLI
             </h2>
-            <p className="text-zinc-400 max-w-xl mx-auto text-sm">
+            <p className="text-[#C9C4B8]/70 max-w-xl mx-auto text-sm">
               Run standalone in any terminal, integrate into GitHub Actions, or embed into custom workflows
             </p>
           </div>
@@ -328,20 +328,20 @@ export default function LandingPage() {
       </section>
 
       {/* Programmatic Python SDK Code Snippets */}
-      <section className="py-20 border-b border-[#6CC6CB]/20">
+      <section id="sdk" className="py-20 border-b border-[#1B3B3F] bg-[#0B0D10]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 tracking-tight">
               Type-Safe Python SDK
             </h2>
-            <p className="text-zinc-400 max-w-xl mx-auto text-sm">
+            <p className="text-[#C9C4B8]/70 max-w-xl mx-auto text-sm">
               Clean, typed Python abstractions for programmatic integration into custom release infrastructure
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[#6CC6CB]/20 bg-[#060a0c] overflow-hidden shadow-2xl">
+          <div className="rounded-2xl border border-[#1B3B3F] bg-[#0B0D10] overflow-hidden shadow-2xl">
             {/* Header tabs */}
-            <div className="px-4 py-3 bg-[#0d1417] border-b border-[#6CC6CB]/20 flex flex-wrap items-center justify-between gap-3">
+            <div className="px-4 py-3 bg-[#121A2B] border-b border-[#1B3B3F] flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-1.5">
                 {SDK_SNIPPETS.map((snippet) => (
                   <button
@@ -349,8 +349,8 @@ export default function LandingPage() {
                     onClick={() => setActiveSnippetTab(snippet.id)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
                       activeSnippetTab === snippet.id
-                        ? "bg-[#6CC6CB]/20 text-[#EAE5C9] font-bold border border-[#6CC6CB]/40 shadow-[0_0_10px_rgba(108,198,203,0.15)]"
-                        : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
+                        ? "bg-[#6B6E3A]/25 text-[#C9C4B8] font-bold border border-[#6B6E3A]/60 shadow-[0_0_10px_rgba(107,110,58,0.25)]"
+                        : "text-[#C9C4B8]/60 hover:text-white hover:bg-white/[0.04]"
                     }`}
                   >
                     {snippet.label}
@@ -359,21 +359,21 @@ export default function LandingPage() {
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="text-[11px] font-mono text-zinc-500 hidden sm:inline">
+                <span className="text-[11px] font-mono text-[#C9C4B8]/50 hidden sm:inline">
                   {activeSnippet.filename}
                 </span>
                 <button
                   onClick={handleCopySnippet}
-                  className="flex items-center gap-1.5 text-xs font-mono text-zinc-300 hover:text-white px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/[0.06] border border-white/[0.08] transition-all"
+                  className="flex items-center gap-1.5 text-xs font-mono text-[#C9C4B8]/70 hover:text-white px-2.5 py-1 rounded-lg bg-[#0B0D10]/60 hover:bg-white/[0.06] border border-[#1B3B3F] transition-all"
                 >
-                  {copiedSnippet ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedSnippet ? <Check className="w-3.5 h-3.5 text-[#2E4A32]" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copiedSnippet ? "Copied" : "Copy Code"}</span>
                 </button>
               </div>
             </div>
 
             {/* Code display */}
-            <div className="p-5 font-mono text-xs text-[#EAE5C9]/95 overflow-x-auto leading-relaxed bg-[#080c0e]">
+            <div className="p-5 font-mono text-xs text-[#C9C4B8]/95 overflow-x-auto leading-relaxed bg-[#0B0D10]">
               <pre className="whitespace-pre">{activeSnippet.code}</pre>
             </div>
           </div>
@@ -381,25 +381,25 @@ export default function LandingPage() {
       </section>
 
       {/* Bottom CTA */}
-      <section className="py-24 relative overflow-hidden">
+      <section className="py-24 relative overflow-hidden bg-[#0B0D10]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight mb-6">
             Stop waiting on slow CI suites.<br />
-            <span className="text-[#6CC6CB]">Verify PRs with connected evidence.</span>
+            <span className="text-[#6B6E3A]">Verify PRs with connected evidence.</span>
           </h2>
-          <p className="text-zinc-400 max-w-xl mx-auto mb-10 text-sm">
+          <p className="text-[#C9C4B8]/70 max-w-xl mx-auto mb-10 text-sm">
             Connect any GitHub repository with zero configuration or install the typed Python package to get started in under a minute.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 font-mono text-xs sm:text-sm">
             <Link
               href="/app"
-              className="bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-extrabold px-7 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(108,198,203,0.45)] active:scale-[0.98]"
+              className="bg-[#6B6E3A] hover:bg-[#7E8245] text-[#0B0D10] font-extrabold px-7 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(107,110,58,0.45)] active:scale-[0.98]"
             >
               Open Web Companion
             </Link>
             <button
               onClick={() => setIsConnectModalOpen(true)}
-              className="bg-[#0d1417] hover:bg-[#121b1f] text-white border border-[#6CC6CB]/30 px-6 py-3.5 rounded-xl transition-all font-semibold"
+              className="bg-[#121A2B] hover:bg-[#1B3B3F] text-white border border-[#1B3B3F] px-6 py-3.5 rounded-xl transition-all font-semibold"
             >
               Connect Repository
             </button>
@@ -408,10 +408,10 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#6CC6CB]/20 py-8 bg-[#060a0c] text-xs font-mono text-zinc-500">
+      <footer className="border-t border-[#1B3B3F] py-8 bg-[#0B0D10] text-xs font-mono text-[#C9C4B8]/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-white">Ripple<span className="text-[#6CC6CB]">CI</span></span>
+            <span className="font-bold text-white">Ripple<span className="text-[#6B6E3A]">CI</span></span>
             <span>•</span>
             <span>Graph-Native Release Intelligence Toolkit</span>
           </div>

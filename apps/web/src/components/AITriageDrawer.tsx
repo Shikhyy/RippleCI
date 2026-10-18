@@ -75,12 +75,12 @@ ${data.merge_recommendation}
   const isMedium = data?.risk_level === "MEDIUM";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl max-h-[90vh] rounded-2xl border border-[#6CC6CB]/30 bg-[#0d1417] shadow-2xl flex flex-col overflow-hidden text-zinc-100 font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B0D10]/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl max-h-[90vh] rounded-2xl border border-[#1B3B3F] bg-[#121A2B] shadow-2xl flex flex-col overflow-hidden text-[#C9C4B8] font-sans">
         {/* Header */}
-        <div className="p-5 border-b border-[#6CC6CB]/20 flex items-center justify-between bg-[#060a0c]/60">
+        <div className="p-5 border-b border-[#1B3B3F] flex items-center justify-between bg-[#0B0D10]/80">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB]">
+            <div className="w-8 h-8 rounded-xl bg-[#6B6E3A]/20 border border-[#6B6E3A]/40 flex items-center justify-center text-[#6B6E3A]">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
@@ -89,12 +89,12 @@ ${data.merge_recommendation}
                   Autonomous PR Release Triage
                 </h2>
                 {triage?.provider && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#6CC6CB]/10 text-[#6CC6CB] border border-[#6CC6CB]/20">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1B3B3F]/60 text-[#C9C4B8] border border-[#1B3B3F]">
                     {triage.provider} · {triage.model}
                   </span>
                 )}
               </div>
-              <p className="text-[11px] font-mono text-zinc-400 mt-0.5">
+              <p className="text-[11px] font-mono text-[#C9C4B8]/60 mt-0.5">
                 {repoId} {prNumber && `· PR #${prNumber}`} {prTitle && `(${prTitle})`}
               </p>
             </div>
@@ -102,7 +102,7 @@ ${data.merge_recommendation}
 
           <button
             onClick={onClose}
-            className="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-white/[0.08] transition-colors"
+            className="text-[#C9C4B8]/60 hover:text-white p-1 rounded-lg hover:bg-white/[0.08] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -112,8 +112,8 @@ ${data.merge_recommendation}
         <div className="p-6 overflow-y-auto space-y-5 text-xs font-sans">
           {loading ? (
             <div className="py-12 flex flex-col items-center justify-center space-y-3">
-              <div className="w-8 h-8 rounded-full border-2 border-[#6CC6CB] border-t-transparent animate-spin" />
-              <div className="text-xs font-mono text-zinc-400 animate-pulse">
+              <div className="w-8 h-8 rounded-full border-2 border-[#6B6E3A] border-t-transparent animate-spin" />
+              <div className="text-xs font-mono text-[#C9C4B8]/70 animate-pulse">
                 Synthesizing FalkorDB AST blast radius and Groq LPU reasoning...
               </div>
             </div>
@@ -123,19 +123,19 @@ ${data.merge_recommendation}
               <div
                 className={`p-4 rounded-xl border flex items-center justify-between gap-4 ${
                   isLow
-                    ? "bg-emerald-950/20 border-emerald-500/30 text-emerald-300"
+                    ? "bg-[#2E4A32]/25 border-[#2E4A32]/50 text-[#C9C4B8]"
                     : isMedium
-                    ? "bg-amber-950/20 border-amber-500/30 text-amber-300"
-                    : "bg-red-950/20 border-red-500/30 text-red-300"
+                    ? "bg-[#8B5E3C]/25 border-[#8B5E3C]/50 text-[#C9C4B8]"
+                    : "bg-[#5B4A5F]/35 border-[#5B4A5F]/60 text-[#C9C4B8]"
                 }`}
               >
                 <div className="flex items-center gap-3">
                   {isLow ? (
-                    <ShieldCheck className="w-6 h-6 text-emerald-400 shrink-0" />
+                    <ShieldCheck className="w-6 h-6 text-[#2E4A32] shrink-0" />
                   ) : isMedium ? (
-                    <AlertTriangle className="w-6 h-6 text-amber-400 shrink-0" />
+                    <AlertTriangle className="w-6 h-6 text-[#8B5E3C] shrink-0" />
                   ) : (
-                    <ShieldAlert className="w-6 h-6 text-red-400 shrink-0" />
+                    <ShieldAlert className="w-6 h-6 text-[#5B4A5F] shrink-0" />
                   )}
                   <div>
                     <div className="font-mono font-bold text-sm uppercase tracking-wider text-white">
@@ -148,7 +148,7 @@ ${data.merge_recommendation}
                 </div>
 
                 {triage?.latency_ms && (
-                  <div className="text-right font-mono text-[10px] text-zinc-400 shrink-0">
+                  <div className="text-right font-mono text-[10px] text-[#C9C4B8]/60 shrink-0">
                     <div>LPU Latency</div>
                     <div className="text-white font-bold text-xs">{triage.latency_ms}ms</div>
                   </div>
@@ -157,49 +157,49 @@ ${data.merge_recommendation}
 
               {/* Headline */}
               <div className="space-y-1.5">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider font-semibold">
+                <span className="text-[10px] font-mono text-[#C9C4B8]/60 uppercase tracking-wider font-semibold">
                   Executive Headline
                 </span>
-                <p className="text-zinc-100 font-semibold leading-relaxed bg-black/40 p-3.5 rounded-xl border border-white/[0.06]">
+                <p className="text-[#C9C4B8] font-semibold leading-relaxed bg-[#0B0D10]/70 p-3.5 rounded-xl border border-[#1B3B3F]">
                   {data.headline}
                 </p>
               </div>
 
               {/* Blast Radius Analysis */}
               <div className="space-y-1.5">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider font-semibold">
+                <span className="text-[10px] font-mono text-[#C9C4B8]/60 uppercase tracking-wider font-semibold">
                   AST Blast Radius Analysis
                 </span>
-                <p className="text-zinc-300 leading-relaxed bg-black/40 p-3.5 rounded-xl border border-white/[0.06] whitespace-pre-line">
+                <p className="text-[#C9C4B8]/90 leading-relaxed bg-[#0B0D10]/70 p-3.5 rounded-xl border border-[#1B3B3F] whitespace-pre-line">
                   {data.blast_radius_analysis}
                 </p>
               </div>
 
               {/* Merge Recommendation */}
               <div className="space-y-1.5">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider font-semibold">
+                <span className="text-[10px] font-mono text-[#C9C4B8]/60 uppercase tracking-wider font-semibold">
                   Merge Recommendation
                 </span>
-                <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] text-[#EAE5C9] font-medium leading-relaxed">
+                <div className="p-3.5 rounded-xl bg-[#0B0D10]/70 border border-[#1B3B3F] text-[#C9C4B8] font-medium leading-relaxed">
                   {data.merge_recommendation}
                 </div>
               </div>
             </>
           ) : (
-            <div className="text-center py-8 text-zinc-500 font-mono">
+            <div className="text-center py-8 text-[#C9C4B8]/50 font-mono">
               No triage data available for this pull request.
             </div>
           )}
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-[#6CC6CB]/20 flex flex-wrap items-center justify-between gap-3 bg-[#060a0c]/60">
+        <div className="p-4 border-t border-[#1B3B3F] flex flex-wrap items-center justify-between gap-3 bg-[#0B0D10]/80">
           <button
             onClick={handleCopyMarkdown}
             disabled={!data}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#6CC6CB]/30 bg-[#0d1417] text-xs font-mono text-zinc-200 hover:text-white hover:border-[#6CC6CB] transition-all disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#1B3B3F] bg-[#121A2B] text-xs font-mono text-[#C9C4B8] hover:text-white hover:border-[#6B6E3A] transition-all disabled:opacity-50"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-[#2E4A32]" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copied ? "Copied Markdown" : "Copy PR Comment Markdown"}</span>
           </button>
 
@@ -209,8 +209,8 @@ ${data.merge_recommendation}
               disabled={commentPosted || !data}
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
                 commentPosted
-                  ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
-                  : "bg-[#6CC6CB] text-black hover:bg-[#58B4B9] active:scale-[0.98]"
+                  ? "bg-[#2E4A32]/30 text-[#C9C4B8] border border-[#2E4A32]/50"
+                  : "bg-[#6B6E3A] text-[#0B0D10] hover:bg-[#7E8245] active:scale-[0.98]"
               }`}
             >
               {commentPosted ? (

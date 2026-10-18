@@ -182,19 +182,19 @@ export function BlastRadiusCalculator() {
   }, [scenario, budgetSeconds]);
 
   return (
-    <div className="rounded-2xl border border-[#6CC6CB]/20 bg-[#0d1417]/80 backdrop-blur-xl p-6 space-y-6">
+    <div className="rounded-2xl border border-[#1B3B3F] bg-[#121A2B]/85 backdrop-blur-xl p-6 space-y-6 shadow-card">
       {/* Title & Scenario Selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB]">
+            <div className="w-8 h-8 rounded-xl bg-[#6B6E3A]/20 border border-[#6B6E3A]/40 flex items-center justify-center text-[#6B6E3A]">
               <Sliders className="w-4 h-4" />
             </div>
             <h3 className="text-base font-bold text-white tracking-tight">
               Interactive Blast Radius & Prioritization Engine
             </h3>
           </div>
-          <p className="text-xs text-zinc-400 mt-1 font-mono">
+          <p className="text-xs text-[#C9C4B8]/70 mt-1 font-mono">
             Simulate modifying a code symbol and inspect how FalkorDB graphs & ML rankers select tests
           </p>
         </div>
@@ -207,8 +207,8 @@ export function BlastRadiusCalculator() {
               onClick={() => setSelectedId(s.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
                 selectedId === s.id
-                  ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB] font-bold shadow-[0_0_12px_rgba(108,198,203,0.2)]"
-                  : "bg-black/40 text-zinc-400 hover:text-white border border-white/[0.08]"
+                  ? "bg-[#6B6E3A]/25 text-[#C9C4B8] border border-[#6B6E3A] font-bold shadow-[0_0_12px_rgba(107,110,58,0.25)]"
+                  : "bg-[#0B0D10]/60 text-[#C9C4B8]/60 hover:text-white border border-[#1B3B3F]"
               }`}
             >
               {s.name.split(":").pop()}
@@ -218,26 +218,26 @@ export function BlastRadiusCalculator() {
       </div>
 
       {/* Symbol Target Details */}
-      <div className="p-4 rounded-xl bg-black/40 border border-white/[0.06] flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono text-xs">
+      <div className="p-4 rounded-xl bg-[#0B0D10]/70 border border-[#1B3B3F] flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono text-xs">
         <div className="space-y-1">
-          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Modified Target Symbol</div>
+          <div className="text-[10px] text-[#C9C4B8]/60 uppercase tracking-wider">Modified Target Symbol</div>
           <div className="text-white font-bold text-sm flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#6CC6CB]" />
-            <span>{scenario.name}</span>
+            <span className="w-2 h-2 rounded-full bg-[#8B5E3C] ring-2 ring-[#8B5E3C]/30" />
+            <span className="text-[#C9C4B8]">{scenario.name}</span>
           </div>
-          <div className="text-[11px] text-[#EAE5C9]/80">
+          <div className="text-[11px] text-[#C9C4B8]/70">
             {scenario.file}:{scenario.lines} · {scenario.category}
           </div>
         </div>
 
         <div className="flex items-center gap-4 sm:gap-6 text-xs">
           <div>
-            <div className="text-[10px] text-zinc-500 uppercase">Downstream Callers</div>
-            <div className="text-white font-bold text-base mt-0.5">{scenario.callersCount} callers</div>
+            <div className="text-[10px] text-[#C9C4B8]/60 uppercase">Downstream Callers</div>
+            <div className="text-[#C9C4B8] font-bold text-base mt-0.5">{scenario.callersCount} callers</div>
           </div>
           <div>
-            <div className="text-[10px] text-zinc-500 uppercase">Suite Execution</div>
-            <div className="text-zinc-400 font-bold text-base mt-0.5">
+            <div className="text-[10px] text-[#C9C4B8]/60 uppercase">Suite Execution</div>
+            <div className="text-[#C9C4B8]/70 font-bold text-base mt-0.5">
               {scenario.totalSuiteSeconds.toFixed(1)}s (100%)
             </div>
           </div>
@@ -245,13 +245,13 @@ export function BlastRadiusCalculator() {
       </div>
 
       {/* Budget Slider */}
-      <div className="space-y-2 p-4 rounded-xl bg-[#090d0f] border border-white/[0.04]">
+      <div className="space-y-2 p-4 rounded-xl bg-[#0B0D10]/60 border border-[#1B3B3F]">
         <div className="flex items-center justify-between text-xs font-mono">
-          <span className="text-zinc-300 font-medium flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-[#6CC6CB]" />
+          <span className="text-[#C9C4B8] font-medium flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 text-[#6B6E3A]" />
             <span>CI Runtime Budget Constraint:</span>
           </span>
-          <span className="text-[#EAE5C9] font-bold text-sm">{budgetSeconds} seconds</span>
+          <span className="text-[#C9C4B8] font-bold text-sm">{budgetSeconds} seconds</span>
         </div>
         <input
           type="range"
@@ -260,9 +260,9 @@ export function BlastRadiusCalculator() {
           step={10}
           value={budgetSeconds}
           onChange={(e) => setBudgetSeconds(Number(e.target.value))}
-          className="w-full accent-[#6CC6CB] bg-zinc-800 h-2 rounded-lg cursor-pointer"
+          className="w-full accent-[#6B6E3A] bg-[#121A2B] h-2 rounded-lg cursor-pointer"
         />
-        <div className="flex justify-between text-[10px] font-mono text-zinc-500">
+        <div className="flex justify-between text-[10px] font-mono text-[#C9C4B8]/50">
           <span>10s (Rapid PR Gate)</span>
           <span>150s (Balanced)</span>
           <span>300s (Full Regression Guard)</span>
@@ -271,57 +271,57 @@ export function BlastRadiusCalculator() {
 
       {/* Output Metrics Matrix */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] space-y-1 font-mono">
-          <span className="text-[10px] text-zinc-400 uppercase">Selected Tests</span>
+        <div className="p-3.5 rounded-xl bg-[#0B0D10]/60 border border-[#1B3B3F] space-y-1 font-mono">
+          <span className="text-[10px] text-[#C9C4B8]/60 uppercase">Selected Tests</span>
           <div className="text-2xl font-bold text-white">
-            {selectedTests.length} <span className="text-xs text-zinc-500 font-normal">/ {scenario.candidateTests.length}</span>
+            {selectedTests.length} <span className="text-xs text-[#C9C4B8]/50 font-normal">/ {scenario.candidateTests.length}</span>
           </div>
-          <div className="text-[10px] text-emerald-400">Targeted regression</div>
+          <div className="text-[10px] text-[#2E4A32] font-semibold">Targeted regression</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] space-y-1 font-mono">
-          <span className="text-[10px] text-zinc-400 uppercase">Predicted Duration</span>
-          <div className="text-2xl font-bold text-[#EAE5C9]">{estimatedDuration.toFixed(1)}s</div>
-          <div className="text-[10px] text-zinc-400">within {budgetSeconds}s budget</div>
+        <div className="p-3.5 rounded-xl bg-[#0B0D10]/60 border border-[#1B3B3F] space-y-1 font-mono">
+          <span className="text-[10px] text-[#C9C4B8]/60 uppercase">Predicted Duration</span>
+          <div className="text-2xl font-bold text-[#C9C4B8]">{estimatedDuration.toFixed(1)}s</div>
+          <div className="text-[10px] text-[#C9C4B8]/60">within {budgetSeconds}s budget</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] space-y-1 font-mono">
-          <span className="text-[10px] text-zinc-400 uppercase">CI Time Saved</span>
-          <div className="text-2xl font-bold text-emerald-400">-{timeSavedPercent}%</div>
-          <div className="text-[10px] text-emerald-400/80">vs full test suite</div>
+        <div className="p-3.5 rounded-xl bg-[#0B0D10]/60 border border-[#1B3B3F] space-y-1 font-mono">
+          <span className="text-[10px] text-[#C9C4B8]/60 uppercase">CI Time Saved</span>
+          <div className="text-2xl font-bold text-[#2E4A32]">-{timeSavedPercent}%</div>
+          <div className="text-[10px] text-[#2E4A32]/90">vs full test suite</div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] space-y-1 font-mono">
-          <span className="text-[10px] text-zinc-400 uppercase">Fault Recall</span>
-          <div className="text-2xl font-bold text-[#6CC6CB]">{faultRecallEstimate}%</div>
-          <div className="text-[10px] text-zinc-400">empirical accuracy</div>
+        <div className="p-3.5 rounded-xl bg-[#0B0D10]/60 border border-[#1B3B3F] space-y-1 font-mono">
+          <span className="text-[10px] text-[#C9C4B8]/60 uppercase">Fault Recall</span>
+          <div className="text-2xl font-bold text-[#6B6E3A]">{faultRecallEstimate}%</div>
+          <div className="text-[10px] text-[#C9C4B8]/60">empirical accuracy</div>
         </div>
       </div>
 
       {/* Selected Tests List */}
       <div className="space-y-2">
-        <div className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider font-semibold">
+        <div className="text-[11px] font-mono text-[#C9C4B8]/70 uppercase tracking-wider font-semibold">
           Ranked Test Candidates (Prioritized by GBDT + Graph Distance)
         </div>
         <div className="space-y-1.5">
           {selectedTests.map((t, idx) => (
             <div
               key={idx}
-              className="p-3 rounded-xl bg-[#090d0f] border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono"
+              className="p-3 rounded-xl bg-[#0B0D10]/60 border border-[#1B3B3F] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono"
             >
               <div className="flex items-center gap-2.5">
-                <span className="w-5 h-5 rounded-md bg-[#6CC6CB]/20 text-[#6CC6CB] flex items-center justify-center text-[10px] font-bold">
+                <span className="w-5 h-5 rounded-md bg-[#6B6E3A]/20 text-[#6B6E3A] border border-[#6B6E3A]/40 flex items-center justify-center text-[10px] font-bold">
                   {idx + 1}
                 </span>
                 <div>
                   <div className="text-white font-semibold truncate max-w-sm sm:max-w-md">{t.name}</div>
-                  <div className="text-[10px] text-zinc-500 mt-0.5">{t.reason}</div>
+                  <div className="text-[10px] text-[#C9C4B8]/60 mt-0.5">{t.reason}</div>
                 </div>
               </div>
 
               <div className="flex items-center gap-4 text-[11px] shrink-0 ml-7 sm:ml-0">
-                <span className="text-zinc-400">{t.duration.toFixed(1)}s</span>
-                <span className="text-emerald-400 font-bold">
+                <span className="text-[#C9C4B8]/70">{t.duration.toFixed(1)}s</span>
+                <span className="text-[#6B6E3A] font-bold">
                   ML: {(t.score * 100).toFixed(1)}%
                 </span>
               </div>

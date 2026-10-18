@@ -9,45 +9,72 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#080c0e",
+        // Direct Palette Tokens from User Specification
+        charcoal: {
+          DEFAULT: "#0B0D10",
+          deep: "#0B0D10",
+        },
+        midnight: {
+          DEFAULT: "#121A2B",
+          surface: "#121A2B",
+          elevated: "#182338",
+        },
+        tealshadow: {
+          DEFAULT: "#1B3B3F",
+          hover: "#244E53",
+          subtle: "rgba(27, 59, 63, 0.4)",
+        },
+        moss: {
+          DEFAULT: "#2E4A32",
+          light: "#3F6344",
+          subtle: "rgba(46, 74, 50, 0.25)",
+        },
+        olive: {
+          DEFAULT: "#6B6E3A",
+          hover: "#7E8245",
+          light: "#8E934F",
+          subtle: "rgba(107, 110, 58, 0.25)",
+        },
+        cinnamon: {
+          DEFAULT: "#8B5E3C",
+          hover: "#9F6C46",
+          subtle: "rgba(139, 94, 60, 0.25)",
+        },
+        mauve: {
+          DEFAULT: "#5B4A5F",
+          hover: "#6F5A74",
+          subtle: "rgba(91, 74, 95, 0.25)",
+        },
+        moonstone: {
+          DEFAULT: "#C9C4B8",
+          light: "#E4E0D7",
+          muted: "rgba(201, 196, 184, 0.65)",
+        },
+        // Semantic Mappings
+        background: "#0B0D10",
         surface: {
-          DEFAULT: "#0d1417",
-          hover: "#121b1f",
-          elevated: "#182329",
+          DEFAULT: "#121A2B",
+          hover: "#182338",
+          elevated: "#1B3B3F",
         },
         border: {
-          subtle: "rgba(255, 255, 255, 0.07)",
-          DEFAULT: "rgba(108, 198, 203, 0.20)",
-          strong: "rgba(234, 229, 201, 0.35)",
-        },
-        spectral: {
-          base: "#6CC6CB",
-          crest: "#EAE5C9",
-          glow: "rgba(108, 198, 203, 0.28)",
-        },
-        champagne: {
-          DEFAULT: "#EAE5C9",
-          light: "#FAF7EA",
-          dark: "#D8D1A3",
-        },
-        teal: {
-          DEFAULT: "#6CC6CB",
-          light: "#A4E4E8",
-          dark: "#4CA2A7",
+          subtle: "rgba(201, 196, 184, 0.12)",
+          DEFAULT: "rgba(107, 110, 58, 0.35)",
+          strong: "rgba(201, 196, 184, 0.35)",
         },
         accent: {
-          DEFAULT: "#6CC6CB",
-          hover: "#58B4B9",
-          subtle: "rgba(108, 198, 203, 0.12)",
-          highlight: "#EAE5C9",
+          DEFAULT: "#6B6E3A",
+          hover: "#7E8245",
+          subtle: "rgba(107, 110, 58, 0.20)",
+          highlight: "#C9C4B8",
         },
         success: {
-          DEFAULT: "#10b981",
-          subtle: "rgba(16, 185, 129, 0.12)",
+          DEFAULT: "#2E4A32",
+          subtle: "rgba(46, 74, 50, 0.25)",
         },
         warning: {
-          DEFAULT: "#f59e0b",
-          subtle: "rgba(245, 158, 11, 0.12)",
+          DEFAULT: "#8B5E3C",
+          subtle: "rgba(139, 94, 60, 0.25)",
         },
       },
       fontFamily: {
@@ -55,11 +82,11 @@ const config: Config = {
         mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "monospace"],
       },
       boxShadow: {
-        rim: "inset 0 1px 0 0 rgba(234, 229, 201, 0.24)",
-        "rim-subtle": "inset 0 1px 0 0 rgba(255, 255, 255, 0.06)",
-        card: "0 8px 30px rgba(0, 0, 0, 0.45)",
-        glow: "0 0 28px -4px rgba(108, 198, 203, 0.35)",
-        "glow-lg": "0 0 60px -8px rgba(108, 198, 203, 0.45)",
+        rim: "inset 0 1px 0 0 rgba(201, 196, 184, 0.20)",
+        "rim-subtle": "inset 0 1px 0 0 rgba(201, 196, 184, 0.08)",
+        card: "0 8px 32px rgba(11, 13, 16, 0.70)",
+        glow: "0 0 28px -4px rgba(107, 110, 58, 0.35)",
+        "glow-lg": "0 0 60px -8px rgba(107, 110, 58, 0.45)",
       },
     },
   },

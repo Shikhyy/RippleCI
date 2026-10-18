@@ -106,18 +106,18 @@ export function TerminalBlock() {
   };
 
   return (
-    <div className="rounded-2xl border border-[#6CC6CB]/20 bg-[#060a0c] overflow-hidden shadow-2xl">
+    <div className="rounded-2xl border border-[#1B3B3F] bg-[#0B0D10] overflow-hidden shadow-2xl">
       {/* Top Header */}
-      <div className="px-4 py-3 bg-[#0d1417] border-b border-[#6CC6CB]/20 flex flex-wrap items-center justify-between gap-3">
+      <div className="px-4 py-3 bg-[#121A2B] border-b border-[#1B3B3F] flex flex-wrap items-center justify-between gap-3">
         {/* Terminal dots */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 mr-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block" />
-            <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 inline-block" />
-            <span className="w-2.5 h-2.5 rounded-full bg-green-500/80 inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#8B5E3C] inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#6B6E3A] inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#2E4A32] inline-block" />
           </div>
-          <span className="text-xs font-mono text-zinc-400 font-semibold flex items-center gap-1.5">
-            <TerminalIcon className="w-3.5 h-3.5 text-[#6CC6CB]" />
+          <span className="text-xs font-mono text-[#C9C4B8]/80 font-semibold flex items-center gap-1.5">
+            <TerminalIcon className="w-3.5 h-3.5 text-[#6B6E3A]" />
             <span>ripple-cli</span>
           </span>
         </div>
@@ -132,8 +132,8 @@ export function TerminalBlock() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-3 py-1 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 ${
                   isActive
-                    ? "bg-[#6CC6CB]/20 text-[#EAE5C9] font-bold border border-[#6CC6CB]/40 shadow-[0_0_10px_rgba(108,198,203,0.15)]"
-                    : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
+                    ? "bg-[#6B6E3A]/25 text-[#C9C4B8] font-bold border border-[#6B6E3A]/60 shadow-[0_0_10px_rgba(107,110,58,0.25)]"
+                    : "text-[#C9C4B8]/60 hover:text-white hover:bg-white/[0.04]"
                 }`}
               >
                 <span>{tab.label}</span>
@@ -145,26 +145,26 @@ export function TerminalBlock() {
         {/* Copy command button */}
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 text-xs font-mono text-zinc-400 hover:text-white px-2.5 py-1 rounded-lg bg-black/40 hover:bg-white/[0.06] border border-white/[0.08] transition-all ml-auto sm:ml-0"
+          className="flex items-center gap-1.5 text-xs font-mono text-[#C9C4B8]/70 hover:text-white px-2.5 py-1 rounded-lg bg-[#0B0D10]/60 hover:bg-white/[0.06] border border-[#1B3B3F] transition-all ml-auto sm:ml-0"
         >
-          {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+          {copied ? <Check className="w-3.5 h-3.5 text-[#2E4A32]" /> : <Copy className="w-3.5 h-3.5" />}
           <span>{copied ? "Copied" : "Copy"}</span>
         </button>
       </div>
 
       {/* Terminal prompt bar */}
-      <div className="px-5 py-2.5 bg-[#090d0f] border-b border-white/[0.04] flex items-center justify-between text-xs font-mono">
+      <div className="px-5 py-2.5 bg-[#0B0D10]/90 border-b border-[#1B3B3F]/70 flex items-center justify-between text-xs font-mono">
         <div className="flex items-center gap-2">
-          <span className="text-[#6CC6CB] font-bold">$</span>
+          <span className="text-[#6B6E3A] font-bold">$</span>
           <span className="text-white font-semibold">{current.command}</span>
         </div>
-        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#6CC6CB]/15 text-[#6CC6CB] border border-[#6CC6CB]/25 hidden sm:inline">
+        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#1B3B3F]/70 text-[#C9C4B8] border border-[#1B3B3F] hidden sm:inline">
           {current.badge}
         </span>
       </div>
 
       {/* Output Body */}
-      <div className="p-5 font-mono text-xs text-[#EAE5C9]/90 overflow-x-auto leading-relaxed max-h-[360px] scrollbar-thin">
+      <div className="p-5 font-mono text-xs text-[#C9C4B8]/95 overflow-x-auto leading-relaxed max-h-[360px] scrollbar-thin bg-[#0B0D10]">
         <pre className="whitespace-pre">{current.output}</pre>
       </div>
     </div>

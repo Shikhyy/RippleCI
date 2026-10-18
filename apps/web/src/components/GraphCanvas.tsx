@@ -105,16 +105,16 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
       }
 
       let borderClass = isChanged
-        ? "border-[#6CC6CB] bg-[#6CC6CB]/15 text-[#EAE5C9] hover:border-[#EAE5C9] shadow-[0_0_15px_rgba(108,198,203,0.25)]"
+        ? "border-[#8B5E3C] bg-[#8B5E3C]/20 text-[#C9C4B8] hover:border-[#C9C4B8] shadow-[0_0_15px_rgba(139,94,60,0.35)]"
         : isImpacted
-        ? "border-[#6CC6CB]/40 bg-[#0d1417] text-[#EAE5C9] hover:border-[#6CC6CB]"
+        ? "border-[#5B4A5F] bg-[#121A2B] text-[#C9C4B8] hover:border-[#5B4A5F]/90 shadow-[0_0_12px_rgba(91,74,95,0.25)]"
         : isTest
-        ? "border-emerald-500/40 bg-emerald-950/20 text-emerald-200 hover:border-emerald-400"
-        : "border-white/[0.08] bg-[#0d1417] text-zinc-300 hover:border-[#6CC6CB]/40";
+        ? "border-[#2E4A32] bg-[#2E4A32]/25 text-[#C9C4B8] hover:border-[#2E4A32]/90 shadow-[0_0_12px_rgba(46,74,50,0.25)]"
+        : "border-[#1B3B3F] bg-[#121A2B] text-[#C9C4B8]/80 hover:border-[#6B6E3A]/40";
 
       if (isSelected) {
         borderClass =
-          "ring-2 ring-[#6CC6CB] border-[#6CC6CB] bg-[#6CC6CB]/20 shadow-[0_0_25px_rgba(108,198,203,0.4)]";
+          "ring-2 ring-[#6B6E3A] border-[#6B6E3A] bg-[#6B6E3A]/25 shadow-[0_0_25px_rgba(107,110,58,0.45)]";
       }
 
       return {
@@ -127,18 +127,18 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
                 <span
                   className={`text-[9px] font-mono uppercase px-1.5 py-0.5 rounded font-bold tracking-wider ${
                     isChanged
-                      ? "bg-[#6CC6CB]/25 text-[#6CC6CB]"
+                      ? "bg-[#8B5E3C]/30 text-[#C9C4B8] border border-[#8B5E3C]/50"
                       : isImpacted
-                      ? "bg-[#EAE5C9]/15 text-[#EAE5C9]"
+                      ? "bg-[#5B4A5F]/30 text-[#C9C4B8] border border-[#5B4A5F]/50"
                       : isTest
-                      ? "bg-emerald-500/20 text-emerald-300"
-                      : "bg-zinc-800 text-zinc-400"
+                      ? "bg-[#2E4A32]/30 text-[#C9C4B8] border border-[#2E4A32]/50"
+                      : "bg-[#1B3B3F]/50 text-[#C9C4B8]/70 border border-[#1B3B3F]"
                   }`}
                 >
                   {isChanged ? "Modified" : isImpacted ? "Caller" : isTest ? "Test Case" : "Symbol"}
                 </span>
                 {n.data?.hops !== undefined && (
-                  <span className="text-[10px] font-mono text-zinc-400 font-semibold">
+                  <span className="text-[10px] font-mono text-[#C9C4B8]/70 font-semibold">
                     {n.data.hops === 0 ? "Direct" : `${n.data.hops} hop`}
                   </span>
                 )}
@@ -147,7 +147,7 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
                 {n.label}
               </div>
               {n.data?.file_path && (
-                <div className="text-[10px] font-mono text-[#EAE5C9]/70 truncate max-w-[200px]">
+                <div className="text-[10px] font-mono text-[#C9C4B8]/70 truncate max-w-[200px]">
                   {n.data.file_path}
                 </div>
               )}
@@ -177,21 +177,21 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
         animated: isCovers || (selectedNode !== null && isEdgeConnected),
         label: e.data?.label || e.type.toUpperCase(),
         labelStyle: {
-          fill: isCovers ? "#34d399" : "#EAE5C9",
+          fill: isCovers ? "#C9C4B8" : "#C9C4B8",
           fontSize: 10,
           fontFamily: "monospace",
           fontWeight: 600,
           opacity: edgeOpacity,
         },
-        labelBgStyle: { fill: "#0d1417", fillOpacity: 0.95 },
+        labelBgStyle: { fill: "#121A2B", fillOpacity: 0.95 },
         style: {
-          stroke: isCovers ? "#059669" : "#6CC6CB",
+          stroke: isCovers ? "#2E4A32" : "#5B4A5F",
           strokeWidth,
           opacity: edgeOpacity,
         },
         markerEnd: {
           type: MarkerType.ArrowClosed,
-          color: isCovers ? "#059669" : "#6CC6CB",
+          color: isCovers ? "#2E4A32" : "#5B4A5F",
           width: 14,
           height: 14,
         },
@@ -237,7 +237,7 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
 
   return (
     <div
-      className={`relative w-full rounded-2xl border border-[#6CC6CB]/20 bg-[#060a0c] overflow-hidden shadow-2xl transition-all ${
+      className={`relative w-full rounded-2xl border border-[#1B3B3F] bg-[#0B0D10] overflow-hidden shadow-2xl transition-all ${
         isFullscreen ? "fixed inset-0 z-50 rounded-none h-screen" : ""
       }`}
       style={{ height: isFullscreen ? "100vh" : height }}
@@ -245,19 +245,19 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
       {/* Top Controls Bar */}
       <div className="absolute top-3 left-3 right-3 z-10 flex flex-wrap items-center justify-between gap-2.5 pointer-events-none">
         {/* Search & Filter Pill */}
-        <div className="flex items-center gap-2 pointer-events-auto bg-[#0d1417]/90 backdrop-blur-xl border border-[#6CC6CB]/30 px-3 py-1.5 rounded-xl shadow-lg">
-          <Search className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+        <div className="flex items-center gap-2 pointer-events-auto bg-[#121A2B]/95 backdrop-blur-xl border border-[#1B3B3F] px-3 py-1.5 rounded-xl shadow-lg">
+          <Search className="w-3.5 h-3.5 text-[#C9C4B8]/60 shrink-0" />
           <input
             type="text"
             placeholder="Search nodes or files..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-transparent text-xs text-white placeholder-zinc-500 focus:outline-none font-mono w-36 sm:w-48"
+            className="bg-transparent text-xs text-white placeholder-[#C9C4B8]/40 focus:outline-none font-mono w-36 sm:w-48"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="text-zinc-400 hover:text-white"
+              className="text-[#C9C4B8]/60 hover:text-white"
             >
               <X className="w-3 h-3" />
             </button>
@@ -278,8 +278,8 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
                 onClick={() => setKindFilter(f.id)}
                 className={`text-[10px] font-mono px-2 py-0.5 rounded transition-all ${
                   kindFilter === f.id
-                    ? "bg-[#6CC6CB]/20 text-[#6CC6CB] border border-[#6CC6CB]/40 font-bold"
-                    : "text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]"
+                    ? "bg-[#6B6E3A]/25 text-[#C9C4B8] border border-[#6B6E3A]/60 font-bold"
+                    : "text-[#C9C4B8]/60 hover:text-white hover:bg-white/[0.04]"
                 }`}
               >
                 {f.label}
@@ -289,8 +289,8 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-1.5 pointer-events-auto bg-[#0d1417]/90 backdrop-blur-xl border border-[#6CC6CB]/30 px-2 py-1 rounded-xl shadow-lg text-xs">
-          <span className="text-[11px] font-mono text-zinc-400 px-1 hidden md:inline">
+        <div className="flex items-center gap-1.5 pointer-events-auto bg-[#121A2B]/95 backdrop-blur-xl border border-[#1B3B3F] px-2 py-1 rounded-xl shadow-lg text-xs">
+          <span className="text-[11px] font-mono text-[#C9C4B8]/60 px-1 hidden md:inline">
             {counts.total} nodes · {counts.edges} edges
           </span>
           <button
@@ -300,14 +300,14 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
               setKindFilter("all");
             }}
             title="Reset Filters"
-            className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="p-1 rounded-lg text-[#C9C4B8]/60 hover:text-white hover:bg-white/[0.06] transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
-            className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="p-1 rounded-lg text-[#C9C4B8]/60 hover:text-white hover:bg-white/[0.06] transition-colors"
           >
             {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
           </button>
@@ -325,50 +325,50 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
         minZoom={0.25}
         maxZoom={1.75}
       >
-        <Background color="rgba(108, 198, 203, 0.08)" gap={24} size={1} />
-        <Controls className="!bg-[#0d1417] !border-[#6CC6CB]/25 !text-zinc-300 !rounded-xl fill-white shadow-xl" />
+        <Background color="rgba(107, 110, 58, 0.12)" gap={24} size={1} />
+        <Controls className="!bg-[#121A2B] !border-[#1B3B3F] !text-[#C9C4B8] !rounded-xl fill-[#C9C4B8] shadow-xl" />
         <MiniMap
           nodeColor={(node) => {
             const raw = node.data?.raw as GraphNode;
-            if (raw?.kind === "changed") return "#6CC6CB";
-            if (raw?.kind === "impacted") return "#EAE5C9";
-            if (raw?.kind === "test") return "#10b981";
-            return "#71717a";
+            if (raw?.kind === "changed") return "#8B5E3C";
+            if (raw?.kind === "impacted") return "#5B4A5F";
+            if (raw?.kind === "test") return "#2E4A32";
+            return "#1B3B3F";
           }}
-          maskColor="rgba(6, 10, 12, 0.88)"
-          className="!bg-[#0d1417] !border-[#6CC6CB]/25 !rounded-xl"
+          maskColor="rgba(11, 13, 16, 0.88)"
+          className="!bg-[#121A2B] !border-[#1B3B3F] !rounded-xl"
         />
       </ReactFlow>
 
       {/* Selected Node Inspector Drawer */}
       {selectedNode && (
-        <aside className="absolute right-4 top-16 bottom-4 w-84 md:w-96 rounded-2xl border border-[#6CC6CB]/35 bg-[#0d1417]/95 backdrop-blur-2xl p-5 flex flex-col justify-between text-xs z-20 shadow-2xl overflow-y-auto">
+        <aside className="absolute right-4 top-16 bottom-4 w-84 md:w-96 rounded-2xl border border-[#1B3B3F] bg-[#121A2B]/95 backdrop-blur-2xl p-5 flex flex-col justify-between text-xs z-20 shadow-2xl overflow-y-auto">
           <div className="space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#6CC6CB]/20">
+            <div className="flex items-center justify-between pb-3 border-b border-[#1B3B3F]">
               <div className="flex items-center gap-2">
                 <span
                   className={`w-2.5 h-2.5 rounded-full ${
                     selectedNode.kind === "changed"
-                      ? "bg-[#6CC6CB] shadow-[0_0_8px_#6CC6CB]"
+                      ? "bg-[#8B5E3C] shadow-[0_0_8px_#8B5E3C]"
                       : selectedNode.kind === "impacted"
-                      ? "bg-[#EAE5C9] shadow-[0_0_8px_#EAE5C9]"
+                      ? "bg-[#5B4A5F] shadow-[0_0_8px_#5B4A5F]"
                       : selectedNode.kind === "test"
-                      ? "bg-emerald-400 shadow-[0_0_8px_#34d399]"
-                      : "bg-zinc-500"
+                      ? "bg-[#2E4A32] shadow-[0_0_8px_#2E4A32]"
+                      : "bg-[#1B3B3F]"
                   }`}
                 />
                 <span className="font-mono font-bold uppercase text-xs tracking-wider text-white">
                   {selectedNode.kind} Node
                 </span>
                 {selectedNode.data?.hops !== undefined && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.06] text-[#EAE5C9]">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#1B3B3F]/60 text-[#C9C4B8]">
                     {selectedNode.data.hops === 0 ? "Directly Modified" : `${selectedNode.data.hops}-Hop Downstream`}
                   </span>
                 )}
               </div>
               <button
                 onClick={() => setSelectedNode(null)}
-                className="text-zinc-400 hover:text-white p-1 rounded-md hover:bg-white/[0.08] transition-colors"
+                className="text-[#C9C4B8]/60 hover:text-white p-1 rounded-md hover:bg-white/[0.08] transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -377,38 +377,38 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
             {/* Symbol Details */}
             <div className="space-y-3">
               <div>
-                <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">Symbol Identifier</div>
-                <div className="font-mono text-xs font-bold text-white break-all mt-1 bg-black/40 p-2 rounded-lg border border-white/[0.06]">
+                <div className="text-[10px] font-mono text-[#C9C4B8]/50 uppercase tracking-wider">Symbol Identifier</div>
+                <div className="font-mono text-xs font-bold text-white break-all mt-1 bg-[#0B0D10]/80 p-2 rounded-lg border border-[#1B3B3F]">
                   {selectedNode.id}
                 </div>
               </div>
 
               {selectedNode.data?.file_path && (
                 <div>
-                  <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">Source Location</div>
-                  <div className="font-mono text-xs text-zinc-300 mt-1 flex items-center gap-1.5 bg-black/40 p-2 rounded-lg border border-white/[0.06]">
-                    <FileCode className="w-3.5 h-3.5 text-[#6CC6CB] shrink-0" />
+                  <div className="text-[10px] font-mono text-[#C9C4B8]/50 uppercase tracking-wider">Source Location</div>
+                  <div className="font-mono text-xs text-[#C9C4B8] mt-1 flex items-center gap-1.5 bg-[#0B0D10]/80 p-2 rounded-lg border border-[#1B3B3F]">
+                    <FileCode className="w-3.5 h-3.5 text-[#6B6E3A] shrink-0" />
                     <span className="truncate">{selectedNode.data.file_path}</span>
                     {selectedNode.data.lines && (
-                      <span className="text-[#EAE5C9] font-semibold shrink-0">:{selectedNode.data.lines}</span>
+                      <span className="text-[#C9C4B8] font-semibold shrink-0">:{selectedNode.data.lines}</span>
                     )}
                   </div>
                 </div>
               )}
 
               {selectedNode.data?.score !== undefined && (
-                <div className="p-3 rounded-xl bg-emerald-950/20 border border-emerald-500/30">
+                <div className="p-3 rounded-xl bg-[#2E4A32]/20 border border-[#2E4A32]/40">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider">
+                    <span className="text-[10px] font-mono text-[#C9C4B8] uppercase tracking-wider">
                       ML Prioritization Score
                     </span>
-                    <span className="text-xs font-mono font-bold text-emerald-300">
+                    <span className="text-xs font-mono font-bold text-[#C9C4B8]">
                       {(selectedNode.data.score * 100).toFixed(1)}%
                     </span>
                   </div>
-                  <div className="w-full bg-black/50 h-1.5 rounded-full overflow-hidden mt-2">
+                  <div className="w-full bg-[#0B0D10] h-1.5 rounded-full overflow-hidden mt-2">
                     <div
-                      className="bg-emerald-400 h-full rounded-full"
+                      className="bg-[#2E4A32] h-full rounded-full"
                       style={{ width: `${selectedNode.data.score * 100}%` }}
                     />
                   </div>
@@ -417,29 +417,29 @@ function InnerGraphCanvas({ initialData, height = "600px", repoId }: GraphCanvas
 
               {/* Cypher Query Snippet */}
               <div>
-                <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 uppercase tracking-wider mb-1">
+                <div className="flex items-center justify-between text-[10px] font-mono text-[#C9C4B8]/50 uppercase tracking-wider mb-1">
                   <span>FalkorDB Cypher Query</span>
                   <button
                     onClick={() => handleCopyCypher(activeCypher)}
-                    className="flex items-center gap-1 text-[#6CC6CB] hover:text-[#EAE5C9] transition-colors"
+                    className="flex items-center gap-1 text-[#6B6E3A] hover:text-[#C9C4B8] transition-colors"
                   >
-                    {copiedCypher ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    {copiedCypher ? <Check className="w-3 h-3 text-[#2E4A32]" /> : <Copy className="w-3 h-3" />}
                     <span>{copiedCypher ? "Copied" : "Copy"}</span>
                   </button>
                 </div>
-                <pre className="p-2.5 rounded-lg border border-[#6CC6CB]/20 bg-[#080d0f] font-mono text-[10px] text-[#EAE5C9]/90 whitespace-pre-wrap leading-relaxed overflow-x-auto">
+                <pre className="p-2.5 rounded-lg border border-[#1B3B3F] bg-[#0B0D10] font-mono text-[10px] text-[#C9C4B8]/95 whitespace-pre-wrap leading-relaxed overflow-x-auto">
                   {activeCypher}
                 </pre>
               </div>
             </div>
           </div>
 
-          <div className="pt-3 border-t border-[#6CC6CB]/20 flex justify-between items-center text-[11px] text-zinc-400">
+          <div className="pt-3 border-t border-[#1B3B3F] flex justify-between items-center text-[11px] text-[#C9C4B8]/70">
             <span className="flex items-center gap-1.5">
-              <Database className="w-3.5 h-3.5 text-[#6CC6CB]" />
+              <Database className="w-3.5 h-3.5 text-[#6B6E3A]" />
               <span>FalkorDB Graph</span>
             </span>
-            <span className="font-mono text-[#EAE5C9] uppercase">{selectedNode.kind}</span>
+            <span className="font-mono text-[#C9C4B8] uppercase">{selectedNode.kind}</span>
           </div>
         </aside>
       )}
