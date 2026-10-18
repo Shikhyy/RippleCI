@@ -121,77 +121,40 @@ export default function LandingPage() {
       />
 
       {/* Hero Section */}
-      <section className="relative pt-36 pb-28 border-b border-[#6CC6CB]/20 overflow-hidden">
-        {/* Dynamic Aceternity Canvas Reveal Shaders Background */}
-        <div className="absolute inset-0 z-0 opacity-45 pointer-events-none">
-          <CanvasRevealEffect
-            animationSpeed={1.2}
-            containerClassName="bg-transparent"
-            colors={[
-              [108, 198, 203],
-              [34, 211, 238],
-              [234, 229, 201],
-            ]}
-            opacities={[0.1, 0.15, 0.2, 0.25, 0.35, 0.5, 0.7]}
-            dotSize={2.2}
-            showGradient={true}
-          />
-        </div>
+      <section className="relative pt-32 pb-20 border-b border-[#6CC6CB]/20 overflow-hidden">
+        {/* Subtle Architectural Grid Background */}
+        <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-40" />
 
-        {/* Ambient Radial Fog & Vignette */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#080c0e]/30 via-transparent to-[#080c0e] pointer-events-none z-[1]" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[500px] bg-[#6CC6CB]/[0.10] blur-[160px] rounded-full pointer-events-none z-[1]" />
-
-        {/* Floating Architectural Telemetry Chips on Desktop */}
-        <div className="hidden xl:flex items-center justify-between absolute inset-x-12 top-1/2 -translate-y-1/2 pointer-events-none z-10">
-          <div className="p-4 rounded-2xl bg-[#0a1014]/90 border border-cyan-500/30 backdrop-blur-xl shadow-[0_0_35px_rgba(108,198,203,0.18)] flex items-center gap-3.5 transition-all hover:scale-105 pointer-events-auto">
-            <div className="w-9 h-9 rounded-xl bg-cyan-950 flex items-center justify-center border border-cyan-500/40 text-cyan-400">
-              <Network className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-[11px] font-mono text-cyan-400 uppercase tracking-wider font-semibold">FalkorDB Cypher</div>
-              <div className="text-xs font-mono text-white font-bold">&lt; 14.2ms AST Multi-Hop</div>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-[#0a1014]/90 border border-amber-500/30 backdrop-blur-xl shadow-[0_0_35px_rgba(234,229,201,0.18)] flex items-center gap-3.5 transition-all hover:scale-105 pointer-events-auto">
-            <div className="w-9 h-9 rounded-xl bg-amber-950 flex items-center justify-center border border-amber-500/40 text-[#EAE5C9]">
-              <Cpu className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="text-[11px] font-mono text-[#EAE5C9] uppercase tracking-wider font-semibold">Learned Prioritization</div>
-              <div className="text-xs font-mono text-white font-bold">100% Fault Recall Guarantee</div>
-            </div>
-          </div>
-        </div>
+        {/* Soft Ambient Spotlight */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-cyan-500/10 via-sky-500/5 to-transparent blur-3xl pointer-events-none" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center relative z-10">
-          {/* Live Badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#6CC6CB]/40 bg-[#0d1417]/95 backdrop-blur-xl text-[#EAE5C9] text-xs font-mono mb-8 shadow-[0_0_25px_rgba(108,198,203,0.2)]">
-            <span className="w-2 h-2 rounded-full bg-[#6CC6CB] animate-ping" />
-            <span className="font-semibold">FalkorDB Graph-Native Release Intelligence</span>
+          {/* Status Badge */}
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/30 text-cyan-300 text-xs font-mono mb-8 backdrop-blur-md">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span>FalkorDB Graph-Native Release Intelligence</span>
             <span className="text-slate-600">|</span>
-            <span className="text-cyan-400 font-bold">v0.1.0 Ready</span>
+            <span className="text-slate-400">Open Source</span>
           </div>
 
           {/* Headline */}
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08] max-w-4xl mx-auto mb-6">
-            Run the right tests,<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#EAE5C9] via-[#6CC6CB] to-[#EAE5C9]">
-              close to every PR.
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08] max-w-4xl mx-auto mb-6">
+            Understand what could break,<br className="hidden sm:inline" />{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-cyan-400">
+              before you ship.
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-            Index code AST into FalkorDB, trace multi-hop blast radius, prioritize regression tests with ML under runtime budgets, and verify with counterfactual mutation testing before merge.
+          <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+            Trace multi-hop blast radius across code changes, prioritize the 10% of tests that catch 100% of regressions under budget, and verify releases with counterfactual mutation testing.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs sm:text-sm font-mono mb-12">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs sm:text-sm font-mono mb-14">
             <Link
               href="/app"
-              className="flex items-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(108,198,203,0.45)] hover:shadow-[0_1px_35px_rgba(108,198,203,0.65)] hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-extrabold px-6 py-3.5 rounded-xl transition-all shadow-[0_1px_25px_rgba(108,198,203,0.35)] hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>Launch Web Companion</span>
               <ArrowRight className="w-4 h-4" />
@@ -199,7 +162,7 @@ export default function LandingPage() {
 
             <button
               onClick={() => setIsConnectModalOpen(true)}
-              className="flex items-center gap-2 bg-[#0d1417]/90 hover:bg-[#121b1f] text-white border border-[#6CC6CB]/40 px-5 py-3.5 rounded-xl transition-all font-semibold hover:border-cyan-400 hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center gap-2 bg-[#0d1417] hover:bg-[#121b1f] text-white border border-[#6CC6CB]/30 px-5 py-3.5 rounded-xl transition-all font-semibold hover:border-cyan-400 hover:scale-[1.02] active:scale-[0.98]"
             >
               <Github className="w-4 h-4 text-[#6CC6CB]" />
               <span>Connect Repository</span>
@@ -207,24 +170,115 @@ export default function LandingPage() {
 
             <button
               onClick={handleCopyPip}
-              className="flex items-center gap-2 bg-black/70 hover:bg-white/[0.08] text-[#EAE5C9] border border-white/[0.15] px-4 py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center gap-2 bg-black/50 hover:bg-white/[0.06] text-[#EAE5C9] border border-white/[0.12] px-4 py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <span>pip install rippleci</span>
               {copiedPip ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-[#6CC6CB]" />}
             </button>
           </div>
 
+          {/* Hero Interactive Proof Visual: Grounded Live AST Traversal */}
+          <div className="max-w-4xl mx-auto text-left rounded-2xl border border-slate-800 bg-[#0a0f12]/90 backdrop-blur-xl shadow-2xl overflow-hidden mb-12">
+            {/* Window Titlebar */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800/80 bg-[#070b0d]">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-rose-500/80" />
+                <span className="w-3 h-3 rounded-full bg-amber-500/80" />
+                <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                <span className="ml-2 font-mono text-xs text-slate-400">git diff --cached (auth/tokens.py)</span>
+              </div>
+              <div className="flex items-center gap-2 font-mono text-xs text-cyan-400 bg-cyan-950/40 px-2.5 py-0.5 rounded border border-cyan-800/40">
+                <span>FalkorDB Cypher</span>
+                <span className="text-slate-500">•</span>
+                <span>14.2ms</span>
+              </div>
+            </div>
+
+            {/* Split Content: Diff -> Provenance -> Verdict */}
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-800/80 font-mono text-xs">
+              {/* Column 1: Diff Snippet */}
+              <div className="p-4 space-y-2 bg-[#090d10]">
+                <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mb-2">
+                  01 // Modified AST Symbol
+                </div>
+                <div className="bg-black/60 rounded-lg p-3 space-y-1 font-mono text-[11px] border border-slate-800/60 overflow-x-auto">
+                  <div className="text-slate-500">@@ -40,3 +40,3 @@</div>
+                  <div className="text-rose-400 bg-rose-950/20 px-1 rounded">- def verify_token(token):</div>
+                  <div className="text-emerald-400 bg-emerald-950/20 px-1 rounded">+ def verify_token(token, max_age=3600):</div>
+                </div>
+                <div className="text-[11px] text-slate-400 flex items-center justify-between pt-1">
+                  <span>Symbol: <code className="text-cyan-300">verify_token</code></span>
+                  <span className="text-emerald-400 font-bold">1 Modified</span>
+                </div>
+              </div>
+
+              {/* Column 2: Graph Provenance Chain */}
+              <div className="p-4 space-y-2 bg-[#0a0f12]">
+                <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mb-2">
+                  02 // Cypher Multi-Hop Trace
+                </div>
+                <div className="space-y-2">
+                  <div className="p-2 rounded bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+                    <span className="text-slate-300">verify_token</span>
+                    <span className="text-slate-500 text-[10px]">HOP 0</span>
+                  </div>
+                  <div className="flex justify-center text-cyan-400 text-[10px]">▼ [:CALLS]</div>
+                  <div className="p-2 rounded bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+                    <span className="text-slate-300">dispatch_auth</span>
+                    <span className="text-slate-500 text-[10px]">HOP 1</span>
+                  </div>
+                  <div className="flex justify-center text-cyan-400 text-[10px]">▼ [:COVERS]</div>
+                  <div className="p-2 rounded bg-cyan-950/30 border border-cyan-500/30 text-cyan-300 flex items-center justify-between font-bold">
+                    <span>test_expired_token</span>
+                    <span className="text-[10px]">SELECTED</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Column 3: Bounded Verification Decision */}
+              <div className="p-4 space-y-3 bg-[#090d10] flex flex-col justify-between">
+                <div>
+                  <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider mb-2">
+                    03 // Verification Verdict
+                  </div>
+                  <div className="space-y-2 pt-1">
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span>Suite Reduction:</span>
+                      <span className="text-emerald-400 font-bold">96.0% saved</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span>Selected Tests:</span>
+                      <span className="text-white">2 / 54</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span>Mutants Killed:</span>
+                      <span className="text-cyan-400 font-bold">4 / 4 (100%)</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span>Fault Recall:</span>
+                      <span className="text-emerald-400 font-bold">100.0%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-2.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-400 text-center font-bold text-xs">
+                  VERDICT: RELEASE_SAFE
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Trust Value Points */}
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-zinc-300">
-            <div className="flex items-center gap-2 bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-800">
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-slate-400">
+            <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>80%+ CI Runtime Saved</span>
             </div>
-            <div className="flex items-center gap-2 bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-800">
+            <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>99.4% Empirical Fault Recall</span>
             </div>
-            <div className="flex items-center gap-2 bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-800">
+            <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>Zero Credentials Required</span>
             </div>
