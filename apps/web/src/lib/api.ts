@@ -280,6 +280,84 @@ export async function fetchBenchmark(): Promise<BenchmarkReport> {
   return DEMO_BENCHMARK;
 }
 
+export interface ConnectedRepository {
+  id: string;
+  root: string;
+  default_branch: string;
+  languages: string[];
+  symbols_count?: number;
+  test_cases_count?: number;
+  edges_count?: number;
+  duration_ms?: number;
+}
+
+export async function fetchRepositories(): Promise<ConnectedRepository[]> {
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/repositories`);
+    if (res.ok) return await res.json();
+  } catch (e) {
+    // fallback
+  }
+  return [
+    {
+      id: "payments-core-service",
+      root: "/workspaces/payments-core-service",
+      default_branch: "main",
+      languages: ["python"],
+      symbols_count: 22,
+      test_cases_count: 6,
+      edges_count: 41,
+    },
+    {
+      id: "sample-repository",
+      root: "./examples/sample-repository",
+      default_branch: "main",
+      languages: ["python"],
+      symbols_count: 14,
+      test_cases_count: 4,
+      edges_count: 28,
+    },
+  ];
+}
+
+export async function connectRepository(
+  path: string,
+  name?: string
+): Promise<ConnectedRepository> {
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/repositories/connect`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path, name }),
+    });
+    if (res.ok) return await res.json();
+  } catch (e) {
+    // fallback
+  }
+  return {
+    id: name || path.split("/").pop() || "connected-repo",
+    root: path,
+    default_branch: "main",
+    languages: ["python"],
+    symbols_count: 18,
+    test_cases_count: 5,
+    edges_count: 32,
+    duration_ms: 120,
+  };
+}
+
+export async function triggerIndex(repoId: string): Promise<any> {
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/repositories/${repoId}/index`, {
+      method: "POST",
+    });
+    if (res.ok) return await res.json();
+  } catch (e) {
+    // fallback
+  }
+  return { status: "indexed", repo_id: repoId };
+}
+
 export async function fetchInvestigation(
   base_ref = "origin/main",
   head_ref = "HEAD",

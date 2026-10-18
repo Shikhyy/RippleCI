@@ -77,3 +77,21 @@ def test_api_investigate_and_benchmark():
     assert "strategies" in bench_data
     assert "full_suite" in bench_data["strategies"]
     assert "graph_plus_ml" in bench_data["strategies"]
+
+
+def test_api_connect_repository():
+    res = client.post(
+        "/api/v1/repositories/connect",
+        json={"path": "examples/sample-repository", "name": "sample-payments"},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert data["id"] == "sample-payments"
+    assert data["symbols_count"] > 0
+    assert "edges_count" in data
+
+    # Verify listed in get_repositories
+    res_list = client.get("/api/v1/repositories")
+    assert res_list.status_code == 200
+    repos = res_list.json()
+    assert any(r["id"] == "sample-payments" for r in repos)

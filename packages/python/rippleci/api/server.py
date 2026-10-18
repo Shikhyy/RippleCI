@@ -61,6 +61,24 @@ class InvestigateRequest(BaseModel):
     file_diffs: Optional[List[Dict[str, Any]]] = None
 
 
+class ConnectRepoRequest(BaseModel):
+    path: str = "."
+    name: Optional[str] = None
+
+
+_REPOSITORIES: Dict[str, Dict[str, Any]] = {}
+
+
+def _get_project_for_repo(repo_id: str) -> RippleProject:
+    if repo_id in _REPOSITORIES:
+        return RippleProject.open(_REPOSITORIES[repo_id]["root"])
+    if repo_id in ("payments-core-service", "sample-repository"):
+        sample_path = Path("examples/sample-repository").resolve()
+        if sample_path.exists():
+            return RippleProject.open(sample_path)
+    return RippleProject.open(".")
+
+
 @app.get("/api/v1/health")
 def get_health():
     project = RippleProject.open(".")
@@ -75,20 +93,48 @@ def get_health():
 
 @app.get("/api/v1/repositories")
 def get_repositories():
-    project = RippleProject.open(".")
-    return [
-        {
-            "id": project.config.repository.id,
-            "root": str(project.root),
-            "default_branch": project.config.repository.default_branch,
-            "languages": project.config.repository.languages,
+    if not _REPOSITORIES:
+        default_proj = RippleProject.open(".")
+        _REPOSITORIES[default_proj.config.repository.id] = {
+            "id": default_proj.config.repository.id,
+            "root": str(default_proj.root),
+            "default_branch": default_proj.config.repository.default_branch,
+            "languages": default_proj.config.repository.languages,
         }
-    ]
+    return list(_REPOSITORIES.values())
+
+
+@app.post("/api/v1/repositories/connect")
+def connect_repository(req: ConnectRepoRequest):
+    target_path = Path(req.path).resolve()
+    if not target_path.exists():
+        cwd_target = (Path.cwd() / req.path).resolve()
+        if cwd_target.exists():
+            target_path = cwd_target
+        else:
+            raise HTTPException(status_code=400, detail=f"Directory '{req.path}' not found.")
+
+    project = RippleProject.open(target_path)
+    repo_id = req.name or project.config.repository.id or target_path.name
+    summary = project.indexer.index()
+    _LAST_INDEX[repo_id] = summary
+    repo_info = {
+        "id": repo_id,
+        "root": str(project.root),
+        "default_branch": project.config.repository.default_branch,
+        "languages": project.config.repository.languages,
+        "symbols_count": summary.symbols_count,
+        "test_cases_count": summary.test_cases_count,
+        "edges_count": summary.call_edges_count + summary.coverage_edges_count,
+        "duration_ms": summary.duration_ms,
+    }
+    _REPOSITORIES[repo_id] = repo_info
+    return repo_info
 
 
 @app.post("/api/v1/repositories/{repo_id}/index")
 def trigger_index(repo_id: str):
-    project = RippleProject.open(".")
+    project = _get_project_for_repo(repo_id)
     summary = project.indexer.index()
     _LAST_INDEX[repo_id] = summary
     return summary
@@ -98,7 +144,7 @@ def trigger_index(repo_id: str):
 def get_index_status(repo_id: str):
     if repo_id in _LAST_INDEX:
         return _LAST_INDEX[repo_id]
-    project = RippleProject.open(".")
+    project = _get_project_for_repo(repo_id)
     counts = project.graph.get_graph_counts()
     return {
         "repo_id": repo_id,
@@ -110,7 +156,7 @@ def get_index_status(repo_id: str):
 
 @app.post("/api/v1/repositories/{repo_id}/impact")
 def run_impact(repo_id: str, req: ImpactRequest):
-    project = RippleProject.open(".")
+    project = _get_project_for_repo(repo_id)
     file_diffs = None
     if req.file_diffs:
         file_diffs = [FileDiff(**fd) for fd in req.file_diffs]
@@ -123,7 +169,7 @@ def run_impact(repo_id: str, req: ImpactRequest):
 
 @app.post("/api/v1/repositories/{repo_id}/plans")
 def create_plan(repo_id: str, req: PlanRequest, run_id: Optional[str] = None):
-    project = RippleProject.open(".")
+    project = _get_project_for_repo(repo_id)
     if run_id and run_id in _RUNS:
         impact = _RUNS[run_id].impact
     else:
@@ -138,7 +184,7 @@ def create_plan(repo_id: str, req: PlanRequest, run_id: Optional[str] = None):
 
 @app.post("/api/v1/repositories/{repo_id}/verification")
 def run_verification(repo_id: str, req: VerificationRequest, run_id: Optional[str] = None):
-    project = RippleProject.open(".")
+    project = _get_project_for_repo(repo_id)
     if not run_id or run_id not in _RUNS or not _RUNS[run_id].plan:
         raise HTTPException(status_code=400, detail="Valid run_id with an existing TestPlan is required.")
 
