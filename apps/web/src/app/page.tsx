@@ -30,6 +30,7 @@ import { TerminalBlock } from "@/components/TerminalBlock";
 import { BlastRadiusCalculator } from "@/components/BlastRadiusCalculator";
 import { CanvasRevealEffectDemo3 } from "@/components/CanvasRevealEffectDemo3";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
+import { ContourTide } from "@/components/ui/contour-tide";
 
 const SDK_SNIPPETS = [
   {
@@ -111,22 +112,48 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0B0D10] text-[#C9C4B8] font-sans relative selection:bg-[#E5A952]/40 selection:text-white">
-      <Navbar />
+    <div className="min-h-screen flex flex-col bg-[#0B0D10] text-[#C9C4B8] font-sans relative selection:bg-[#E5A952]/40 selection:text-white overflow-hidden">
+      {/* React Bits Pro - Contour Tide (Ocean of particles rolling in waves across entire landing page) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-60">
+        <ContourTide
+          colors={["#1B3B3F", "#E5A952"]}
+          backgroundColor="transparent"
+          density={0.85}
+          particleSize={1.15}
+          waveHeight={1.25}
+          choppiness={0.85}
+          wavelength={1.15}
+          windAngle={14}
+          horizon={0.22}
+          fog={1.15}
+          glow={0.5}
+          foam={1.2}
+          speed={0.65}
+          interactive={true}
+          parallax={1.2}
+          swell={1.3}
+          swellRadius={1.1}
+          clickRipples={true}
+          className="w-full h-full"
+        />
+      </div>
 
-      {/* Connect Repository Modal */}
-      <ConnectRepoModal
-        isOpen={isConnectModalOpen}
-        onClose={() => setIsConnectModalOpen(false)}
-      />
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 border-b border-[#1B3B3F] overflow-hidden">
-        {/* Subtle Architectural Grid Background */}
-        <div className="absolute inset-0 bg-[radial-gradient(#1B3B3F_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-40" />
+        {/* Connect Repository Modal */}
+        <ConnectRepoModal
+          isOpen={isConnectModalOpen}
+          onClose={() => setIsConnectModalOpen(false)}
+        />
 
-        {/* Soft Ambient Spotlight */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-[#E5A952]/15 via-[#1B3B3F]/20 to-transparent blur-3xl pointer-events-none" />
+        {/* Hero Section */}
+        <section className="relative pt-32 pb-20 border-b border-[#1B3B3F]/70 overflow-hidden">
+          {/* Subtle Architectural Grid Background */}
+          <div className="absolute inset-0 bg-[radial-gradient(#1B3B3F_1px,transparent_1px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none opacity-25" />
+
+          {/* Soft Ambient Spotlight */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-[#E5A952]/15 via-[#1B3B3F]/20 to-transparent blur-3xl pointer-events-none" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center relative z-10">
           {/* Status Badge */}
@@ -381,7 +408,7 @@ export default function LandingPage() {
       </section>
 
       {/* Bottom CTA */}
-      <section className="py-24 relative overflow-hidden bg-[#0B0D10]">
+      <section className="py-24 relative overflow-hidden bg-transparent">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight mb-6">
             Stop waiting on slow CI suites.<br />
@@ -408,7 +435,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#1B3B3F] py-8 bg-[#0B0D10] text-xs font-mono text-[#C9C4B8]/60">
+      <footer className="border-t border-[#1B3B3F]/80 py-8 bg-[#0B0D10]/85 backdrop-blur-md text-xs font-mono text-[#C9C4B8]/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="font-bold text-white">Ripple<span className="text-[#E5A952]">CI</span></span>
@@ -420,6 +447,7 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
