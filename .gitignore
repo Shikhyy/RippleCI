@@ -1,6 +1,9 @@
 # Private planning packs and specification documents (DO NOT COMMIT)
 rippleci-docs/
 rippleci-documentation-pack.zip
+docs/
+*DEMO*
+*demo_guide*
 AGENTS-2.md
 README-2.md
 AGENTS.md
