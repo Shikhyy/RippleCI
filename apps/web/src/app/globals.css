@@ -5,16 +5,16 @@
 @tailwind utilities;
 
 :root {
-  --background: #0B0D10; /* DEEP CHARCOAL */
-  --foreground: #C9C4B8; /* MOON STONE */
-  --midnight-blue: #121A2B;
-  --teal-shadow: #1B3B3F;
-  --forest-moss: #2E4A32;
-  --olive-drift: #E5A952;
-  --amber-gold: #E5A952;
-  --cinnamon-earth: #8B5E3C;
-  --dusk-mauve: #5B4A5F;
-  --moon-stone: #C9C4B8;
+  --background: #000000;
+  --foreground: #FFFFFF;
+  --midnight-blue: #0A0A0A;
+  --teal-shadow: #171717;
+  --forest-moss: #262626;
+  --olive-drift: #FFFFFF;
+  --amber-gold: #FFFFFF;
+  --cinnamon-earth: #525252;
+  --dusk-mauve: #404040;
+  --moon-stone: #FFFFFF;
 }
 
 body {
@@ -28,8 +28,8 @@ body {
 }
 
 ::selection {
-  background-color: rgba(229, 169, 82, 0.40);
-  color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.30);
+  color: #000000;
 }
 
 /* Precision scrollbars */
@@ -43,85 +43,84 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(229, 169, 82, 0.35);
+  background: rgba(255, 255, 255, 0.20);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(229, 169, 82, 0.60);
+  background: rgba(255, 255, 255, 0.45);
 }
 
-/* Glassmorphism & Sculpted Craft Surfaces */
+/* Frosted Glassmorphism Surfaces */
 .glass-header {
-  background: rgba(11, 13, 16, 0.85);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(27, 59, 63, 0.70);
-  box-shadow: inset 0 -1px 0 0 rgba(201, 196, 184, 0.08), 0 4px 24px rgba(11, 13, 16, 0.60);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.70);
 }
 
-.craft-card {
-  background: rgba(18, 26, 43, 0.70);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  border: 1px solid rgba(27, 59, 63, 0.80);
+.craft-card,
+.glass-card {
+  background: rgba(10, 10, 10, 0.45);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 
-    inset 0 1px 1px 0 rgba(201, 196, 184, 0.15),
-    inset 0 -1px 0 0 rgba(27, 59, 63, 0.40),
-    0 8px 32px 0 rgba(11, 13, 16, 0.65),
-    0 0 20px -6px rgba(229, 169, 82, 0.15);
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.18),
+    0 12px 36px 0 rgba(0, 0, 0, 0.80),
+    0 0 24px -6px rgba(255, 255, 255, 0.06);
   border-radius: 1rem;
 }
 
 .craft-card-subtle {
-  background: rgba(18, 26, 43, 0.50);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  border: 1px solid rgba(27, 59, 63, 0.60);
+  background: rgba(10, 10, 10, 0.35);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 
-    inset 0 1px 0 0 rgba(201, 196, 184, 0.10),
-    0 4px 20px rgba(11, 13, 16, 0.50);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.10),
+    0 6px 24px rgba(0, 0, 0, 0.60);
   border-radius: 0.875rem;
 }
 
 .glass-panel {
-  background: rgba(18, 26, 43, 0.80);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border: 1px solid rgba(229, 169, 82, 0.35);
+  background: rgba(10, 10, 10, 0.55);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 
-    inset 0 1px 1px 0 rgba(201, 196, 184, 0.18),
-    inset 0 -1px 0 0 rgba(27, 59, 63, 0.40),
-    0 16px 48px -8px rgba(11, 13, 16, 0.75),
-    0 0 24px -4px rgba(229, 169, 82, 0.20);
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.22),
+    0 20px 50px -10px rgba(0, 0, 0, 0.90),
+    0 0 30px -4px rgba(255, 255, 255, 0.08);
   border-radius: 1.25rem;
 }
 
 .glass-pill {
-  background: rgba(229, 169, 82, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(229, 169, 82, 0.40);
-  color: #C9C4B8;
-  box-shadow: inset 0 1px 0 0 rgba(201, 196, 184, 0.20);
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.20);
 }
 
 .glass-pill-cinnamon {
-  background: rgba(139, 94, 60, 0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(139, 94, 60, 0.40);
-  color: #C9C4B8;
-  box-shadow: inset 0 1px 0 0 rgba(201, 196, 184, 0.20);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
 }
 
 .glass-pill-mauve {
-  background: rgba(91, 74, 95, 0.18);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(91, 74, 95, 0.45);
-  color: #C9C4B8;
-  box-shadow: inset 0 1px 0 0 rgba(201, 196, 184, 0.20);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
 }
 
 /* React Flow customizations */
@@ -130,26 +129,27 @@ body {
 }
 
 .react-flow__pane {
-  background-color: #0B0D10 !important;
+  background-color: #000000 !important;
 }
 
 .react-flow__controls {
   border-radius: 8px !important;
   overflow: hidden !important;
-  border: 1px solid rgba(27, 59, 63, 0.80) !important;
-  background: #121A2B !important;
-  box-shadow: 0 4px 16px rgba(11, 13, 16, 0.70) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.70) !important;
 }
 
 .react-flow__controls-button {
-  background: #121A2B !important;
-  border-bottom: 1px solid rgba(27, 59, 63, 0.60) !important;
-  color: #C9C4B8 !important;
-  fill: #C9C4B8 !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #A3A3A3 !important;
+  fill: #A3A3A3 !important;
 }
 
 .react-flow__controls-button:hover {
-  background: #1B3B3F !important;
+  background: rgba(255, 255, 255, 0.15) !important;
   color: #FFFFFF !important;
   fill: #FFFFFF !important;
 }

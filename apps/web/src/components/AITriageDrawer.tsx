@@ -75,12 +75,12 @@ ${data.merge_recommendation}
   const isMedium = data?.risk_level === "MEDIUM";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B0D10]/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl max-h-[90vh] rounded-2xl border border-[#1B3B3F] bg-[#121A2B] shadow-2xl flex flex-col overflow-hidden text-[#C9C4B8] font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-200">
+      <div className="relative w-full max-w-2xl max-h-[90vh] rounded-2xl border border-white/20 bg-black/85 backdrop-blur-2xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_25px_60px_rgba(0,0,0,0.9)] flex flex-col overflow-hidden text-neutral-300 font-sans">
         {/* Header */}
-        <div className="p-5 border-b border-[#1B3B3F] flex items-center justify-between bg-[#0B0D10]/80">
+        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-black/60">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#E5A952]/20 border border-[#E5A952]/40 flex items-center justify-center text-[#E5A952]">
+            <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-[0_0_10px_rgba(255,255,255,0.15)]">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
@@ -89,12 +89,12 @@ ${data.merge_recommendation}
                   Autonomous PR Release Triage
                 </h2>
                 {triage?.provider && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#1B3B3F]/60 text-[#C9C4B8] border border-[#1B3B3F]">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.08] text-neutral-300 border border-white/15">
                     {triage.provider} · {triage.model}
                   </span>
                 )}
               </div>
-              <p className="text-[11px] font-mono text-[#C9C4B8]/60 mt-0.5">
+              <p className="text-[11px] font-mono text-neutral-400 mt-0.5">
                 {repoId} {prNumber && `· PR #${prNumber}`} {prTitle && `(${prTitle})`}
               </p>
             </div>
@@ -102,7 +102,7 @@ ${data.merge_recommendation}
 
           <button
             onClick={onClose}
-            className="text-[#C9C4B8]/60 hover:text-white p-1 rounded-lg hover:bg-white/[0.08] transition-colors"
+            className="text-neutral-400 hover:text-white p-1 rounded-lg hover:bg-white/[0.08] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -112,43 +112,29 @@ ${data.merge_recommendation}
         <div className="p-6 overflow-y-auto space-y-5 text-xs font-sans">
           {loading ? (
             <div className="py-12 flex flex-col items-center justify-center space-y-3">
-              <div className="w-8 h-8 rounded-full border-2 border-[#E5A952] border-t-transparent animate-spin" />
-              <div className="text-xs font-mono text-[#C9C4B8]/70 animate-pulse">
+              <div className="w-8 h-8 rounded-full border-2 border-white border-t-transparent animate-spin" />
+              <div className="text-xs font-mono text-neutral-400 animate-pulse">
                 Synthesizing FalkorDB AST blast radius and Groq LPU reasoning...
               </div>
             </div>
           ) : data ? (
             <>
               {/* Verdict Banner */}
-              <div
-                className={`p-4 rounded-xl border flex items-center justify-between gap-4 ${
-                  isLow
-                    ? "bg-[#2E4A32]/25 border-[#2E4A32]/50 text-[#C9C4B8]"
-                    : isMedium
-                    ? "bg-[#8B5E3C]/25 border-[#8B5E3C]/50 text-[#C9C4B8]"
-                    : "bg-[#5B4A5F]/35 border-[#5B4A5F]/60 text-[#C9C4B8]"
-                }`}
-              >
+              <div className="p-4 rounded-xl border border-white/20 bg-white/[0.08] backdrop-blur-xl flex items-center justify-between gap-4 text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
                 <div className="flex items-center gap-3">
-                  {isLow ? (
-                    <ShieldCheck className="w-6 h-6 text-[#2E4A32] shrink-0" />
-                  ) : isMedium ? (
-                    <AlertTriangle className="w-6 h-6 text-[#8B5E3C] shrink-0" />
-                  ) : (
-                    <ShieldAlert className="w-6 h-6 text-[#5B4A5F] shrink-0" />
-                  )}
+                  <ShieldCheck className="w-6 h-6 text-white shrink-0" />
                   <div>
                     <div className="font-mono font-bold text-sm uppercase tracking-wider text-white">
                       Risk Assessment: {data.risk_level}
                     </div>
-                    <div className="text-[11px] opacity-90 mt-0.5">
+                    <div className="text-[11px] text-neutral-300 mt-0.5">
                       Confidence: {(data.confidence_score * 100).toFixed(0)}% based on graph evidence paths
                     </div>
                   </div>
                 </div>
 
                 {triage?.latency_ms && (
-                  <div className="text-right font-mono text-[10px] text-[#C9C4B8]/60 shrink-0">
+                  <div className="text-right font-mono text-[10px] text-neutral-400 shrink-0">
                     <div>LPU Latency</div>
                     <div className="text-white font-bold text-xs">{triage.latency_ms}ms</div>
                   </div>
@@ -157,49 +143,49 @@ ${data.merge_recommendation}
 
               {/* Headline */}
               <div className="space-y-1.5">
-                <span className="text-[10px] font-mono text-[#C9C4B8]/60 uppercase tracking-wider font-semibold">
+                <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-wider font-semibold">
                   Executive Headline
                 </span>
-                <p className="text-[#C9C4B8] font-semibold leading-relaxed bg-[#0B0D10]/70 p-3.5 rounded-xl border border-[#1B3B3F]">
+                <p className="text-white font-semibold leading-relaxed bg-black/60 p-3.5 rounded-xl border border-white/10">
                   {data.headline}
                 </p>
               </div>
 
               {/* Blast Radius Analysis */}
               <div className="space-y-1.5">
-                <span className="text-[10px] font-mono text-[#C9C4B8]/60 uppercase tracking-wider font-semibold">
+                <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-wider font-semibold">
                   AST Blast Radius Analysis
                 </span>
-                <p className="text-[#C9C4B8]/90 leading-relaxed bg-[#0B0D10]/70 p-3.5 rounded-xl border border-[#1B3B3F] whitespace-pre-line">
+                <p className="text-neutral-200 leading-relaxed bg-black/60 p-3.5 rounded-xl border border-white/10 whitespace-pre-line">
                   {data.blast_radius_analysis}
                 </p>
               </div>
 
               {/* Merge Recommendation */}
               <div className="space-y-1.5">
-                <span className="text-[10px] font-mono text-[#C9C4B8]/60 uppercase tracking-wider font-semibold">
+                <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-wider font-semibold">
                   Merge Recommendation
                 </span>
-                <div className="p-3.5 rounded-xl bg-[#0B0D10]/70 border border-[#1B3B3F] text-[#C9C4B8] font-medium leading-relaxed">
+                <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 text-neutral-200 font-medium leading-relaxed">
                   {data.merge_recommendation}
                 </div>
               </div>
             </>
           ) : (
-            <div className="text-center py-8 text-[#C9C4B8]/50 font-mono">
+            <div className="text-center py-8 text-neutral-500 font-mono">
               No triage data available for this pull request.
             </div>
           )}
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-[#1B3B3F] flex flex-wrap items-center justify-between gap-3 bg-[#0B0D10]/80">
+        <div className="p-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 bg-black/60">
           <button
             onClick={handleCopyMarkdown}
             disabled={!data}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#1B3B3F] bg-[#121A2B] text-xs font-mono text-[#C9C4B8] hover:text-white hover:border-[#E5A952] transition-all disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/15 bg-white/[0.06] text-xs font-mono text-neutral-300 hover:text-white hover:bg-white/15 transition-all disabled:opacity-50"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-[#2E4A32]" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-white" /> : <Copy className="w-3.5 h-3.5 text-neutral-400" />}
             <span>{copied ? "Copied Markdown" : "Copy PR Comment Markdown"}</span>
           </button>
 
@@ -209,13 +195,13 @@ ${data.merge_recommendation}
               disabled={commentPosted || !data}
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
                 commentPosted
-                  ? "bg-[#2E4A32]/30 text-[#C9C4B8] border border-[#2E4A32]/50"
-                  : "bg-[#E5A952] text-[#0B0D10] hover:bg-[#F5BD66] active:scale-[0.98]"
+                  ? "bg-white/20 text-white border border-white/30"
+                  : "bg-white text-black hover:bg-neutral-200 shadow-[0_0_20px_rgba(255,255,255,0.3)] active:scale-[0.98]"
               }`}
             >
               {commentPosted ? (
                 <>
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                   <span>Comment Posted to GitHub</span>
                 </>
               ) : (

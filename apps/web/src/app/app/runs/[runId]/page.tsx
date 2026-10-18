@@ -45,33 +45,33 @@ export default function RunDetailsPage() {
   }, [runId]);
 
   return (
-    <div className="min-h-screen bg-[#0B0D10] text-[#C9C4B8] flex flex-col font-sans relative">
+    <div className="min-h-screen bg-black text-white flex flex-col font-sans relative">
       {/* Ambient Glassmorphic Background Glow Orbs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-[#E5A952]/[0.10] blur-[140px]" />
-        <div className="absolute top-[40%] right-[5%] w-[550px] h-[550px] rounded-full bg-[#1B3B3F]/[0.25] blur-[150px]" />
-        <div className="absolute bottom-[-10%] left-[30%] w-[650px] h-[500px] rounded-full bg-[#5B4A5F]/[0.15] blur-[150px]" />
+        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-white/[0.03] blur-[140px]" />
+        <div className="absolute top-[40%] right-[5%] w-[550px] h-[550px] rounded-full bg-white/[0.02] blur-[150px]" />
+        <div className="absolute bottom-[-10%] left-[30%] w-[650px] h-[500px] rounded-full bg-white/[0.03] blur-[150px]" />
       </div>
 
       {/* Top Header */}
-      <header className="h-14 border-b border-[#1B3B3F] px-4 md:px-6 flex items-center justify-between glass-header">
+      <header className="h-14 border-b border-white/10 px-4 md:px-6 flex items-center justify-between glass-header">
         <div className="flex items-center gap-3">
           <Link
             href="/app"
-            className="flex items-center gap-1.5 text-xs text-[#C9C4B8]/60 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Dashboard</span>
           </Link>
-          <span className="text-[#C9C4B8]/30">/</span>
+          <span className="text-white/20">/</span>
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs font-semibold text-white">{run.run_id}</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-[#C9C4B8]/70">
+        <div className="flex items-center gap-2 text-xs font-mono text-neutral-400">
           <span>Range:</span>
-          <span className="bg-[#121A2B] border border-[#1B3B3F] px-2.5 py-0.5 rounded text-[#C9C4B8]">
+          <span className="bg-black/60 border border-white/15 px-2.5 py-0.5 rounded text-neutral-200">
             {run.base_ref}..{run.head_ref}
           </span>
         </div>
@@ -86,32 +86,32 @@ export default function RunDetailsPage() {
               <h1 className="text-lg md:text-xl font-bold text-white tracking-tight">
                 Pull Request Release Report
               </h1>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#2E4A32]/25 text-[#C9C4B8] border border-[#2E4A32]/50">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#2E4A32] animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 text-white border border-white/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                 {run.recommendation}
               </span>
             </div>
-            <p className="text-xs text-[#C9C4B8]/60 mt-1 font-mono">
+            <p className="text-xs text-neutral-400 mt-1 font-mono">
               Repository: {run.repo_id} · Range: {run.base_ref}..{run.head_ref} · Run: {run.run_id}
             </p>
           </div>
 
           <div className="flex items-center gap-6 sm:gap-8 text-xs font-mono">
             <div>
-              <div className="text-[#C9C4B8]/50 uppercase text-[10px] tracking-wider">Estimated Runtime</div>
+              <div className="text-neutral-500 uppercase text-[10px] tracking-wider">Estimated Runtime</div>
               <div className="text-white font-bold text-base mt-0.5">
                 {run.plan?.estimated_total_seconds || 4.8}s
               </div>
             </div>
             <div>
-              <div className="text-[#C9C4B8]/50 uppercase text-[10px] tracking-wider">Selected Tests</div>
-              <div className="text-[#2E4A32] font-bold text-base mt-0.5">
+              <div className="text-neutral-500 uppercase text-[10px] tracking-wider">Selected Tests</div>
+              <div className="text-white font-bold text-base mt-0.5">
                 {run.plan?.selected_tests.length || 0} / {run.impact?.candidate_tests?.length || run.verification?.tests_executed_count || 6} tests
               </div>
             </div>
             <div>
-              <div className="text-[#C9C4B8]/50 uppercase text-[10px] tracking-wider">Mutation Score</div>
-              <div className="text-[#E5A952] font-bold text-base mt-0.5">
+              <div className="text-neutral-500 uppercase text-[10px] tracking-wider">Mutation Score</div>
+              <div className="text-white font-bold text-base mt-0.5">
                 {(run.verification?.mutation_score ? run.verification.mutation_score * 100 : 100).toFixed(0)}%
               </div>
             </div>
@@ -119,13 +119,13 @@ export default function RunDetailsPage() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="p-1 bg-[#121A2B] rounded-xl border border-[#1B3B3F] inline-flex items-center gap-1 overflow-x-auto max-w-full">
+        <div className="p-1 bg-black/60 backdrop-blur-xl rounded-xl border border-white/15 inline-flex items-center gap-1 overflow-x-auto max-w-full">
           <button
             onClick={() => setActiveTab("impact")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === "impact"
-                ? "bg-[#E5A952]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#E5A952]/50"
-                : "text-[#C9C4B8]/60 hover:text-white"
+                ? "bg-white text-black font-extrabold shadow-sm border border-white"
+                : "text-neutral-400 hover:text-white"
             }`}
           >
             Change Blast Radius ({run.impact.changed_symbols.length + run.impact.impacted_symbols.length})
@@ -135,8 +135,8 @@ export default function RunDetailsPage() {
             onClick={() => setActiveTab("plan")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === "plan"
-                ? "bg-[#E5A952]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#E5A952]/50"
-                : "text-[#C9C4B8]/60 hover:text-white"
+                ? "bg-white text-black font-extrabold shadow-sm border border-white"
+                : "text-neutral-400 hover:text-white"
             }`}
           >
             Prioritized Plan ({run.plan?.selected_tests.length || 0})
@@ -146,8 +146,8 @@ export default function RunDetailsPage() {
             onClick={() => setActiveTab("verification")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === "verification"
-                ? "bg-[#E5A952]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#E5A952]/50"
-                : "text-[#C9C4B8]/60 hover:text-white"
+                ? "bg-white text-black font-extrabold shadow-sm border border-white"
+                : "text-neutral-400 hover:text-white"
             }`}
           >
             Mutation Verification ({run.verification?.mutations_tested_count || 0} mutants)
@@ -157,8 +157,8 @@ export default function RunDetailsPage() {
             onClick={() => setActiveTab("agent")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === "agent"
-                ? "bg-[#E5A952]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#E5A952]/50"
-                : "text-[#C9C4B8]/60 hover:text-white"
+                ? "bg-white text-black font-extrabold shadow-sm border border-white"
+                : "text-neutral-400 hover:text-white"
             }`}
           >
             Agent Reasoning
@@ -168,8 +168,8 @@ export default function RunDetailsPage() {
             onClick={() => setActiveTab("graph")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === "graph"
-                ? "bg-[#E5A952]/25 text-[#C9C4B8] font-semibold shadow-sm border border-[#E5A952]/50"
-                : "text-[#C9C4B8]/60 hover:text-white"
+                ? "bg-white text-black font-extrabold shadow-sm border border-white"
+                : "text-neutral-400 hover:text-white"
             }`}
           >
             FalkorDB Subgraph
@@ -181,16 +181,16 @@ export default function RunDetailsPage() {
           <div className="space-y-6">
             {/* Directly Modified Symbols */}
             <div className="craft-card overflow-hidden">
-              <div className="px-5 py-3.5 bg-[#121A2B] border-b border-[#1B3B3F] flex items-center justify-between">
+              <div className="px-5 py-3.5 bg-black/60 border-b border-white/10 flex items-center justify-between">
                 <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#8B5E3C]" />
+                  <span className="w-2 h-2 rounded-full bg-white" />
                   Directly Modified Symbols
                 </h3>
-                <span className="text-[11px] font-mono text-[#C9C4B8]/70">AST Diff Inspector</span>
+                <span className="text-[11px] font-mono text-neutral-400">AST Diff Inspector</span>
               </div>
               <div className="overflow-x-auto text-xs font-mono">
                 <table className="w-full text-left">
-                  <thead className="bg-[#0B0D10] border-b border-[#1B3B3F] text-[#C9C4B8]/60">
+                  <thead className="bg-black/80 border-b border-white/10 text-neutral-400">
                     <tr>
                       <th className="py-2.5 px-5">Symbol Name</th>
                       <th className="py-2.5 px-5">File Path</th>
@@ -198,14 +198,14 @@ export default function RunDetailsPage() {
                       <th className="py-2.5 px-5">Diff Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#1B3B3F]/60 text-[#C9C4B8]">
+                  <tbody className="divide-y divide-white/10 text-neutral-300">
                     {run.impact.changed_symbols.map((s, idx) => (
-                      <tr key={idx} className="hover:bg-[#0B0D10]/50 transition-colors">
-                        <td className="py-3 px-5 text-[#8B5E3C] font-bold">{s.name}</td>
-                        <td className="py-3 px-5 text-[#C9C4B8]/70">{s.file_path}</td>
+                      <tr key={idx} className="hover:bg-white/5 transition-colors">
+                        <td className="py-3 px-5 text-white font-bold">{s.name}</td>
+                        <td className="py-3 px-5 text-neutral-400">{s.file_path}</td>
                         <td className="py-3 px-5">{s.start_line}–{s.end_line}</td>
                         <td className="py-3 px-5">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#8B5E3C]/20 text-[#8B5E3C] border border-[#8B5E3C]/40">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white/15 text-white border border-white/30">
                             MODIFIED
                           </span>
                         </td>
@@ -218,28 +218,28 @@ export default function RunDetailsPage() {
 
             {/* Downstream Callers */}
             <div className="craft-card overflow-hidden">
-              <div className="px-5 py-3.5 bg-[#121A2B] border-b border-[#1B3B3F] flex items-center justify-between">
+              <div className="px-5 py-3.5 bg-black/60 border-b border-white/10 flex items-center justify-between">
                 <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#5B4A5F]" />
+                  <span className="w-2 h-2 rounded-full bg-neutral-400" />
                   Downstream Impacted Callers (FalkorDB Multi-Hop Traversal)
                 </h3>
-                <span className="text-[11px] font-mono text-[#C9C4B8]/70">Cypher CALLS Query</span>
+                <span className="text-[11px] font-mono text-neutral-400">Cypher CALLS Query</span>
               </div>
               <div className="overflow-x-auto text-xs font-mono">
                 <table className="w-full text-left">
-                  <thead className="bg-[#0B0D10] border-b border-[#1B3B3F] text-[#C9C4B8]/60">
+                  <thead className="bg-black/80 border-b border-white/10 text-neutral-400">
                     <tr>
                       <th className="py-2.5 px-5">Caller Symbol</th>
                       <th className="py-2.5 px-5">Distance</th>
                       <th className="py-2.5 px-5">FalkorDB Call Chain</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#1B3B3F]/60 text-[#C9C4B8]">
+                  <tbody className="divide-y divide-white/10 text-neutral-300">
                     {run.impact.impacted_symbols.map((imp, idx) => (
-                      <tr key={idx} className="hover:bg-[#0B0D10]/50 transition-colors">
-                        <td className="py-3 px-5 text-[#C9C4B8] font-bold">{imp.symbol.name}</td>
-                        <td className="py-3 px-5 text-[#C9C4B8]/70">{imp.hops_from_change} hop(s)</td>
-                        <td className="py-3 px-5 text-zinc-200 font-semibold">{imp.path_to_change.join(" → ")}</td>
+                      <tr key={idx} className="hover:bg-white/5 transition-colors">
+                        <td className="py-3 px-5 text-white font-bold">{imp.symbol.name}</td>
+                        <td className="py-3 px-5 text-neutral-400">{imp.hops_from_change} hop(s)</td>
+                        <td className="py-3 px-5 text-neutral-200 font-semibold">{imp.path_to_change.join(" → ")}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -253,23 +253,23 @@ export default function RunDetailsPage() {
         {activeTab === "plan" && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 craft-card overflow-hidden">
-              <div className="px-5 py-4 bg-[#121A2B] border-b border-[#1B3B3F] flex items-center justify-between">
+              <div className="px-5 py-4 bg-black/60 border-b border-white/10 flex items-center justify-between">
                 <div>
                   <h3 className="text-sm font-bold text-white tracking-tight">
                     Ranked Regression Test Plan
                   </h3>
-                  <p className="text-xs text-[#C9C4B8]/60 mt-0.5">
+                  <p className="text-xs text-neutral-400 mt-0.5">
                     GBDT prioritized under 300s budget based on graph distance and historical defect signal.
                   </p>
                 </div>
-                <span className="text-xs font-mono text-[#C9C4B8] px-2 py-0.5 rounded bg-[#0B0D10] border border-[#1B3B3F]">
+                <span className="text-xs font-mono text-neutral-300 px-2 py-0.5 rounded bg-white/10 border border-white/20">
                   Model: GBDT-v1
                 </span>
               </div>
 
               <div className="overflow-x-auto text-xs font-mono">
                 <table className="w-full text-left">
-                  <thead className="bg-[#0B0D10] border-b border-[#1B3B3F] text-[#C9C4B8]/60">
+                  <thead className="bg-black/80 border-b border-white/10 text-neutral-400">
                     <tr>
                       <th className="py-3 px-5">Rank</th>
                       <th className="py-3 px-5">Test Case</th>
@@ -278,22 +278,22 @@ export default function RunDetailsPage() {
                       <th className="py-3 px-5 text-right">Inspect</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#1B3B3F]/60 text-[#C9C4B8]">
+                  <tbody className="divide-y divide-white/10 text-neutral-300">
                     {run.plan?.selected_tests.map((t) => (
                       <tr
                         key={t.rank}
                         onClick={() => setSelectedTest(t)}
                         className={`cursor-pointer transition-colors ${
                           selectedTest?.name === t.name
-                            ? "bg-[#E5A952]/20 text-white"
-                            : "hover:bg-[#0B0D10]/50"
+                            ? "bg-white/15 text-white"
+                            : "hover:bg-white/5"
                         }`}
                       >
                         <td className="py-3.5 px-5 font-bold text-white">#{t.rank}</td>
-                        <td className="py-3.5 px-5 text-[#2E4A32] font-bold">{t.name}</td>
-                        <td className="py-3.5 px-5 text-[#C9C4B8] font-bold">{t.rank_score.toFixed(2)}</td>
-                        <td className="py-3.5 px-5 text-[#C9C4B8]/70">{t.estimated_duration_seconds.toFixed(1)}s</td>
-                        <td className="py-3.5 px-5 text-right text-[#E5A952]">
+                        <td className="py-3.5 px-5 text-white font-bold">{t.name}</td>
+                        <td className="py-3.5 px-5 text-neutral-200 font-bold">{t.rank_score.toFixed(2)}</td>
+                        <td className="py-3.5 px-5 text-neutral-400">{t.estimated_duration_seconds.toFixed(1)}s</td>
+                        <td className="py-3.5 px-5 text-right text-white">
                           <ChevronRight className="w-4 h-4 inline" />
                         </td>
                       </tr>
@@ -306,10 +306,10 @@ export default function RunDetailsPage() {
             {/* Test Evidence Detail Inspector */}
             <div className="craft-card p-5 text-xs font-mono space-y-4 flex flex-col justify-between">
               <div className="space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-[#1B3B3F]">
+                <div className="flex items-center justify-between pb-3 border-b border-white/10">
                   <span className="text-xs font-bold text-white uppercase tracking-wider">Evidence Inspector</span>
                   {selectedTest && (
-                    <span className="text-xs text-[#2E4A32] font-bold px-2 py-0.5 rounded bg-[#2E4A32]/20 border border-[#2E4A32]/40">
+                    <span className="text-xs text-white font-bold px-2 py-0.5 rounded bg-white/15 border border-white/30">
                       Rank #{selectedTest.rank}
                     </span>
                   )}
@@ -318,26 +318,26 @@ export default function RunDetailsPage() {
                 {selectedTest ? (
                   <div className="space-y-4">
                     <div>
-                      <div className="text-[10px] text-[#C9C4B8]/50 uppercase tracking-wider">Test Identifier</div>
+                      <div className="text-[10px] text-neutral-500 uppercase tracking-wider">Test Identifier</div>
                       <div className="text-xs font-bold text-white break-all mt-1">{selectedTest.name}</div>
                     </div>
 
                     <div>
-                      <div className="text-[10px] text-[#C9C4B8]/50 uppercase tracking-wider">ML Prioritization Score</div>
-                      <div className="text-sm font-bold text-[#C9C4B8] mt-1">{selectedTest.rank_score.toFixed(3)}</div>
+                      <div className="text-[10px] text-neutral-500 uppercase tracking-wider">ML Prioritization Score</div>
+                      <div className="text-sm font-bold text-white mt-1">{selectedTest.rank_score.toFixed(3)}</div>
                     </div>
 
                     <div>
-                      <div className="text-[10px] text-[#C9C4B8]/50 uppercase tracking-wider">Predicted Duration</div>
-                      <div className="text-xs text-white mt-1">{selectedTest.estimated_duration_seconds.toFixed(1)}s</div>
+                      <div className="text-[10px] text-neutral-500 uppercase tracking-wider">Predicted Duration</div>
+                      <div className="text-xs text-neutral-300 mt-1">{selectedTest.estimated_duration_seconds.toFixed(1)}s</div>
                     </div>
 
                     <div>
-                      <div className="text-[10px] text-[#C9C4B8]/50 uppercase tracking-wider">Graph Selection Rationale</div>
-                      <ul className="mt-1.5 space-y-1.5 text-xs text-[#C9C4B8]">
+                      <div className="text-[10px] text-neutral-500 uppercase tracking-wider">Graph Selection Rationale</div>
+                      <ul className="mt-1.5 space-y-1.5 text-xs text-neutral-300">
                         {selectedTest.reasons.map((r: string, idx: number) => (
                           <li key={idx} className="flex items-start gap-2">
-                            <span className="text-[#E5A952] shrink-0 font-bold">•</span>
+                            <span className="text-white shrink-0 font-bold">•</span>
                             <span>{r}</span>
                           </li>
                         ))}
@@ -355,16 +355,16 @@ export default function RunDetailsPage() {
                       isDirect={selectedTest.rank === 1}
                     />
 
-                    <div className="p-3 rounded-lg border border-[#1B3B3F] bg-[#0B0D10] text-[11px] text-[#C9C4B8]/80 leading-relaxed font-mono">
+                    <div className="p-3 rounded-lg border border-white/15 bg-black/60 text-[11px] text-neutral-300 leading-relaxed font-mono">
                       Prioritized by GBDT ranker due to immediate proximity in FalkorDB to modified AST symbols.
                     </div>
                   </div>
                 ) : (
-                  <div className="text-[#C9C4B8]/50 font-mono">Select a test from the table to inspect graph attribution.</div>
+                  <div className="text-neutral-500 font-mono">Select a test from the table to inspect graph attribution.</div>
                 )}
               </div>
 
-              <div className="pt-3 border-t border-[#1B3B3F] text-[11px] text-[#C9C4B8]/60 font-mono">
+              <div className="pt-3 border-t border-white/10 text-[11px] text-neutral-500 font-mono">
                 FalkorDB Provenance Model
               </div>
             </div>
@@ -384,7 +384,7 @@ export default function RunDetailsPage() {
                 survivingMutants={run.verification.surviving_mutants}
               />
             ) : (
-              <div className="craft-card p-6 text-[#C9C4B8]/50 font-mono text-xs text-center">
+              <div className="craft-card p-6 text-neutral-500 font-mono text-xs text-center">
                 No mutation verification data available for this run.
               </div>
             )}
@@ -399,30 +399,30 @@ export default function RunDetailsPage() {
                 <h3 className="text-sm font-bold text-white tracking-tight">
                   Autonomous Graph Reasoning Agent Trace
                 </h3>
-                <p className="text-xs text-[#C9C4B8]/60 mt-0.5">
+                <p className="text-xs text-neutral-400 mt-0.5">
                   5 deterministic tool calls across AST symbols, CALLS edges, and test candidate graphs in FalkorDB.
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#2E4A32]/25 text-[#C9C4B8] border border-[#2E4A32]/50">
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/15 text-white border border-white/30">
                 {run.investigation?.verdict || "VERIFIED_SAFE"}
               </span>
             </div>
 
             <div className="craft-card p-5 space-y-3">
-              <h4 className="text-[10px] text-[#C9C4B8]/50 uppercase tracking-wider">Tool Execution Trace</h4>
+              <h4 className="text-[10px] text-neutral-500 uppercase tracking-wider">Tool Execution Trace</h4>
               <div className="space-y-2">
                 {(run.investigation?.tool_trace || []).map((step, idx) => {
                   const parts = step.split(" -> ");
                   return (
                     <div
                       key={idx}
-                      className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[#0B0D10]/80 border border-[#1B3B3F] text-[#C9C4B8]"
+                      className="flex items-center gap-2.5 p-2.5 rounded-lg bg-black/60 border border-white/15 text-neutral-200"
                     >
-                      <span className="w-5 h-5 rounded-md bg-[#E5A952]/20 border border-[#E5A952]/40 text-[#E5A952] flex items-center justify-center text-[10px] font-bold shrink-0">
+                      <span className="w-5 h-5 rounded-md bg-white/15 border border-white/30 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                         {idx + 1}
                       </span>
-                      <span className="text-[#C9C4B8] font-semibold">{parts[0]}</span>
-                      <span className="text-[#C9C4B8]/40">→</span>
+                      <span className="text-white font-semibold">{parts[0]}</span>
+                      <span className="text-neutral-500">→</span>
                       <span>{parts[1] || ""}</span>
                     </div>
                   );
@@ -431,8 +431,8 @@ export default function RunDetailsPage() {
             </div>
 
             <div className="craft-card p-5 space-y-3">
-              <h4 className="text-[10px] text-[#C9C4B8]/50 uppercase tracking-wider">Grounded Graph Findings</h4>
-              <pre className="p-4 rounded-lg bg-[#0B0D10] border border-[#1B3B3F] text-xs text-[#C9C4B8] whitespace-pre-wrap leading-relaxed font-mono">
+              <h4 className="text-[10px] text-neutral-500 uppercase tracking-wider">Grounded Graph Findings</h4>
+              <pre className="p-4 rounded-lg bg-black/60 border border-white/15 text-xs text-neutral-300 whitespace-pre-wrap leading-relaxed font-mono">
                 {run.investigation?.evidence_summary}
               </pre>
             </div>
@@ -442,7 +442,7 @@ export default function RunDetailsPage() {
         {/* Tab 5: Subgraph Canvas */}
         {activeTab === "graph" && (
           <div className="space-y-3">
-            <div className="text-xs font-mono text-[#C9C4B8]/80">
+            <div className="text-xs font-mono text-neutral-400">
               Interactive FalkorDB subgraph for this pull request change:
             </div>
             <GraphCanvas initialData={DEMO_GRAPH_DATA} />

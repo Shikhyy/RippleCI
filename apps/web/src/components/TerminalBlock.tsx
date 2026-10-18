@@ -106,18 +106,18 @@ export function TerminalBlock() {
   };
 
   return (
-    <div className="rounded-2xl border border-[#1B3B3F] bg-[#0B0D10] overflow-hidden shadow-2xl">
+    <div className="rounded-2xl border border-white/15 bg-black/55 backdrop-blur-2xl overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.15)]">
       {/* Top Header */}
-      <div className="px-4 py-3 bg-[#121A2B] border-b border-[#1B3B3F] flex flex-wrap items-center justify-between gap-3">
+      <div className="px-4 py-3 bg-black/40 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 backdrop-blur-md">
         {/* Terminal dots */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 mr-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#8B5E3C] inline-block" />
-            <span className="w-2.5 h-2.5 rounded-full bg-[#E5A952] inline-block" />
-            <span className="w-2.5 h-2.5 rounded-full bg-[#2E4A32] inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-white/20 inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-white/40 inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-white/70 inline-block" />
           </div>
-          <span className="text-xs font-mono text-[#C9C4B8]/80 font-semibold flex items-center gap-1.5">
-            <TerminalIcon className="w-3.5 h-3.5 text-[#E5A952]" />
+          <span className="text-xs font-mono text-neutral-300 font-semibold flex items-center gap-1.5">
+            <TerminalIcon className="w-3.5 h-3.5 text-white" />
             <span>ripple-cli</span>
           </span>
         </div>
@@ -132,8 +132,8 @@ export function TerminalBlock() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-3 py-1 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 ${
                   isActive
-                    ? "bg-[#E5A952]/25 text-[#C9C4B8] font-bold border border-[#E5A952]/60 shadow-[0_0_10px_rgba(229,169,82,0.25)]"
-                    : "text-[#C9C4B8]/60 hover:text-white hover:bg-white/[0.04]"
+                    ? "bg-white/15 text-white font-bold border border-white/30 shadow-[0_0_10px_rgba(255,255,255,0.15)] backdrop-blur-md"
+                    : "text-neutral-400 hover:text-white hover:bg-white/[0.06]"
                 }`}
               >
                 <span>{tab.label}</span>
@@ -145,26 +145,26 @@ export function TerminalBlock() {
         {/* Copy command button */}
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 text-xs font-mono text-[#C9C4B8]/70 hover:text-white px-2.5 py-1 rounded-lg bg-[#0B0D10]/60 hover:bg-white/[0.06] border border-[#1B3B3F] transition-all ml-auto sm:ml-0"
+          className="flex items-center gap-1.5 text-xs font-mono text-neutral-300 hover:text-white px-2.5 py-1 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/15 transition-all ml-auto sm:ml-0 backdrop-blur-md"
         >
-          {copied ? <Check className="w-3.5 h-3.5 text-[#2E4A32]" /> : <Copy className="w-3.5 h-3.5" />}
+          {copied ? <Check className="w-3.5 h-3.5 text-white" /> : <Copy className="w-3.5 h-3.5" />}
           <span>{copied ? "Copied" : "Copy"}</span>
         </button>
       </div>
 
       {/* Terminal prompt bar */}
-      <div className="px-5 py-2.5 bg-[#0B0D10]/90 border-b border-[#1B3B3F]/70 flex items-center justify-between text-xs font-mono">
+      <div className="px-5 py-2.5 bg-black/60 border-b border-white/10 flex items-center justify-between text-xs font-mono backdrop-blur-md">
         <div className="flex items-center gap-2">
-          <span className="text-[#E5A952] font-bold">$</span>
+          <span className="text-white font-bold">$</span>
           <span className="text-white font-semibold">{current.command}</span>
         </div>
-        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#1B3B3F]/70 text-[#C9C4B8] border border-[#1B3B3F] hidden sm:inline">
+        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/[0.06] text-neutral-300 border border-white/15 hidden sm:inline">
           {current.badge}
         </span>
       </div>
 
       {/* Output Body */}
-      <div className="p-5 font-mono text-xs text-[#C9C4B8]/95 overflow-x-auto leading-relaxed max-h-[360px] scrollbar-thin bg-[#0B0D10]">
+      <div className="p-5 font-mono text-xs text-neutral-200 overflow-x-auto leading-relaxed max-h-[360px] scrollbar-thin bg-black/35 backdrop-blur-md">
         <pre className="whitespace-pre">{current.output}</pre>
       </div>
     </div>

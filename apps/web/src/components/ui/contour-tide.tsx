@@ -31,7 +31,7 @@ export interface ContourTideProps {
   children?: React.ReactNode;
 }
 
-const DEFAULT_COLORS: [string, string] = ["#1B3B3F", "#E5A952"];
+const DEFAULT_COLORS: [string, string] = ["#333333", "#FFFFFF"];
 
 // GLSL Common Definition and Wave Physics
 const SHADER_COMMON = `
@@ -174,10 +174,10 @@ void main() {
   float brightness = (0.24 + 0.05 * lit + 0.9 * fresnel * distant + (glint * 2.6 + 2.4 * crest * crest * crest + froth * 2.6) * mix(0.3, 1.0, distant)) * pileUp * near * far;
   vTone = clamp(glint * 0.9 + crest * 0.6 + froth, 0.0, 1.0);
 
-  float pixels = uSize * uFocal / max(-view.z, 0.05) * (1.0 + crest * 0.35) * uPixelRatio;
+  float pixels = uSize * uFocal / max(-view.z, 0.05) * (1.0 + crest * 0.4) * uPixelRatio;
   float coverage = min(pixels, 1.0);
   vBright = brightness * coverage;
-  gl_PointSize = clamp(pixels, 1.0, 6.0 * uPixelRatio) * (1.0 + uGlow * 1.6);
+  gl_PointSize = clamp(pixels, 1.25, 7.5 * uPixelRatio) * (1.0 + uGlow * 1.8);
 }
 `;
 
@@ -196,11 +196,11 @@ varying float vTone;
 void main() {
   vec2 c = gl_PointCoord - 0.5;
   float r = length(c) * 2.0;
-  float edge = 1.0 / (1.0 + uGlow * 1.6);
+  float edge = 1.0 / (1.0 + uGlow * 1.8);
   float core = 1.0 - smoothstep(edge * 0.45, edge, r);
-  float halo = exp(-r * r * 7.0) * uGlow * 0.28;
-  float amount = (core + halo) * vBright * uIntensity;
-  if (amount < 0.002) discard;
+  float halo = exp(-r * r * 5.5) * uGlow * 0.45;
+  float amount = (core + halo * 1.25) * vBright * uIntensity * 1.65;
+  if (amount < 0.001) discard;
   vec3 color = mix(uTrough, uCrest, vTone);
   if (uInk > 0.5) {
     float alpha = clamp(amount * 1.6, 0.0, 1.0);
@@ -249,22 +249,22 @@ const createPrng = (seed: number) => {
 
 export function ContourTide({
   colors = DEFAULT_COLORS,
-  backgroundColor = "#0B0D10",
-  density = 1,
-  particleSize = 1,
-  waveHeight = 1,
-  choppiness = 0.8,
-  wavelength = 1,
-  windAngle = 0,
-  horizon = 0.1,
-  fog = 1,
-  glow = 0.35,
-  foam = 1,
-  speed = 1,
+  backgroundColor = "#000000",
+  density = 1.1,
+  particleSize = 1.35,
+  waveHeight = 1.3,
+  choppiness = 0.85,
+  wavelength = 1.2,
+  windAngle = 10,
+  horizon = 0.2,
+  fog = 1.1,
+  glow = 0.65,
+  foam = 1.45,
+  speed = 0.75,
   interactive = true,
-  parallax = 1,
-  swell = 1,
-  swellRadius = 0.9,
+  parallax = 1.2,
+  swell = 1.3,
+  swellRadius = 1.1,
   clickRipples = true,
   seed = 0,
   paused = false,

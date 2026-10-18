@@ -29,7 +29,7 @@ export const CanvasRevealEffect: React.FC<CanvasRevealEffectProps> = ({
         animationSpeed={animationSpeed}
       />
       {showGradient && (
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0D10] via-transparent to-[#0B0D10]/60 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60 pointer-events-none" />
       )}
       <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,white_30%,transparent_80%)] pointer-events-none" />
     </div>

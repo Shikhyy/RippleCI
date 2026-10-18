@@ -110,51 +110,51 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B0D10]/85 backdrop-blur-sm">
-      <div className="w-full max-w-xl bg-[#121A2B] border border-[#1B3B3F] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-200">
+      <div className="w-full max-w-xl bg-black/85 border border-white/20 rounded-2xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_25px_60px_rgba(0,0,0,0.9)] backdrop-blur-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Modal Header */}
-        <div className="p-5 border-b border-[#1B3B3F] flex items-center justify-between bg-[#0B0D10]/80">
+        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-black/50">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#E5A952]/20 border border-[#E5A952]/40 flex items-center justify-center text-[#E5A952]">
+            <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-[0_0_10px_rgba(255,255,255,0.15)]">
               <FolderGit2 className="w-5 h-5" />
             </div>
             <div>
               <h2 className="text-base font-bold text-white tracking-tight">Connect Repository</h2>
-              <p className="text-xs text-[#C9C4B8]/70">
+              <p className="text-xs text-neutral-400">
                 Index code AST into FalkorDB for graph-native release intelligence.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-[#C9C4B8]/60 hover:text-white hover:bg-white/[0.08] transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Tab Selection */}
-        <div className="px-5 pt-3 pb-0 border-b border-[#1B3B3F] flex items-center gap-2 text-xs font-medium">
+        <div className="px-5 pt-3 pb-0 border-b border-white/10 flex items-center gap-2 text-xs font-medium">
           <button
             onClick={() => setActiveTab("github")}
             className={`pb-2.5 px-2 border-b-2 flex items-center gap-1.5 transition-all ${
               activeTab === "github"
-                ? "border-[#E5A952] text-[#C9C4B8] font-semibold"
-                : "border-transparent text-[#C9C4B8]/50 hover:text-zinc-200"
+                ? "border-white text-white font-semibold"
+                : "border-transparent text-neutral-400 hover:text-white"
             }`}
           >
-            <Github className="w-3.5 h-3.5 text-[#E5A952]" />
+            <Github className="w-3.5 h-3.5" />
             <span>GitHub</span>
           </button>
           <button
             onClick={() => setActiveTab("local")}
             className={`pb-2.5 px-2 border-b-2 flex items-center gap-1.5 transition-all ${
               activeTab === "local"
-                ? "border-[#E5A952] text-[#C9C4B8] font-semibold"
-                : "border-transparent text-[#C9C4B8]/50 hover:text-zinc-200"
+                ? "border-white text-white font-semibold"
+                : "border-transparent text-neutral-400 hover:text-white"
             }`}
           >
-            <Terminal className="w-3.5 h-3.5 text-[#E5A952]" />
+            <Terminal className="w-3.5 h-3.5" />
             <span>Local</span>
           </button>
         </div>
@@ -164,13 +164,13 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
           {/* TAB 1: GitHub */}
           {activeTab === "github" && (
             <div className="space-y-4">
-              <div className="text-xs text-[#C9C4B8]/80 leading-relaxed">
+              <div className="text-xs text-neutral-300 leading-relaxed">
                 Connect any public or private GitHub repository. RippleCI queries pull requests, maps the blast radius across AST callers, and prioritizes tests using FalkorDB.
               </div>
 
               {/* Presets */}
               <div className="space-y-1.5">
-                <span className="text-[11px] font-mono uppercase text-[#C9C4B8]/60 tracking-wider">Demo Repositories (Mock Data):</span>
+                <span className="text-[11px] font-mono uppercase text-neutral-500 tracking-wider">Demo Repositories (Mock Data):</span>
                 <div className="flex flex-wrap gap-1.5">
                   {[
                     { id: "fastapi/fastapi", label: "fastapi" },
@@ -183,13 +183,13 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
                         setGithubInput(preset.id);
                         handleConnectGitHub(preset.id);
                       }}
-                      className="text-xs font-mono px-2.5 py-1 rounded-lg bg-[#0B0D10]/70 hover:bg-[#E5A952]/20 border border-[#1B3B3F] text-[#C9C4B8] transition-all hover:border-[#E5A952]"
+                      className="text-xs font-mono px-2.5 py-1 rounded-lg bg-black/60 hover:bg-white/10 border border-white/15 text-neutral-300 hover:text-white hover:border-white/30 transition-all"
                     >
                       {preset.label}
                     </button>
                   ))}
                 </div>
-                <div className="text-[10px] text-[#C9C4B8]/50 mt-1">
+                <div className="text-[10px] text-neutral-500 mt-1">
                   Other GitHub repos will show demo mode. Use "Local" tab for real analysis.
                 </div>
               </div>
@@ -197,25 +197,25 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
               {/* Form Input */}
               <div className="space-y-3 text-xs">
                 <div>
-                  <label className="block text-[11px] font-mono text-[#C9C4B8]/60 mb-1">
+                  <label className="block text-[11px] font-mono text-neutral-400 mb-1">
                     Repository Identifier or URL:
                   </label>
                   <div className="relative">
-                    <Github className="w-4 h-4 absolute left-3 top-2.5 text-[#E5A952]" />
+                    <Github className="w-4 h-4 absolute left-3 top-2.5 text-neutral-400" />
                     <input
                       type="text"
                       value={githubInput}
                       onChange={(e) => setGithubInput(e.target.value)}
                       placeholder="e.g. fastapi/fastapi or https://github.com/..."
-                      className="w-full bg-[#0B0D10]/80 border border-[#1B3B3F] rounded-lg pl-9 pr-3 py-2 text-white font-mono focus:outline-none focus:border-[#E5A952] transition-colors text-xs"
+                      className="w-full bg-black/70 border border-white/15 rounded-lg pl-9 pr-3 py-2 text-white font-mono focus:outline-none focus:border-white transition-colors text-xs"
                     />
                   </div>
                 </div>
               </div>
 
               {connectSuccess && (
-                <div className="p-3 rounded-xl bg-[#2E4A32]/25 border border-[#2E4A32]/45 text-[#C9C4B8] font-mono text-xs flex items-center gap-2">
-                  <Check className="w-4 h-4 text-[#2E4A32]" />
+                <div className="p-3 rounded-xl bg-white/10 border border-white/30 text-white font-mono text-xs flex items-center gap-2">
+                  <Check className="w-4 h-4 text-white" />
                   <span>{connectSuccess} — opening dashboard...</span>
                 </div>
               )}
@@ -223,7 +223,7 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
               <button
                 onClick={() => handleConnectGitHub()}
                 disabled={githubLoading || !githubInput.trim()}
-                className="w-full flex items-center justify-center gap-2 bg-[#E5A952] hover:bg-[#F5BD66] text-[#0B0D10] font-bold py-2.5 rounded-xl transition-all shadow-lg disabled:opacity-50 active:scale-[0.99] text-xs font-mono"
+                className="w-full flex items-center justify-center gap-2 bg-white hover:bg-neutral-200 text-black font-bold py-2.5 rounded-xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] disabled:opacity-50 active:scale-[0.99] text-xs font-mono"
               >
                 {githubLoading ? (
                   <>
@@ -243,40 +243,40 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
           {/* TAB 2: Local Workspace */}
           {activeTab === "local" && (
             <div className="space-y-4 text-xs">
-              <div className="text-xs text-[#C9C4B8]/80 leading-relaxed">
+              <div className="text-xs text-neutral-300 leading-relaxed">
                 Connect a local Python project on this machine. RippleCI scans the codebase with tree-sitter AST, constructs the call graph, and loads it into your FalkorDB instance.
               </div>
 
               <div className="space-y-3">
                 <div>
-                  <label className="block text-[11px] font-mono text-[#C9C4B8]/60 mb-1">
+                  <label className="block text-[11px] font-mono text-neutral-400 mb-1">
                     Repository Path (Relative or Absolute):
                   </label>
                   <input
                     type="text"
                     value={repoPath}
                     onChange={(e) => setRepoPath(e.target.value)}
-                    className="w-full bg-[#0B0D10]/80 border border-[#1B3B3F] rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-[#E5A952] text-xs"
+                    className="w-full bg-black/70 border border-white/15 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-white text-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-mono text-[#C9C4B8]/60 mb-1">
+                  <label className="block text-[11px] font-mono text-neutral-400 mb-1">
                     Project Display Name:
                   </label>
                   <input
                     type="text"
                     value={repoName}
                     onChange={(e) => setRepoName(e.target.value)}
-                    className="w-full bg-[#0B0D10]/80 border border-[#1B3B3F] rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-[#E5A952] text-xs"
+                    className="w-full bg-black/70 border border-white/15 rounded-lg px-3 py-2 text-white font-mono focus:outline-none focus:border-white text-xs"
                   />
                 </div>
               </div>
 
               {/* Progress Terminal Window */}
               {indexing && (
-                <div className="p-3 bg-[#0B0D10] rounded-xl border border-[#1B3B3F] font-mono text-[11px] text-[#C9C4B8]/90 space-y-1">
-                  <div className="text-[#E5A952] font-bold flex items-center gap-1.5">
+                <div className="p-3 bg-black/90 rounded-xl border border-white/15 font-mono text-[11px] text-neutral-200 space-y-1">
+                  <div className="text-white font-bold flex items-center gap-1.5">
                     <RefreshCw className="w-3.5 h-3.5 animate-spin" />
                     <span>Indexing in progress...</span>
                   </div>
@@ -289,7 +289,7 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
               <button
                 onClick={handleConnectLocal}
                 disabled={indexing || !repoPath.trim()}
-                className="w-full flex items-center justify-center gap-2 bg-[#E5A952] hover:bg-[#F5BD66] text-[#0B0D10] font-bold py-2.5 rounded-xl transition-all shadow-lg disabled:opacity-50 active:scale-[0.99] text-xs font-mono"
+                className="w-full flex items-center justify-center gap-2 bg-white hover:bg-neutral-200 text-black font-bold py-2.5 rounded-xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] disabled:opacity-50 active:scale-[0.99] text-xs font-mono"
               >
                 {indexing ? (
                   <>

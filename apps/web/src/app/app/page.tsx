@@ -265,7 +265,7 @@ ${data.merge_recommendation}
   const activePRAnalysis = selectedPR ? analyzedPRs[selectedPR.number] : null;
 
   return (
-    <div className="min-h-screen bg-[#0B0D10] text-[#C9C4B8] flex flex-col md:flex-row relative font-sans">
+    <div className="min-h-screen bg-black text-neutral-300 flex flex-col md:flex-row relative font-sans">
       {/* Connect Repository Modal */}
       <ConnectRepoModal
         isOpen={isConnectModalOpen}
@@ -287,11 +287,11 @@ ${data.merge_recommendation}
       />
 
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[#E5A952]/20 bg-[#0B0D10]/90 backdrop-blur-md flex flex-col justify-between p-5 shrink-0 z-10">
+      <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-white/10 bg-black/60 backdrop-blur-2xl flex flex-col justify-between p-5 shrink-0 z-10">
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl bg-[#121A2B] border border-[#E5A952]/30 flex items-center justify-center shadow-[0_0_15px_rgba(229,169,82,0.2)]">
-              <svg className="w-4 h-4 text-[#E5A952]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.15)]">
+              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="6" cy="12" r="3" />
                 <circle cx="18" cy="6" r="3" />
                 <circle cx="18" cy="18" r="3" />
@@ -300,9 +300,9 @@ ${data.merge_recommendation}
             </div>
             <div className="flex items-baseline gap-1">
               <span className="font-extrabold text-base tracking-tight text-white">
-                Ripple<span className="text-[#E5A952]">CI</span>
+                Ripple<span className="text-neutral-400">CI</span>
               </span>
-              <span className="text-[10px] font-mono text-[#C9C4B8]/80 font-bold px-1.5 py-0.5 rounded bg-white/[0.05]">
+              <span className="text-[10px] font-mono text-neutral-400 font-bold px-1.5 py-0.5 rounded bg-white/[0.08]">
                 v0.1.0
               </span>
             </div>
@@ -314,14 +314,14 @@ ${data.merge_recommendation}
               onClick={() => setActiveTab("prs")}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
                 activeTab === "prs"
-                  ? "bg-[#E5A952]/20 text-[#C9C4B8] font-bold border border-[#E5A952]/40 shadow-[0_0_12px_rgba(229,169,82,0.15)]"
-                  : "text-[#C9C4B8]/70 hover:text-white hover:bg-white/[0.04]"
+                  ? "bg-white text-black font-bold border border-white shadow-[0_0_15px_rgba(255,255,255,0.25)]"
+                  : "text-neutral-400 hover:text-white hover:bg-white/[0.06]"
               }`}
             >
-              <GitPullRequest className="w-4 h-4 text-[#E5A952]" />
+              <GitPullRequest className="w-4 h-4" />
               <span>PR Blast Radius</span>
               {githubPRs.length > 0 && (
-                <span className="ml-auto px-1.5 py-0.5 rounded text-[10px] font-mono bg-white/[0.08] text-[#C9C4B8]">
+                <span className={`ml-auto px-1.5 py-0.5 rounded text-[10px] font-mono ${activeTab === "prs" ? "bg-black/15 text-black font-bold" : "bg-white/10 text-neutral-300"}`}>
                   {githubPRs.length}
                 </span>
               )}
@@ -331,11 +331,11 @@ ${data.merge_recommendation}
               onClick={() => setActiveTab("graph")}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
                 activeTab === "graph"
-                  ? "bg-[#E5A952]/20 text-[#C9C4B8] font-bold border border-[#E5A952]/40 shadow-[0_0_12px_rgba(229,169,82,0.15)]"
-                  : "text-[#C9C4B8]/70 hover:text-white hover:bg-white/[0.04]"
+                  ? "bg-white text-black font-bold border border-white shadow-[0_0_15px_rgba(255,255,255,0.25)]"
+                  : "text-neutral-400 hover:text-white hover:bg-white/[0.06]"
               }`}
             >
-              <Network className="w-4 h-4 text-[#E5A952]" />
+              <Network className="w-4 h-4" />
               <span>Interactive Graph</span>
             </button>
 
@@ -343,11 +343,11 @@ ${data.merge_recommendation}
               onClick={() => setActiveTab("simulator")}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
                 activeTab === "simulator"
-                  ? "bg-[#E5A952]/20 text-[#C9C4B8] font-bold border border-[#E5A952]/40 shadow-[0_0_12px_rgba(229,169,82,0.15)]"
-                  : "text-[#C9C4B8]/70 hover:text-white hover:bg-white/[0.04]"
+                  ? "bg-white text-black font-bold border border-white shadow-[0_0_15px_rgba(255,255,255,0.25)]"
+                  : "text-neutral-400 hover:text-white hover:bg-white/[0.06]"
               }`}
             >
-              <Sliders className="w-4 h-4 text-[#E5A952]" />
+              <Sliders className="w-4 h-4" />
               <span>Impact Simulator</span>
             </button>
 
@@ -355,11 +355,11 @@ ${data.merge_recommendation}
               onClick={() => setActiveTab("benchmark")}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
                 activeTab === "benchmark"
-                  ? "bg-[#E5A952]/20 text-[#C9C4B8] font-bold border border-[#E5A952]/40 shadow-[0_0_12px_rgba(229,169,82,0.15)]"
-                  : "text-[#C9C4B8]/70 hover:text-white hover:bg-white/[0.04]"
+                  ? "bg-white text-black font-bold border border-white shadow-[0_0_15px_rgba(255,255,255,0.25)]"
+                  : "text-neutral-400 hover:text-white hover:bg-white/[0.06]"
               }`}
             >
-              <BarChart3 className="w-4 h-4 text-[#E5A952]" />
+              <BarChart3 className="w-4 h-4" />
               <span>Strategy Benchmark</span>
             </button>
 
@@ -367,42 +367,42 @@ ${data.merge_recommendation}
               onClick={() => setActiveTab("runs")}
               className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
                 activeTab === "runs"
-                  ? "bg-[#E5A952]/20 text-[#C9C4B8] font-bold border border-[#E5A952]/40 shadow-[0_0_12px_rgba(229,169,82,0.15)]"
-                  : "text-[#C9C4B8]/70 hover:text-white hover:bg-white/[0.04]"
+                  ? "bg-white text-black font-bold border border-white shadow-[0_0_15px_rgba(255,255,255,0.25)]"
+                  : "text-neutral-400 hover:text-white hover:bg-white/[0.06]"
               }`}
             >
-              <Layers className="w-4 h-4 text-[#E5A952]" />
+              <Layers className="w-4 h-4" />
               <span>Release Runs</span>
             </button>
 
             <button
               onClick={() => setIsConnectModalOpen(true)}
-              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#E5A952] hover:text-[#C9C4B8] hover:bg-[#E5A952]/10 transition-all font-medium text-left mt-2 border border-[#E5A952]/20"
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-neutral-300 hover:text-white hover:bg-white/[0.08] transition-all font-medium text-left mt-2 border border-white/15"
             >
-              <Plus className="w-4 h-4 text-[#E5A952]" />
+              <Plus className="w-4 h-4 text-white" />
               <span>Connect Repository</span>
             </button>
           </nav>
         </div>
 
         {/* Engine Status Pod */}
-        <div className="p-4 rounded-2xl border border-[#E5A952]/25 bg-[#121A2B]/90 backdrop-blur-xl text-xs space-y-2 mt-6">
+        <div className="p-4 rounded-2xl border border-white/15 bg-black/70 backdrop-blur-xl text-xs space-y-2 mt-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
           <div className="flex items-center justify-between">
-            <span className="text-[#C9C4B8] font-medium flex items-center gap-1.5">
-              <Database className="w-3.5 h-3.5 text-[#E5A952]" />
+            <span className="text-white font-medium flex items-center gap-1.5">
+              <Database className="w-3.5 h-3.5 text-white" />
               <span>FalkorDB Engine</span>
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold font-mono bg-[#2E4A32]/20 text-[#C9C4B8] border border-[#2E4A32]/25">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#2E4A32] animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono bg-white/15 text-white border border-white/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_6px_#ffffff]" />
               ONLINE
             </span>
           </div>
-          <div className="text-[11px] font-mono text-[#C9C4B8]/70 truncate">
+          <div className="text-[11px] font-mono text-neutral-400 truncate">
             {health.graph_url || "redis://127.0.0.1:6379"}
           </div>
-          <div className="flex items-center justify-between text-[10px] font-mono text-[#C9C4B8]/50 pt-1 border-t border-white/[0.04]">
+          <div className="flex items-center justify-between text-[10px] font-mono text-neutral-500 pt-1 border-t border-white/[0.08]">
             <span>AST Multi-Hop</span>
-            <span className="text-[#E5A952]">Active</span>
+            <span className="text-white font-bold">Active</span>
           </div>
         </div>
       </aside>
@@ -410,9 +410,9 @@ ${data.merge_recommendation}
       {/* Main Workspace Area */}
       <main className="flex-1 flex flex-col min-w-0 z-10">
         {/* Cockpit Top Bar */}
-        <header className="h-16 border-b border-[#E5A952]/20 px-6 flex items-center justify-between bg-[#0B0D10]/80 backdrop-blur-md">
+        <header className="h-16 border-b border-white/10 px-6 flex items-center justify-between bg-black/60 backdrop-blur-xl">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-[#C9C4B8]/70 uppercase tracking-wider hidden sm:inline">
+            <span className="text-xs font-mono text-neutral-400 uppercase tracking-wider hidden sm:inline">
               Repository:
             </span>
 
@@ -421,7 +421,7 @@ ${data.merge_recommendation}
               <select
                 value={selectedRepoId}
                 onChange={(e) => handleSelectRepository(e.target.value)}
-                className="bg-[#121A2B] border border-[#E5A952]/30 rounded-xl px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-[#E5A952] transition-colors cursor-pointer appearance-none pr-8"
+                className="bg-black/80 border border-white/20 rounded-xl px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-white transition-colors cursor-pointer appearance-none pr-8"
               >
                 {repositories.map((repo) => (
                   <option key={repo.id} value={repo.id}>
@@ -429,12 +429,12 @@ ${data.merge_recommendation}
                   </option>
                 ))}
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-[#C9C4B8]/70 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-3.5 h-3.5 text-neutral-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
 
             <button
               onClick={() => setIsConnectModalOpen(true)}
-              className="flex items-center gap-1 text-xs text-[#E5A952] hover:text-[#C9C4B8] px-2.5 py-1.5 rounded-xl border border-[#E5A952]/30 bg-[#E5A952]/10 hover:bg-[#E5A952]/20 transition-all font-mono"
+              className="flex items-center gap-1 text-xs text-neutral-200 hover:text-white px-2.5 py-1.5 rounded-xl border border-white/20 bg-white/[0.06] hover:bg-white/15 transition-all font-mono"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Connect</span>
@@ -443,7 +443,7 @@ ${data.merge_recommendation}
 
           {/* Quick presets switch */}
           <div className="hidden lg:flex items-center gap-2">
-            <span className="text-[11px] font-mono text-[#C9C4B8]/50 uppercase tracking-wider">Presets:</span>
+            <span className="text-[11px] font-mono text-neutral-500 uppercase tracking-wider">Presets:</span>
             {PRESET_REPOS.map((preset) => {
               const isActive = selectedRepoId.toLowerCase() === preset.id.toLowerCase();
               return (
@@ -452,8 +452,8 @@ ${data.merge_recommendation}
                   onClick={() => handleSelectRepository(preset.id)}
                   className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all ${
                     isActive
-                      ? "bg-[#E5A952]/20 text-[#C9C4B8] border border-[#E5A952] font-bold"
-                      : "bg-black/40 text-[#C9C4B8]/70 hover:text-white border border-white/[0.06]"
+                      ? "bg-white text-black border border-white font-bold shadow-[0_0_10px_rgba(255,255,255,0.25)]"
+                      : "bg-black/60 text-neutral-400 hover:text-white border border-white/10 hover:border-white/25"
                   }`}
                 >
                   {preset.label}
@@ -469,15 +469,15 @@ ${data.merge_recommendation}
           {activeTab === "prs" && (
             <div className="space-y-6">
               {/* Repository Architecture Overview */}
-              <div className="p-5 rounded-2xl border border-[#E5A952]/20 bg-[#121A2B]/80 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="p-5 rounded-2xl border border-white/15 bg-black/60 backdrop-blur-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]">
                 <div className="flex items-center gap-3.5">
-                  <div className="w-12 h-12 rounded-2xl bg-[#0B0D10] border border-[#E5A952]/30 flex items-center justify-center text-[#E5A952] shadow-[0_0_15px_rgba(229,169,82,0.15)]">
+                  <div className="w-12 h-12 rounded-2xl bg-black/80 border border-white/20 flex items-center justify-center text-white shadow-[0_0_15px_rgba(255,255,255,0.15)]">
                     <Github className="w-6 h-6" />
                   </div>
                   <div>
                     <h1 className="text-xl font-bold text-white tracking-tight">{selectedRepoId}</h1>
-                    <div className="flex items-center gap-3 text-xs font-mono text-[#C9C4B8]/70 mt-1">
-                      <span className="flex items-center gap-1 text-[#E5A952]">
+                    <div className="flex items-center gap-3 text-xs font-mono text-neutral-400 mt-1">
+                      <span className="flex items-center gap-1 text-white font-semibold">
                         <GitBranch className="w-3.5 h-3.5" />
                         {currentRepo.default_branch || "main"}
                       </span>
@@ -494,9 +494,9 @@ ${data.merge_recommendation}
                 <div className="flex items-center gap-2">
                   <Link
                     href={`/app/graph?repo=${encodeURIComponent(selectedRepoId)}`}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#E5A952]/30 bg-[#0B0D10] text-xs font-mono text-[#C9C4B8] hover:text-white hover:border-[#E5A952] transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/20 bg-white/[0.06] hover:bg-white/15 text-xs font-mono text-white transition-all shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"
                   >
-                    <Network className="w-3.5 h-3.5 text-[#E5A952]" />
+                    <Network className="w-3.5 h-3.5 text-white" />
                     <span>View Graph Canvas</span>
                   </Link>
                 </div>
@@ -506,7 +506,7 @@ ${data.merge_recommendation}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Left Column: PR List */}
                 <div className="lg:col-span-4 space-y-3">
-                  <div className="flex items-center justify-between text-xs font-mono text-[#C9C4B8]/70 pb-1">
+                  <div className="flex items-center justify-between text-xs font-mono text-neutral-400 pb-1">
                     <span className="font-semibold uppercase tracking-wider">Open Pull Requests</span>
                     <span>{githubPRs.length} total</span>
                   </div>
@@ -528,33 +528,33 @@ ${data.merge_recommendation}
                           }}
                           className={`p-4 rounded-xl border cursor-pointer transition-all ${
                             isSelected
-                              ? "bg-[#E5A952]/15 border-[#E5A952] shadow-[0_0_15px_rgba(229,169,82,0.2)]"
-                              : "bg-[#121A2B]/70 border-white/[0.08] hover:border-[#E5A952]/40"
+                              ? "bg-white/10 border-white shadow-[0_0_15px_rgba(255,255,255,0.15)]"
+                              : "bg-black/60 border-white/10 hover:border-white/25"
                           }`}
                         >
                           <div className="flex items-center justify-between text-xs font-mono">
-                            <span className="text-[#E5A952] font-bold">#{pr.number}</span>
-                            <span className="text-[10px] text-[#C9C4B8]/50 font-mono">
+                            <span className="text-white font-bold">#{pr.number}</span>
+                            <span className="text-[10px] text-neutral-500 font-mono">
                               {pr.head?.ref || "feature-branch"}
                             </span>
                           </div>
                           <div className="text-xs font-semibold text-white mt-1 line-clamp-2">
                             {pr.title}
                           </div>
-                          <div className="flex items-center justify-between text-[11px] font-mono text-[#C9C4B8]/70 mt-3 pt-2 border-t border-white/[0.05]">
+                          <div className="flex items-center justify-between text-[11px] font-mono text-neutral-400 mt-3 pt-2 border-t border-white/[0.08]">
                             <span>by @{pr.user?.login || "contributor"}</span>
                             {isCurrentlyAnalyzing ? (
-                              <span className="text-[#E5A952] font-bold flex items-center gap-1">
+                              <span className="text-white font-bold flex items-center gap-1">
                                 <RefreshCw className="w-3 h-3 animate-spin" />
                                 <span>Tracing...</span>
                               </span>
                             ) : isAnalyzed ? (
-                              <span className="text-[#2E4A32] font-bold flex items-center gap-1">
-                                <CheckCircle2 className="w-3 h-3" />
+                              <span className="text-white font-bold flex items-center gap-1">
+                                <CheckCircle2 className="w-3 h-3 text-white" />
                                 <span>Indexed</span>
                               </span>
                             ) : (
-                              <span className="text-[#C9C4B8]/50">Click to trace</span>
+                              <span className="text-neutral-500">Click to trace</span>
                             )}
                           </div>
                         </div>
@@ -568,13 +568,13 @@ ${data.merge_recommendation}
                   {selectedPR ? (
                     <>
                       {/* Active PR Header & AI Triage Action */}
-                      <div className="p-5 rounded-2xl border border-[#E5A952]/25 bg-[#121A2B]/80 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="p-5 rounded-2xl border border-white/15 bg-black/60 backdrop-blur-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]">
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-[#E5A952]/20 text-[#E5A952] border border-[#E5A952]/30">
+                            <span className="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-white/15 text-white border border-white/30">
                               PR #{selectedPR.number}
                             </span>
-                            <span className="text-xs font-mono text-[#C9C4B8]/70">
+                            <span className="text-xs font-mono text-neutral-400">
                               {selectedPR.base?.ref || "main"} ← {selectedPR.head?.ref || "feature"}
                             </span>
                           </div>
@@ -586,9 +586,9 @@ ${data.merge_recommendation}
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleOpenTriage(selectedPR)}
-                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#E5A952] to-[#F5BD66] text-[#0B0D10] font-mono font-bold text-xs shadow-[0_0_20px_rgba(229,169,82,0.3)] hover:brightness-110 active:scale-[0.98] transition-all"
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-neutral-200 text-black font-mono font-bold text-xs shadow-[0_0_20px_rgba(255,255,255,0.3)] active:scale-[0.98] transition-all"
                           >
-                            <Sparkles className="w-4 h-4" />
+                            <Sparkles className="w-4 h-4 text-black" />
                             <span>Run AI PR Triage</span>
                           </button>
                         </div>
@@ -596,9 +596,9 @@ ${data.merge_recommendation}
 
                       {/* Blast Radius Details */}
                       {analyzingPR === selectedPR.number ? (
-                        <div className="p-12 rounded-2xl border border-[#E5A952]/20 bg-[#121A2B]/50 flex flex-col items-center justify-center space-y-3">
-                          <RefreshCw className="w-8 h-8 text-[#E5A952] animate-spin" />
-                          <div className="text-xs font-mono text-[#C9C4B8]">
+                        <div className="p-12 rounded-2xl border border-white/15 bg-black/60 backdrop-blur-2xl flex flex-col items-center justify-center space-y-3">
+                          <RefreshCw className="w-8 h-8 text-white animate-spin" />
+                          <div className="text-xs font-mono text-neutral-300">
                             Traversing AST call graph in FalkorDB...
                           </div>
                         </div>
@@ -609,38 +609,38 @@ ${data.merge_recommendation}
                             <div className="space-y-6">
                               {/* Metrics row */}
                               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                                <div className="p-4 rounded-xl bg-black/40 border border-white/[0.06] font-mono space-y-1">
-                                  <span className="text-[10px] text-[#C9C4B8]/70 uppercase">Directly Modified</span>
-                                  <div className="text-2xl font-bold text-[#E5A952]">
+                                <div className="p-4 rounded-xl bg-black/60 border border-white/10 font-mono space-y-1">
+                                  <span className="text-[10px] text-neutral-500 uppercase">Directly Modified</span>
+                                  <div className="text-2xl font-bold text-white">
                                     {report.impact.changed_symbols.length}
                                   </div>
-                                  <div className="text-[10px] text-[#C9C4B8]/50">0-hop symbols</div>
+                                  <div className="text-[10px] text-neutral-500">0-hop symbols</div>
                                 </div>
 
-                                <div className="p-4 rounded-xl bg-black/40 border border-white/[0.06] font-mono space-y-1">
-                                  <span className="text-[10px] text-[#C9C4B8]/70 uppercase">Downstream Callers</span>
-                                  <div className="text-2xl font-bold text-[#C9C4B8]">
+                                <div className="p-4 rounded-xl bg-black/60 border border-white/10 font-mono space-y-1">
+                                  <span className="text-[10px] text-neutral-500 uppercase">Downstream Callers</span>
+                                  <div className="text-2xl font-bold text-neutral-200">
                                     {report.impact.impacted_symbols.length}
                                   </div>
-                                  <div className="text-[10px] text-[#C9C4B8]/50">1..3 hops away</div>
+                                  <div className="text-[10px] text-neutral-500">1..3 hops away</div>
                                 </div>
 
-                                <div className="p-4 rounded-xl bg-black/40 border border-white/[0.06] font-mono space-y-1">
-                                  <span className="text-[10px] text-[#C9C4B8]/70 uppercase">Selected Tests</span>
-                                  <div className="text-2xl font-bold text-[#C9C4B8]">
+                                <div className="p-4 rounded-xl bg-black/60 border border-white/10 font-mono space-y-1">
+                                  <span className="text-[10px] text-neutral-500 uppercase">Selected Tests</span>
+                                  <div className="text-2xl font-bold text-white">
                                     {report.plan?.selected_tests.length || 0}
                                   </div>
-                                  <div className="text-[10px] text-[#C9C4B8]/50">
+                                  <div className="text-[10px] text-neutral-500">
                                     of {report.impact.candidate_tests.length} candidates
                                   </div>
                                 </div>
 
-                                <div className="p-4 rounded-xl bg-black/40 border border-white/[0.06] font-mono space-y-1">
-                                  <span className="text-[10px] text-[#C9C4B8]/70 uppercase">Execution Time</span>
+                                <div className="p-4 rounded-xl bg-black/60 border border-white/10 font-mono space-y-1">
+                                  <span className="text-[10px] text-neutral-500 uppercase">Execution Time</span>
                                   <div className="text-2xl font-bold text-white">
                                     {report.plan?.estimated_total_seconds.toFixed(1) || "0.0"}s
                                   </div>
-                                  <div className="text-[10px] text-[#C9C4B8]">
+                                  <div className="text-[10px] text-neutral-400">
                                     budget: {report.plan?.budget_seconds || 300}s
                                   </div>
                                 </div>
@@ -675,12 +675,12 @@ ${data.merge_recommendation}
 
                               {/* Prioritized Test Suite Table */}
                               {report.plan && (
-                                <div className="p-5 rounded-2xl border border-[#E5A952]/20 bg-[#121A2B]/80 backdrop-blur-xl space-y-3">
+                                <div className="p-5 rounded-2xl border border-white/15 bg-black/60 backdrop-blur-2xl space-y-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]">
                                   <div className="flex items-center justify-between text-xs font-mono">
                                     <span className="font-bold text-white uppercase tracking-wider">
                                       ML-Ranked Regression Suite
                                     </span>
-                                    <span className="text-[#E5A952]">
+                                    <span className="text-neutral-400">
                                       Model: {report.plan.ranker_type.toUpperCase()}
                                     </span>
                                   </div>
@@ -689,25 +689,25 @@ ${data.merge_recommendation}
                                     {report.plan.selected_tests.map((test) => (
                                       <div
                                         key={test.rank}
-                                        className="p-3 rounded-xl bg-black/40 border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono"
+                                        className="p-3 rounded-xl bg-black/60 border border-white/10 hover:border-white/20 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono"
                                       >
                                         <div className="flex items-center gap-3">
-                                          <span className="w-6 h-6 rounded-lg bg-[#E5A952]/20 text-[#E5A952] flex items-center justify-center font-bold text-xs">
+                                          <span className="w-6 h-6 rounded-lg bg-white/10 text-white border border-white/20 flex items-center justify-center font-bold text-xs">
                                             #{test.rank}
                                           </span>
                                           <div>
                                             <div className="text-white font-semibold">{test.name}</div>
-                                            <div className="text-[10px] text-[#C9C4B8]/50 mt-0.5">
+                                            <div className="text-[10px] text-neutral-500 mt-0.5">
                                               {test.reasons.join(" · ")}
                                             </div>
                                           </div>
                                         </div>
 
                                         <div className="flex items-center gap-4 shrink-0 text-xs ml-9 sm:ml-0">
-                                          <span className="text-[#C9C4B8]/70">
+                                          <span className="text-neutral-400">
                                             {test.estimated_duration_seconds.toFixed(1)}s
                                           </span>
-                                          <span className="text-[#2E4A32] font-bold">
+                                          <span className="text-white font-bold bg-white/10 px-2 py-0.5 rounded border border-white/15">
                                             {(test.rank_score * 100).toFixed(1)}%
                                           </span>
                                         </div>
@@ -722,7 +722,7 @@ ${data.merge_recommendation}
                       ) : null}
                     </>
                   ) : (
-                    <div className="text-center py-20 border border-dashed border-white/10 rounded-2xl text-[#C9C4B8]/50 font-mono text-xs">
+                    <div className="text-center py-20 border border-dashed border-white/15 bg-black/40 backdrop-blur-xl rounded-2xl text-neutral-400 font-mono text-xs">
                       Select a pull request from the list to trace its blast radius.
                     </div>
                   )}
@@ -739,14 +739,14 @@ ${data.merge_recommendation}
                   <h2 className="text-lg font-bold text-white tracking-tight">
                     FalkorDB Interactive Dependency Graph
                   </h2>
-                  <p className="text-xs text-[#C9C4B8]/70 font-mono mt-0.5">
+                  <p className="text-xs text-neutral-400 font-mono mt-0.5">
                     Click any node to highlight active call paths and copy Cypher queries
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono text-[#C9C4B8]/70">
-                    Active Subgraph: <span className="text-[#E5A952] font-bold">{selectedRepoId}</span>
+                  <span className="text-xs font-mono text-neutral-400">
+                    Active Subgraph: <span className="text-white font-bold">{selectedRepoId}</span>
                   </span>
                 </div>
               </div>
@@ -765,12 +765,12 @@ ${data.merge_recommendation}
           {/* TAB 4: BENCHMARK & STRATEGY EVALUATOR */}
           {activeTab === "benchmark" && (
             <div className="space-y-6">
-              <div className="p-6 rounded-2xl border border-[#E5A952]/20 bg-[#121A2B]/80 backdrop-blur-xl space-y-6">
+              <div className="p-6 rounded-2xl border border-white/15 bg-black/60 backdrop-blur-2xl space-y-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]">
                 <div>
                   <h2 className="text-lg font-bold text-white tracking-tight">
                     Strategy Benchmark & Fault Recall Evaluation
                   </h2>
-                  <p className="text-xs text-[#C9C4B8]/70 font-mono mt-1">
+                  <p className="text-xs text-neutral-400 font-mono mt-1">
                     Empirical comparison against baseline CI strategies over ground-truth fault injection datasets
                   </p>
                 </div>
@@ -779,7 +779,7 @@ ${data.merge_recommendation}
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs font-mono text-left">
                     <thead>
-                      <tr className="border-b border-white/[0.08] text-[#C9C4B8]/70 uppercase text-[10px] tracking-wider">
+                      <tr className="border-b border-white/10 text-neutral-400 uppercase text-[10px] tracking-wider">
                         <th className="pb-3 font-semibold">Prioritization Strategy</th>
                         <th className="pb-3 font-semibold">Fault Recall</th>
                         <th className="pb-3 font-semibold">Tests Selected</th>
@@ -788,7 +788,7 @@ ${data.merge_recommendation}
                         <th className="pb-3 font-semibold">Verdict</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/[0.04]">
+                    <tbody className="divide-y divide-white/[0.06]">
                       {benchmark?.strategies &&
                         Object.entries(benchmark.strategies).map(([key, strat]) => {
                           const isRipple = key === "learned_ranker";
@@ -800,21 +800,21 @@ ${data.merge_recommendation}
                             <tr
                               key={key}
                               className={`transition-colors ${
-                                isRipple ? "bg-[#E5A952]/10 text-white font-bold" : "text-[#C9C4B8] hover:bg-white/[0.02]"
+                                isRipple ? "bg-white/10 text-white font-bold" : "text-neutral-300 hover:bg-white/[0.04]"
                               }`}
                             >
                               <td className="py-3.5 pr-4 flex items-center gap-2">
-                                {isRipple && <span className="w-2 h-2 rounded-full bg-[#E5A952] animate-pulse" />}
-                                <span className={isRipple ? "text-[#E5A952]" : "text-white"}>
+                                {isRipple && <span className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_6px_#ffffff]" />}
+                                <span className={isRipple ? "text-white" : "text-neutral-200"}>
                                   {strat.strategy}
                                 </span>
                               </td>
                               <td className="py-3.5 pr-4">
                                 <span
-                                  className={`px-2 py-0.5 rounded text-[11px] ${
+                                  className={`px-2 py-0.5 rounded text-[11px] font-bold ${
                                     Number(percentRecall) >= 95
-                                      ? "bg-[#2E4A32]/25 text-[#C9C4B8] border border-[#2E4A32]/50"
-                                      : "bg-amber-500/15 text-[#8B5E3C] border border-[#8B5E3C]/40"
+                                      ? "bg-white/15 text-white border border-white/30"
+                                      : "bg-white/5 text-neutral-400 border border-white/15"
                                   }`}
                                 >
                                   {percentRecall}%
@@ -824,16 +824,16 @@ ${data.merge_recommendation}
                                 {strat.selected_tests_count} / {strat.total_tests_count} ({selectionRatio}%)
                               </td>
                               <td className="py-3.5 pr-4">{strat.estimated_duration_s.toFixed(1)}s</td>
-                              <td className="py-3.5 pr-4 text-[#2E4A32] font-bold">
+                              <td className="py-3.5 pr-4 text-white font-bold">
                                 {isFull ? "0%" : `-${100 - Number(selectionRatio)}%`}
                               </td>
                               <td className="py-3.5">
                                 {isRipple ? (
-                                  <span className="text-[#E5A952] font-bold">RECOMMENDED</span>
+                                  <span className="text-white font-bold bg-white/20 border border-white/40 px-2 py-0.5 rounded text-[10px] shadow-[0_0_10px_rgba(255,255,255,0.2)]">RECOMMENDED</span>
                                 ) : isFull ? (
-                                  <span className="text-[#C9C4B8]/50">Baseline (Slow)</span>
+                                  <span className="text-neutral-500">Baseline (Slow)</span>
                                 ) : (
-                                  <span className="text-[#8B5E3C]">Blind spots</span>
+                                  <span className="text-neutral-400">Blind spots</span>
                                 )}
                               </td>
                             </tr>
@@ -854,7 +854,7 @@ ${data.merge_recommendation}
                   <h2 className="text-lg font-bold text-white tracking-tight">
                     Historical Release Intelligence Runs
                   </h2>
-                  <p className="text-xs text-[#C9C4B8]/70 font-mono mt-0.5">
+                  <p className="text-xs text-neutral-400 font-mono mt-0.5">
                     Immutable records of AST blast radius, test selections, and mutation outcomes
                   </p>
                 </div>
@@ -865,22 +865,22 @@ ${data.merge_recommendation}
                   <Link
                     key={r.run_id}
                     href={`/app/runs/${r.run_id}`}
-                    className="p-5 rounded-2xl border border-white/[0.08] hover:border-[#E5A952]/50 bg-[#121A2B]/80 backdrop-blur-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all group"
+                    className="p-5 rounded-2xl border border-white/10 hover:border-white/30 bg-black/60 backdrop-blur-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all group shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="w-10 h-10 rounded-xl bg-[#0B0D10] border border-white/[0.1] group-hover:border-[#E5A952]/50 flex items-center justify-center text-[#E5A952]">
+                      <div className="w-10 h-10 rounded-xl bg-black/80 border border-white/15 group-hover:border-white/40 flex items-center justify-center text-white transition-colors">
                         <Layers className="w-5 h-5" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-white font-mono group-hover:text-[#E5A952] transition-colors">
+                          <span className="text-sm font-bold text-white font-mono group-hover:text-white transition-colors">
                             {r.run_id}
                           </span>
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#2E4A32]/25 text-[#C9C4B8] border border-[#2E4A32]/50">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-white/15 text-white border border-white/30">
                             {r.recommendation.toUpperCase()}
                           </span>
                         </div>
-                        <div className="text-xs font-mono text-[#C9C4B8]/70 mt-1">
+                        <div className="text-xs font-mono text-neutral-400 mt-1">
                           {r.repo_id} · {r.base_ref}..{r.head_ref}
                         </div>
                       </div>
@@ -888,18 +888,18 @@ ${data.merge_recommendation}
 
                     <div className="flex items-center gap-6 text-xs font-mono">
                       <div>
-                        <span className="text-[#C9C4B8]/50 text-[10px] uppercase">Impact</span>
+                        <span className="text-neutral-500 text-[10px] uppercase">Impact</span>
                         <div className="text-white font-bold">
                           {r.impact.changed_symbols.length} modified · {r.impact.impacted_symbols.length} callers
                         </div>
                       </div>
                       <div>
-                        <span className="text-[#C9C4B8]/50 text-[10px] uppercase">Tests Selected</span>
-                        <div className="text-[#2E4A32] font-bold">
+                        <span className="text-neutral-500 text-[10px] uppercase">Tests Selected</span>
+                        <div className="text-white font-bold">
                           {r.plan?.selected_tests.length || 0} tests ({r.plan?.estimated_total_seconds.toFixed(1)}s)
                         </div>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-[#C9C4B8]/50 group-hover:text-white transition-colors" />
+                      <ArrowRight className="w-4 h-4 text-neutral-500 group-hover:text-white transition-colors" />
                     </div>
                   </Link>
                 ))}
