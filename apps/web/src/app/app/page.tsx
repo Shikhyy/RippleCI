@@ -1149,7 +1149,7 @@ export default function DashboardPage() {
                                         <span>{(aiTriage.triage.confidence_score * 100).toFixed(0)}% confidence</span>
                                       </>
                                     ) : (
-                                      <span className="text-zinc-500">Groq LLaMA-3.3-70B & AST Cypher</span>
+                                      <span className="text-emerald-400/80">Groq Cloud LPU & AST Cypher</span>
                                     )}
                                   </div>
                                 </div>

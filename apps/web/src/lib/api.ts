@@ -1144,9 +1144,9 @@ export interface AITriageResult {
 export async function requestAITriage(
   repoId: string,
   prNumber?: number,
-  runId?: string,
-  groqApiKey?: string
+  runId?: string
 ): Promise<AITriageResult> {
+  // 1. Try FastAPI backend triage endpoint first
   try {
     const res = await fetch(`${API_BASE}/api/v1/ai/triage`, {
       method: "POST",
@@ -1155,7 +1155,24 @@ export async function requestAITriage(
         repo_id: repoId,
         pr_number: prNumber,
         run_id: runId,
-        groq_api_key: groqApiKey,
+      }),
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (e) {
+    // try local Next.js route fallback
+  }
+
+  // 2. Try Next.js server route fallback
+  try {
+    const res = await fetch("/api/ai/triage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        repoId,
+        prNumber,
+        runId,
       }),
     });
     if (res.ok) {
@@ -1164,6 +1181,7 @@ export async function requestAITriage(
   } catch (e) {
     // fallback
   }
+
   return {
     provider: "RippleCI AST Graph Engine",
     model: "falkordb-cypher-v1",
@@ -1175,5 +1193,6 @@ export async function requestAITriage(
       merge_recommendation: "Verdict: RELEASE_SAFE. All counterfactual AST mutations killed.",
       confidence_score: 0.99,
     },
+    run_id: runId,
   };
 }

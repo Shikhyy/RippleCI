@@ -4,6 +4,14 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import uuid
 
+# Automatically load .env if present
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    load_dotenv(Path(__file__).resolve().parents[4] / ".env")
+except Exception:
+    pass
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -750,6 +758,7 @@ def get_health():
     project = RippleProject.open(".")
     is_falkor = isinstance(project.graph, FalkorGraphStore)
     falkor_healthy = is_falkor and project.graph.is_healthy()
+    has_groq = bool(os.environ.get("GROQ_API_KEY", "").strip())
     return {
         "status": "ok",
         "version": __version__,
@@ -758,11 +767,13 @@ def get_health():
         "falkordb_connected": falkor_healthy,
         "graph_url": project.config.graph.url if falkor_healthy else "In-Memory AST Store (Zero Redis Required)",
         "graph_name": project.config.graph.graph_name,
+        "groq_ai_active": has_groq,
+        "groq_model": "openai/gpt-oss-120b" if has_groq else None,
         "requires_api_keys": False,
         "api_keys": {
             "falkordb": "Not required locally (falls back to in-memory AST store when Redis is offline)",
             "github_token": "Optional (only needed for private repos or posting PR comments)",
-            "gemini_api_key": "Optional (only needed for LLM natural language PR explanations)",
+            "groq_api_key": "Active on Backend (Zero Client Prompt)" if has_groq else "Optional (for live Groq LLM PR explanations)",
         },
     }
 
@@ -1469,11 +1480,21 @@ def ai_triage_pr(req: AITriageRequest):
     tests = [f"{t.name} (rank {t.rank})" for t in (report.plan.selected_tests if report.plan else [])]
     kill_rate = int((report.verification.mutation_score * 100) if report.verification else 100)
 
-    # If Groq API key is supplied, run live through Groq LLM
+    # If Groq API key is supplied or found in environment, run live through Groq LLM
     if groq_key and groq_key.startswith("gsk_"):
         try:
-            import urllib.request
             import json
+            import ssl
+            import time
+            import urllib.request
+
+            start_t = time.perf_counter()
+            ssl_ctx = None
+            try:
+                import certifi
+                ssl_ctx = ssl.create_default_context(cafile=certifi.where())
+            except Exception:
+                ssl_ctx = ssl.create_default_context()
 
             prompt = (
                 f"You are RippleCI's autonomous AI Release Triage agent.\n"
@@ -1491,32 +1512,38 @@ def ai_triage_pr(req: AITriageRequest):
                 f"\"confidence_score\": 0.98\n"
             )
 
-            req_payload = json.dumps({
-                "model": "llama-3.3-70b-versatile",
-                "messages": [{"role": "user", "content": prompt}],
-                "temperature": 0.2,
-                "response_format": {"type": "json_object"}
-            }).encode("utf-8")
+            candidate_models = ["openai/gpt-oss-120b", "openai/gpt-oss-20b", "llama-3.3-70b-versatile"]
+            for model_name in candidate_models:
+                try:
+                    req_payload = json.dumps({
+                        "model": model_name,
+                        "messages": [{"role": "user", "content": prompt}],
+                        "temperature": 0.1,
+                        "response_format": {"type": "json_object"}
+                    }).encode("utf-8")
 
-            groq_req = urllib.request.Request(
-                "https://api.groq.com/openai/v1/chat/completions",
-                data=req_payload,
-                headers={
-                    "Authorization": f"Bearer {groq_key}",
-                    "Content-Type": "application/json",
-                    "User-Agent": "RippleCI-Agent/0.1"
-                }
-            )
-            with urllib.request.urlopen(groq_req, timeout=8) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-                parsed = json.loads(data["choices"][0]["message"]["content"])
-                return {
-                    "provider": "Groq LLaMA-3.3-70B-Versatile",
-                    "model": "llama-3.3-70b-versatile",
-                    "latency_ms": 118,
-                    "triage": parsed,
-                    "run_id": report.run_id,
-                }
+                    groq_req = urllib.request.Request(
+                        "https://api.groq.com/openai/v1/chat/completions",
+                        data=req_payload,
+                        headers={
+                            "Authorization": f"Bearer {groq_key}",
+                            "Content-Type": "application/json",
+                            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+                        }
+                    )
+                    with urllib.request.urlopen(groq_req, context=ssl_ctx, timeout=8) as resp:
+                        data = json.loads(resp.read().decode("utf-8"))
+                        parsed = json.loads(data["choices"][0]["message"]["content"])
+                        elapsed_ms = int((time.perf_counter() - start_t) * 1000)
+                        return {
+                            "provider": f"Groq Cloud LPU ({model_name})",
+                            "model": model_name,
+                            "latency_ms": elapsed_ms,
+                            "triage": parsed,
+                            "run_id": report.run_id,
+                        }
+                except Exception:
+                    continue
         except Exception:
             pass
 

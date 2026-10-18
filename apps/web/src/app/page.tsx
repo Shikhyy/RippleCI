@@ -128,8 +128,7 @@ export default function LandingPage() {
   const [sdkSnippetTab, setSdkSnippetTab] = useState<keyof typeof SDK_CODE_SNIPPETS>("quickstart");
   const [copiedSdk, setCopiedSdk] = useState(false);
 
-  // Groq AI State
-  const [groqKeyInput, setGroqKeyInput] = useState<string>("");
+  // Groq AI State (Server-Configured Native Intelligence)
   const [aiTriageRunning, setAiTriageRunning] = useState<boolean>(false);
   const [aiTriageResult, setAiTriageResult] = useState<AITriageResult | null>(null);
 
@@ -181,7 +180,7 @@ jobs:
   const handleRunAiTriage = async () => {
     setAiTriageRunning(true);
     try {
-      const res = await requestAITriage("fastapi/fastapi", 10420, undefined, groqKeyInput.trim() || undefined);
+      const res = await requestAITriage("fastapi/fastapi", 10420);
       setAiTriageResult(res);
     } catch (e) {
       console.error(e);
@@ -881,41 +880,45 @@ jobs:
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-mono">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Groq LLaMA-3.3-70B AI Integration</span>
+              <span>Groq Cloud LPU AI Integration</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
               Instant Natural-Language PR Triage
             </h2>
             <p className="text-sm text-zinc-400 leading-relaxed">
-              Synthesize executive risk reviews and architectural blast radius summaries at 500+ tokens/sec using Groq. Works out of the box with deterministic AST graph reasoning, or plug in your Groq key for live LLM intelligence.
+              Synthesize executive risk reviews and architectural blast radius summaries at 500+ tokens/sec using Groq LPUs. Natively accelerated with zero client credentials or prompts required.
             </p>
           </div>
 
           <div className="craft-card p-6 md:p-8 max-w-3xl mx-auto space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3 font-mono text-xs">
-              <div className="relative flex-1">
-                <input
-                  type="password"
-                  value={groqKeyInput}
-                  onChange={(e) => setGroqKeyInput(e.target.value)}
-                  placeholder="Enter Groq API Key (gsk_...) or leave blank for zero-key engine"
-                  className="w-full bg-[#111c20] border border-[#6CC6CB]/30 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#6CC6CB] transition-colors text-xs"
-                />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs p-4 rounded-xl bg-black/40 border border-white/[0.08]">
+              <div className="flex items-center gap-3">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                </span>
+                <div>
+                  <div className="text-white font-bold flex items-center gap-2">
+                    <span>Groq LPU Inference Engine</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">ONLINE</span>
+                  </div>
+                  <div className="text-zinc-400 text-[11px]">Hardware-accelerated LPUs • 500+ tokens/sec • Zero configuration required</div>
+                </div>
               </div>
               <button
                 onClick={handleRunAiTriage}
                 disabled={aiTriageRunning}
-                className="flex items-center justify-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-bold px-5 py-2.5 rounded-xl transition-all font-mono text-xs disabled:opacity-50"
+                className="flex items-center justify-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-bold px-5 py-2.5 rounded-xl transition-all font-mono text-xs disabled:opacity-50 shrink-0 shadow-lg shadow-[#6CC6CB]/10 active:scale-95"
               >
                 {aiTriageRunning ? (
                   <>
                     <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                    <span>Analyzing...</span>
+                    <span>Synthesizing...</span>
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>Test AI Triage</span>
+                    <span>Test Live PR Triage</span>
                   </>
                 )}
               </button>
