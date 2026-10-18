@@ -72,12 +72,41 @@ export default function DashboardPage() {
   const [selectedRepo, setSelectedRepo] = useState<string>("payments-core-service");
   const [isConnectModalOpen, setIsConnectModalOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<"runs" | "github">("runs");
-  const [githubRepo, setGithubRepo] = useState<string>("Shikhyy/RippleCI");
+  const [githubRepo, setGithubRepo] = useState<string>("fastapi/fastapi");
+  const [inputRepo, setInputRepo] = useState<string>("fastapi/fastapi");
   const [githubPRs, setGithubPRs] = useState<GitHubPullRequest[]>([]);
   const [analyzedPRs, setAnalyzedPRs] = useState<Record<number, GitHubPRAnalysisResult>>({});
   const [analyzingPR, setAnalyzingPR] = useState<number | null>(null);
   const [commentStatus, setCommentStatus] = useState<Record<number, string>>({});
   const [githubLoading, setGithubLoading] = useState<boolean>(false);
+
+  const parseGitHubRepo = (input: string): { owner: string; repo: string } => {
+    const clean = input
+      .trim()
+      .replace(/^https?:\/\/github\.com\//, "")
+      .replace(/\.git$/, "")
+      .replace(/\/+$/, "");
+    const parts = clean.split("/").filter((p) => p && !["pulls", "pull", "issues", "tree", "blob"].includes(p));
+    return {
+      owner: parts[0] || "fastapi",
+      repo: parts[1] || "fastapi",
+    };
+  };
+
+  const loadGitHubPRs = async (targetRepo: string) => {
+    setGithubLoading(true);
+    const { owner, repo } = parseGitHubRepo(targetRepo);
+    try {
+      const prs = await fetchGitHubPullRequests(owner, repo);
+      if (prs) {
+        setGithubPRs(prs);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setGithubLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchHealth().then((h) => setHealth(h));
@@ -95,15 +124,22 @@ export default function DashboardPage() {
         setRuns(loadedRuns);
       }
     });
-    fetchGitHubPullRequests("Shikhyy", "RippleCI").then((prs) => {
-      if (prs) setGithubPRs(prs);
-    });
+    loadGitHubPRs("fastapi/fastapi");
   }, []);
+
+  const handleSwitchRepo = (newRepoStr: string) => {
+    const { owner, repo } = parseGitHubRepo(newRepoStr);
+    const formatted = `${owner}/${repo}`;
+    setGithubRepo(formatted);
+    setInputRepo(formatted);
+    loadGitHubPRs(formatted);
+  };
 
   const handleAnalyzeGitHubPR = async (pr: GitHubPullRequest) => {
     setAnalyzingPR(pr.number);
+    const { owner, repo } = parseGitHubRepo(githubRepo);
     try {
-      const res = await analyzeGitHubPullRequest("Shikhyy", "RippleCI", pr.number);
+      const res = await analyzeGitHubPullRequest(owner, repo, pr.number);
       setAnalyzedPRs((prev) => ({ ...prev, [pr.number]: res }));
       if (res.report) {
         setRuns((prev) => [res.report, ...prev.filter((r) => r.run_id !== res.report.run_id)]);
@@ -117,9 +153,10 @@ export default function DashboardPage() {
 
   const handlePostPRComment = async (prNumber: number) => {
     setCommentStatus((prev) => ({ ...prev, [prNumber]: "posting" }));
+    const { owner, repo } = parseGitHubRepo(githubRepo);
     const runId = analyzedPRs[prNumber]?.run_id;
     try {
-      const res = await postGitHubPRComment("Shikhyy", "RippleCI", prNumber, undefined, runId);
+      const res = await postGitHubPRComment(owner, repo, prNumber, undefined, runId);
       setCommentStatus((prev) => ({
         ...prev,
         [prNumber]: res.status === "posted" ? "Posted to PR!" : "Simulated comment ready",
@@ -148,6 +185,14 @@ export default function DashboardPage() {
   const handleRepositoryConnected = (newRepo: ConnectedRepository) => {
     setRepositories((prev) => [newRepo, ...prev.filter((r) => r.id !== newRepo.id)]);
     setSelectedRepo(newRepo.id);
+    if (newRepo.is_github || newRepo.id.includes("/")) {
+      const { owner, repo } = parseGitHubRepo(newRepo.id);
+      const formatted = `${owner}/${repo}`;
+      setGithubRepo(formatted);
+      setInputRepo(formatted);
+      loadGitHubPRs(formatted);
+      setActiveTab("github");
+    }
   };
 
   return (
@@ -482,20 +527,76 @@ export default function DashboardPage() {
             {/* TAB 2: Live GitHub Pull Requests View */}
             {activeTab === "github" && (
               <div className="p-5 space-y-4">
-                <div className="flex items-center justify-between text-xs font-mono text-zinc-400 bg-white/[0.02] p-3 rounded-xl border border-white/[0.06]">
-                  <div className="flex items-center gap-2">
-                    <Github className="w-4 h-4 text-[#6CC6CB]" />
-                    <span className="text-white font-semibold">Repository: {githubRepo}</span>
-                    <span className="text-zinc-500">•</span>
-                    <span>Direct GitHub Integration Active</span>
-                  </div>
-                  <div className="flex items-center gap-2">
+                {/* Interactive Repository Switcher Bar */}
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-[#6CC6CB]/20 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSwitchRepo(inputRepo);
+                      }}
+                      className="flex items-center gap-2 flex-1"
+                    >
+                      <div className="relative flex-1">
+                        <Github className="w-3.5 h-3.5 absolute left-3 top-2.5 text-[#6CC6CB]" />
+                        <input
+                          type="text"
+                          value={inputRepo}
+                          onChange={(e) => setInputRepo(e.target.value)}
+                          placeholder="e.g. fastapi/fastapi or https://github.com/..."
+                          className="w-full bg-[#060a0c] border border-white/[0.1] focus:border-[#6CC6CB] rounded-lg pl-8 pr-3 py-1.5 text-xs text-white font-mono focus:outline-none transition-colors"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={githubLoading}
+                        className="px-3 py-1.5 rounded-lg bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-bold text-xs font-mono transition-colors flex items-center gap-1.5 disabled:opacity-50"
+                      >
+                        {githubLoading ? (
+                          <>
+                            <RefreshCw className="w-3 h-3 animate-spin" />
+                            <span>Connecting...</span>
+                          </>
+                        ) : (
+                          <>
+                            <GitPullRequest className="w-3 h-3" />
+                            <span>Load PRs</span>
+                          </>
+                        )}
+                      </button>
+                    </form>
+
                     <button
                       onClick={() => setIsConnectModalOpen(true)}
-                      className="px-2.5 py-1 rounded-lg bg-[#6CC6CB]/15 hover:bg-[#6CC6CB]/25 text-[#EAE5C9] border border-[#6CC6CB]/30 transition-colors text-[11px]"
+                      className="px-2.5 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-zinc-300 hover:text-white border border-white/[0.1] transition-colors text-xs font-mono flex items-center gap-1.5"
                     >
-                      Connect Another Repo
+                      <FolderGit2 className="w-3 h-3 text-[#6CC6CB]" />
+                      <span>Onboarding Wizard</span>
                     </button>
+                  </div>
+
+                  {/* 1-Click Quick Repository Presets */}
+                  <div className="flex items-center gap-1.5 flex-wrap pt-1 text-[11px] font-mono">
+                    <span className="text-zinc-500 uppercase tracking-wider text-[10px] mr-1">Switch To:</span>
+                    {[
+                      { name: "fastapi/fastapi", label: "fastapi" },
+                      { name: "pallets/flask", label: "flask" },
+                      { name: "psf/requests", label: "requests" },
+                      { name: "Shikhyy/RippleCI", label: "RippleCI" },
+                      { name: "sample-org/payments-service", label: "payments-service" },
+                    ].map((preset) => (
+                      <button
+                        key={preset.name}
+                        onClick={() => handleSwitchRepo(preset.name)}
+                        className={`px-2 py-0.5 rounded-md border text-[11px] transition-colors ${
+                          githubRepo.toLowerCase() === preset.name.toLowerCase()
+                            ? "bg-[#6CC6CB]/20 text-[#6CC6CB] border-[#6CC6CB]/50 font-semibold"
+                            : "bg-black/30 hover:bg-white/[0.06] text-zinc-400 hover:text-zinc-200 border-white/[0.08]"
+                        }`}
+                      >
+                        ⚡ {preset.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
@@ -505,21 +606,20 @@ export default function DashboardPage() {
                     <div className="text-sm font-semibold text-white">No Open Pull Requests in {githubRepo}</div>
                     <p className="text-xs text-zinc-400 max-w-md mx-auto">
                       Repository <code className="text-[#6CC6CB]">{githubRepo}</code> has 0 open pull requests on GitHub right now.
-                      You can open a PR on GitHub or explore live PRs from an active repository.
+                      Switch to an active repository with open pull requests:
                     </p>
                     <div className="flex items-center justify-center gap-2 pt-2">
                       <button
-                        onClick={() => {
-                          setGithubRepo("fastapi/fastapi");
-                          setGithubLoading(true);
-                          fetchGitHubPullRequests("fastapi", "fastapi").then((prs) => {
-                            if (prs) setGithubPRs(prs);
-                            setGithubLoading(false);
-                          });
-                        }}
+                        onClick={() => handleSwitchRepo("fastapi/fastapi")}
                         className="px-3 py-1.5 rounded-lg bg-[#6CC6CB]/15 hover:bg-[#6CC6CB]/25 border border-[#6CC6CB]/30 text-[#EAE5C9] text-xs font-mono transition-colors"
                       >
-                        ⚡ Load Live PRs from fastapi/fastapi
+                        ⚡ Switch to fastapi/fastapi
+                      </button>
+                      <button
+                        onClick={() => handleSwitchRepo("pallets/flask")}
+                        className="px-3 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.1] text-zinc-300 text-xs font-mono transition-colors"
+                      >
+                        ⚡ Switch to pallets/flask
                       </button>
                     </div>
                   </div>

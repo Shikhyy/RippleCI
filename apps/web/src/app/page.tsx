@@ -119,6 +119,9 @@ export default function LandingPage() {
   const [copiedSdk, setCopiedSdk] = useState(false);
   const [heroSimTab, setHeroSimTab] = useState<"graph" | "plan" | "verify">("graph");
   const [isSimulating, setIsSimulating] = useState(false);
+  const [onboardingTab, setOnboardingTab] = useState<"github" | "cicd" | "sdk" | "cli">("github");
+  const [copiedOnboardingYaml, setCopiedOnboardingYaml] = useState(false);
+  const [copiedOnboardingSdk, setCopiedOnboardingSdk] = useState(false);
 
   const handleCopyPip = () => {
     navigator.clipboard.writeText("pip install rippleci");
@@ -406,78 +409,409 @@ export default function LandingPage() {
       </section>
 
       {/* Onboarding & Repository Connection Section */}
-      <section className="py-16 md:py-24 border-b border-[#6CC6CB]/20 bg-[#060a0c]">
+      <section id="onboarding" className="py-16 md:py-24 border-b border-[#6CC6CB]/20 bg-[#060a0c]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="max-w-3xl mb-12">
+          <div className="max-w-3xl mb-10">
             <div className="text-xs font-mono uppercase tracking-wider text-[#6CC6CB] font-semibold">
-              Developer Onboarding
+              Developer Onboarding & Architecture
             </div>
             <h2 className="mt-1.5 text-2xl sm:text-4xl font-bold text-white tracking-tight">
-              Connect your repositories in seconds
+              Connect Any Repository in Seconds
             </h2>
             <p className="mt-3 text-sm sm:text-base text-zinc-400 leading-relaxed">
-              RippleCI fits seamlessly into your existing developer lifecycle. Connect via the Web Companion, run locally in your terminal, or drop our official GitHub Action into your CI pipeline.
+              RippleCI fits seamlessly into how your team builds software. Connect public or private GitHub repositories with zero configuration, gate PR merges with our automated GitHub Action, or drive release intelligence programmatically using the Python SDK.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Pathway 1: Web Companion */}
-            <div className="craft-card p-6 flex flex-col justify-between space-y-5">
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB]">
-                  <FolderGit2 className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-white tracking-tight">1. Web Companion Connector</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  One-click interactive indexing for local workspace directories or bundled sample services. Explore full-screen FalkorDB Cypher subgraphs and execute impact runs directly in the UI.
-                </p>
+          {/* Interactive Onboarding Selector Tabs */}
+          <div className="craft-card overflow-hidden">
+            <div className="p-3 bg-[#0d1417] border-b border-[#6CC6CB]/20 flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-1.5 p-1 bg-[#060a0c] rounded-lg border border-white/[0.06] overflow-x-auto text-xs font-mono">
+                <button
+                  onClick={() => setOnboardingTab("github")}
+                  className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
+                    onboardingTab === "github"
+                      ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB]/40 font-semibold"
+                      : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <Github className="w-3.5 h-3.5 text-[#6CC6CB]" />
+                  <span>1. GitHub Direct (Zero Setup)</span>
+                </button>
+                <button
+                  onClick={() => setOnboardingTab("cicd")}
+                  className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
+                    onboardingTab === "cicd"
+                      ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB]/40 font-semibold"
+                      : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <GitPullRequest className="w-3.5 h-3.5 text-[#6CC6CB]" />
+                  <span>2. GitHub Actions CI</span>
+                </button>
+                <button
+                  onClick={() => setOnboardingTab("sdk")}
+                  className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
+                    onboardingTab === "sdk"
+                      ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB]/40 font-semibold"
+                      : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <Zap className="w-3.5 h-3.5 text-[#6CC6CB]" />
+                  <span>3. Python SDK</span>
+                </button>
+                <button
+                  onClick={() => setOnboardingTab("cli")}
+                  className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
+                    onboardingTab === "cli"
+                      ? "bg-[#6CC6CB]/20 text-[#EAE5C9] border border-[#6CC6CB]/40 font-semibold"
+                      : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <Terminal className="w-3.5 h-3.5 text-[#6CC6CB]" />
+                  <span>4. Local CLI Terminal</span>
+                </button>
               </div>
+
               <button
                 onClick={() => setIsConnectModalOpen(true)}
-                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-gradient-to-r from-[#6CC6CB] to-[#5bb4b9] hover:from-[#7cd0d5] hover:to-[#6CC6CB] text-[#061012] font-bold text-xs transition-all shadow-[0_1px_12px_rgba(108,198,203,0.3)] active:scale-[0.98]"
+                className="px-3 py-1.5 rounded-lg bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-bold text-xs font-mono transition-colors shadow-sm"
               >
-                <span>Connect Codebase</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                Launch Connector
               </button>
             </div>
 
-            {/* Pathway 2: CLI Terminal */}
-            <div className="craft-card p-6 flex flex-col justify-between space-y-5">
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB]">
-                  <Terminal className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-white tracking-tight">2. CLI Terminal Workflow</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Install via pip and run natively in your development shell. Fast AST indexing, parameterized Cypher traversals, and machine-readable JSON outputs for seamless scripting.
-                </p>
-              </div>
-              <div className="font-mono text-[11px] p-2.5 rounded-lg bg-black/60 border border-white/[0.08] text-[#EAE5C9]">
-                ripple index . && ripple impact
-              </div>
-            </div>
+            {/* TAB 1: GitHub Direct */}
+            {onboardingTab === "github" && (
+              <div className="p-6 md:p-8 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                  <div className="space-y-4">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono bg-[#6CC6CB]/15 text-[#6CC6CB] border border-[#6CC6CB]/30">
+                      <span>Zero API Keys Required for Public Repositories</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-white tracking-tight">
+                      Connect any public or private repository with zero friction
+                    </h3>
+                    <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                      Simply type any GitHub repository identifier (e.g. <code className="text-[#6CC6CB]">fastapi/fastapi</code>, <code className="text-[#6CC6CB]">pallets/flask</code>, or full GitHub URL). RippleCI queries the unauthenticated GitHub REST API to list active pull requests, trace AST multi-hop callers, and prioritize regression tests.
+                    </p>
+                    <div className="space-y-2.5 text-xs font-mono text-zinc-300">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>Instant PR Discovery: inspect open PRs, diff additions, and branch targets</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>FalkorDB Blast Radius: OpenCypher multi-hop caller reachability in milliseconds</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>1-Click Evidence Comments: automatically post reports back to GitHub PRs</span>
+                      </div>
+                    </div>
 
-            {/* Pathway 3: GitHub Actions CI */}
-            <div className="craft-card p-6 flex flex-col justify-between space-y-5">
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-[#6CC6CB]/15 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB]">
-                  <Github className="w-5 h-5" />
+                    <div className="pt-2 flex items-center gap-3">
+                      <button
+                        onClick={() => setIsConnectModalOpen(true)}
+                        className="flex items-center gap-2 bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-bold px-4 py-2 rounded-xl text-xs transition-all shadow-[0_1px_16px_rgba(108,198,203,0.35)]"
+                      >
+                        <FolderGit2 className="w-4 h-4" />
+                        <span>Connect a GitHub Repo</span>
+                      </button>
+                      <Link
+                        href="/app"
+                        className="flex items-center gap-2 bg-white/[0.05] hover:bg-white/[0.1] text-zinc-300 border border-white/[0.1] px-4 py-2 rounded-xl text-xs font-mono transition-colors"
+                      >
+                        <span>Open Web Companion ➔</span>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Interactive Visual Preview Card */}
+                  <div className="p-4 rounded-xl bg-black/60 border border-[#6CC6CB]/20 space-y-3 font-mono text-xs">
+                    <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-white/[0.08] pb-2">
+                      <div className="flex items-center gap-2">
+                        <Github className="w-4 h-4 text-[#6CC6CB]" />
+                        <span className="text-white font-bold">fastapi/fastapi</span>
+                      </div>
+                      <span className="text-emerald-400 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                        Live Verified
+                      </span>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-[#0e1619] border border-white/[0.06] space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[#6CC6CB] font-bold">PR #10420: feat(routing): optimize di cache</span>
+                        <span className="text-emerald-400 text-[11px] font-bold">+34 -12</span>
+                      </div>
+                      <div className="text-[11px] text-zinc-400">
+                        Author: <span className="text-zinc-200">@tiangolo</span> • Base: <span className="text-zinc-200">master</span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 pt-1 text-center text-[10px]">
+                        <div className="p-1.5 rounded bg-black/40 border border-white/[0.05]">
+                          <div className="text-zinc-500">BLAST CALLERS</div>
+                          <div className="text-[#6CC6CB] font-bold">2 impacted</div>
+                        </div>
+                        <div className="p-1.5 rounded bg-black/40 border border-white/[0.05]">
+                          <div className="text-zinc-500">SELECTED TESTS</div>
+                          <div className="text-white font-bold">3 / 48 tests</div>
+                        </div>
+                        <div className="p-1.5 rounded bg-black/40 border border-white/[0.05]">
+                          <div className="text-zinc-500">MUTATION SCORE</div>
+                          <div className="text-emerald-400 font-bold">100% (3/3 killed)</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="text-[11px] text-zinc-400 flex items-center justify-between pt-1">
+                      <span className="text-emerald-400 font-semibold">🟢 Verdict: RELEASE_SAFE</span>
+                      <span className="text-zinc-500">Simulated PR Comment Ready</span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-base font-bold text-white tracking-tight">3. GitHub Actions CI</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Run on pull requests to gate untested code changes. Automatically posts blast radius diagrams, regression test rankings, and mutation kill verification reports on PRs.
-                </p>
               </div>
-              <button
-                onClick={() => {
-                  setIsConnectModalOpen(true);
-                }}
-                className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-[#0d1417] hover:bg-[#121b1f] border border-[#6CC6CB]/30 text-[#EAE5C9] font-medium text-xs transition-all"
-              >
-                <span>View CI Workflow</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </button>
-            </div>
+            )}
+
+            {/* TAB 2: CI/CD Pipeline */}
+            {onboardingTab === "cicd" && (
+              <div className="p-6 md:p-8 space-y-6">
+                <div className="max-w-3xl space-y-3">
+                  <h3 className="text-xl font-bold text-white tracking-tight">
+                    Automate in your CI/CD Pipeline (GitHub Actions in 60s)
+                  </h3>
+                  <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                    Drop RippleCI into <code className="text-[#6CC6CB]">.github/workflows/rippleci.yml</code>. On every pull request, RippleCI checks out the diff, builds the AST graph, executes prioritized regression tests within budget, and posts an evidence-backed comment directly on the PR.
+                  </p>
+                </div>
+
+                <div className="relative rounded-xl bg-black/70 border border-[#6CC6CB]/20 p-4 font-mono text-[11px] overflow-x-auto text-zinc-300">
+                  <button
+                    onClick={() => {
+                      const yaml = `name: RippleCI Blast Radius Gate
+on:
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  rippleci-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install RippleCI & Pytest
+        run: pip install rippleci pytest
+
+      - name: Index & Verify Blast Radius
+        env:
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ripple index .
+          ripple impact origin/\${{ github.base_ref }}..HEAD
+          ripple plan --budget 180
+          ripple verify --mutations 3`;
+                      navigator.clipboard.writeText(yaml);
+                      setCopiedOnboardingYaml(true);
+                      setTimeout(() => setCopiedOnboardingYaml(false), 2000);
+                    }}
+                    className="absolute top-3 right-3 flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-lg bg-[#6CC6CB]/20 hover:bg-[#6CC6CB]/30 text-[#EAE5C9] border border-[#6CC6CB]/30 transition-colors"
+                  >
+                    {copiedOnboardingYaml ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedOnboardingYaml ? "Copied YAML!" : "Copy Workflow YAML"}</span>
+                  </button>
+                  <pre>{`name: RippleCI Blast Radius Gate
+on:
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  rippleci-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install RippleCI & Pytest
+        run: pip install rippleci pytest
+
+      - name: Index & Verify Blast Radius
+        env:
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 1. Parse AST into FalkorDB knowledge graph
+          ripple index .
+
+          # 2. Trace multi-hop callers of PR modified lines
+          ripple impact origin/\${{ github.base_ref }}..HEAD
+
+          # 3. GBDT rank regression tests to fit 180s budget
+          ripple plan --budget 180
+
+          # 4. Inject counterfactual mutants to prove test sensitivity
+          ripple verify --mutations 3`}</pre>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 3: Python SDK */}
+            {onboardingTab === "sdk" && (
+              <div className="p-6 md:p-8 space-y-6">
+                <div className="max-w-3xl space-y-3">
+                  <h3 className="text-xl font-bold text-white tracking-tight">
+                    The RippleCI Python SDK: 5 Core Modules
+                  </h3>
+                  <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                    Import <code className="text-[#6CC6CB]">RippleProject</code> to integrate release intelligence into custom CI scripts, pre-commit hooks, or developer toolchains. Every stage is programmatic, modular, and typed:
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5 font-mono text-[11px]">
+                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] space-y-1">
+                    <div className="text-[#6CC6CB] font-bold">project.indexer</div>
+                    <div className="text-zinc-400">AST parsing & FalkorDB graph ingestion</div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] space-y-1">
+                    <div className="text-[#6CC6CB] font-bold">project.analyzer</div>
+                    <div className="text-zinc-400">Multi-hop call graph blast radius traversal</div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] space-y-1">
+                    <div className="text-[#6CC6CB] font-bold">project.planner</div>
+                    <div className="text-zinc-400">GBDT regression test ranking & budget gating</div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] space-y-1">
+                    <div className="text-[#6CC6CB] font-bold">project.verifier</div>
+                    <div className="text-zinc-400">Bounded AST mutation testing & kill scoring</div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] space-y-1">
+                    <div className="text-[#6CC6CB] font-bold">project.agent</div>
+                    <div className="text-zinc-400">Autonomous investigation & root-cause report</div>
+                  </div>
+                </div>
+
+                <div className="relative rounded-xl bg-black/70 border border-[#6CC6CB]/20 p-4 font-mono text-[11px] overflow-x-auto text-zinc-300">
+                  <button
+                    onClick={() => {
+                      const code = `from rippleci.sdk.project import RippleProject
+
+# 1. Open any repository with automatic FalkorDB discovery
+project = RippleProject.open(".")
+
+# 2. Extract AST functions and populate FalkorDB knowledge graph
+summary = project.indexer.index()
+print(f"Indexed {summary.symbols_count} symbols in {summary.duration_ms:.1f}ms")
+
+# 3. Analyze multi-hop blast radius of current pull request
+impact = project.analyzer.analyze(base="origin/main", head="HEAD")
+print(f"Directly modified symbols: {len(impact.changed_symbols)}")
+print(f"Downstream callers:        {len(impact.impacted_symbols)}")
+
+# 4. Generate budget-constrained regression test plan
+plan = project.planner.plan(impact=impact, budget_seconds=180)
+print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_total_seconds:.1f}s)")
+
+# 5. Verify sensitivity with counterfactual AST mutation testing
+verification = project.verifier.verify(plan=plan, max_mutations=3)
+print(f"Mutation score: {verification.mutation_score:.1%} ({verification.killed_mutations_count} killed)")`;
+                      navigator.clipboard.writeText(code);
+                      setCopiedOnboardingSdk(true);
+                      setTimeout(() => setCopiedOnboardingSdk(false), 2000);
+                    }}
+                    className="absolute top-3 right-3 flex items-center gap-1.5 text-[11px] px-3 py-1.5 rounded-lg bg-[#6CC6CB]/20 hover:bg-[#6CC6CB]/30 text-[#EAE5C9] border border-[#6CC6CB]/30 transition-colors"
+                  >
+                    {copiedOnboardingSdk ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedOnboardingSdk ? "Copied SDK!" : "Copy Python Snippet"}</span>
+                  </button>
+                  <pre>{`from rippleci.sdk.project import RippleProject
+
+# 1. Open any repository with automatic FalkorDB discovery
+project = RippleProject.open(".")
+
+# 2. Extract AST functions and populate FalkorDB knowledge graph
+summary = project.indexer.index()
+print(f"Indexed {summary.symbols_count} symbols in {summary.duration_ms:.1f}ms")
+
+# 3. Analyze multi-hop blast radius of current pull request
+impact = project.analyzer.analyze(base="origin/main", head="HEAD")
+print(f"Directly modified symbols: {len(impact.changed_symbols)}")
+print(f"Downstream callers:        {len(impact.impacted_symbols)}")
+
+# 4. Generate budget-constrained regression test plan
+plan = project.planner.plan(impact=impact, budget_seconds=180)
+print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_total_seconds:.1f}s)")
+
+# 5. Verify sensitivity with counterfactual AST mutation testing
+verification = project.verifier.verify(plan=plan, max_mutations=3)
+print(f"Mutation score: {verification.mutation_score:.1%} ({verification.killed_mutations_count} killed)")`}</pre>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 4: Local CLI */}
+            {onboardingTab === "cli" && (
+              <div className="p-6 md:p-8 space-y-6">
+                <div className="max-w-3xl space-y-3">
+                  <h3 className="text-xl font-bold text-white tracking-tight">
+                    Local Terminal CLI Quickstart
+                  </h3>
+                  <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                    Install <code className="text-[#6CC6CB]">rippleci</code> via pip and run natively in your shell. Fast AST indexing, FalkorDB health verification, and machine-readable JSON reports for local development.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
+                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] space-y-1.5">
+                    <div className="text-[#6CC6CB] font-bold">1. Verify Environment</div>
+                    <code className="text-white text-[11px] block bg-white/[0.04] p-2 rounded">
+                      ripple doctor
+                    </code>
+                    <p className="text-[11px] text-zinc-400">Verifies Python version, git, pytest runner, and FalkorDB connectivity.</p>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] space-y-1.5">
+                    <div className="text-[#6CC6CB] font-bold">2. Index Codebase</div>
+                    <code className="text-white text-[11px] block bg-white/[0.04] p-2 rounded">
+                      ripple index .
+                    </code>
+                    <p className="text-[11px] text-zinc-400">Scans all Python modules and builds the call-and-coverage graph in FalkorDB.</p>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] space-y-1.5">
+                    <div className="text-[#6CC6CB] font-bold">3. Compute Blast Radius</div>
+                    <code className="text-white text-[11px] block bg-white/[0.04] p-2 rounded">
+                      ripple impact origin/main..HEAD
+                    </code>
+                    <p className="text-[11px] text-zinc-400">Traces all multi-hop callers affected by changes in the revision range.</p>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] space-y-1.5">
+                    <div className="text-[#6CC6CB] font-bold">4. Plan & Verify Tests</div>
+                    <code className="text-white text-[11px] block bg-white/[0.04] p-2 rounded">
+                      ripple plan --budget 180 && ripple verify
+                    </code>
+                    <p className="text-[11px] text-zinc-400">Runs GBDT prioritized tests and executes counterfactual mutation testing.</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

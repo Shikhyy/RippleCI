@@ -43,7 +43,7 @@ interface ConnectRepoModalProps {
 }
 
 export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoModalProps) {
-  const [activeTab, setActiveTab] = useState<"local" | "github" | "sdk">("local");
+  const [activeTab, setActiveTab] = useState<"github" | "local" | "cicd" | "sdk">("github");
   const [repoPath, setRepoPath] = useState<string>("examples/sample-repository");
   const [repoName, setRepoName] = useState<string>("payments-core-service");
   const [indexing, setIndexing] = useState<boolean>(false);
@@ -53,7 +53,7 @@ export function ConnectRepoModal({ isOpen, onClose, onConnected }: ConnectRepoMo
   const [copiedSdk, setCopiedSdk] = useState<boolean>(false);
 
   // Direct GitHub Integration State
-  const [githubRepo, setGithubRepo] = useState<string>("Shikhyy/RippleCI");
+  const [githubRepo, setGithubRepo] = useState<string>("fastapi/fastapi");
   const [githubToken, setGithubToken] = useState<string>("");
   const [githubLoading, setGithubLoading] = useState<boolean>(false);
   const [githubPRs, setGithubPRs] = useState<GitHubPullRequest[]>([]);
@@ -146,18 +146,29 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
     setTimeout(() => setCopiedSdk(false), 2000);
   };
 
+  const getOwnerAndRepo = () => {
+    const clean = githubRepo
+      .trim()
+      .replace(/^https?:\/\/github\.com\//, "")
+      .replace(/\.git$/, "")
+      .replace(/\/+$/, "");
+    const parts = clean.split("/").filter((p) => p && !["pulls", "pull", "issues"].includes(p));
+    return {
+      clean: parts.slice(0, 2).join("/"),
+      owner: parts[0] || "fastapi",
+      repo: parts[1] || "fastapi",
+    };
+  };
+
   const handleFetchGitHubPRs = async () => {
     setGithubLoading(true);
-    const clean = githubRepo.replace(/^https?:\/\/github\.com\//, "").replace(/\.git$/, "");
-    const parts = clean.split("/");
-    const owner = parts[0] || "Shikhyy";
-    const repo = parts[1] || "RippleCI";
+    const { clean, owner, repo } = getOwnerAndRepo();
 
     try {
       const connected = await connectGitHubRepo(clean, githubToken);
       setConnectedRepo(connected);
       const prs = await fetchGitHubPullRequests(owner, repo, githubToken);
-      setGithubPRs(prs);
+      setGithubPRs(prs || []);
       if (onConnected) onConnected(connected);
     } catch (e) {
       console.error(e);
@@ -168,10 +179,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
 
   const handleAnalyzePR = async (pr: GitHubPullRequest) => {
     setAnalyzingPR(pr.number);
-    const clean = githubRepo.replace(/^https?:\/\/github\.com\//, "").replace(/\.git$/, "");
-    const parts = clean.split("/");
-    const owner = parts[0] || "Shikhyy";
-    const repo = parts[1] || "RippleCI";
+    const { owner, repo } = getOwnerAndRepo();
 
     try {
       const res = await analyzeGitHubPullRequest(owner, repo, pr.number, githubToken);
@@ -185,10 +193,7 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
 
   const handlePostPRComment = async (prNumber: number) => {
     setCommentStatus((prev) => ({ ...prev, [prNumber]: "posting" }));
-    const clean = githubRepo.replace(/^https?:\/\/github\.com\//, "").replace(/\.git$/, "");
-    const parts = clean.split("/");
-    const owner = parts[0] || "Shikhyy";
-    const repo = parts[1] || "RippleCI";
+    const { owner, repo } = getOwnerAndRepo();
     const runId = analyzedPRs[prNumber]?.run_id;
 
     try {
@@ -229,6 +234,18 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
         {/* Tab Selection */}
         <div className="px-5 pt-3 pb-0 border-b border-white/[0.06] flex items-center gap-2 text-xs font-medium">
           <button
+            onClick={() => setActiveTab("github")}
+            className={`pb-2.5 px-2 border-b-2 flex items-center gap-1.5 transition-all ${
+              activeTab === "github"
+                ? "border-[#6CC6CB] text-[#EAE5C9] font-semibold"
+                : "border-transparent text-zinc-400 hover:text-zinc-200"
+            }`}
+          >
+            <Github className="w-3.5 h-3.5 text-[#6CC6CB]" />
+            <span>GitHub (Direct)</span>
+            <span className="text-[9px] px-1 py-0.2 rounded-full bg-[#6CC6CB]/20 text-[#6CC6CB] font-mono border border-[#6CC6CB]/30">Live</span>
+          </button>
+          <button
             onClick={() => setActiveTab("local")}
             className={`pb-2.5 px-2 border-b-2 flex items-center gap-1.5 transition-all ${
               activeTab === "local"
@@ -240,16 +257,15 @@ print(f"Selected {len(plan.selected_tests)} tests ({plan.estimated_duration_seco
             <span>Local Workspace</span>
           </button>
           <button
-            onClick={() => setActiveTab("github")}
+            onClick={() => setActiveTab("cicd")}
             className={`pb-2.5 px-2 border-b-2 flex items-center gap-1.5 transition-all ${
-              activeTab === "github"
+              activeTab === "cicd"
                 ? "border-[#6CC6CB] text-[#EAE5C9] font-semibold"
                 : "border-transparent text-zinc-400 hover:text-zinc-200"
             }`}
           >
-            <Github className="w-3.5 h-3.5 text-[#6CC6CB]" />
-            <span>GitHub (Direct)</span>
-            <span className="text-[9px] px-1 py-0.2 rounded-full bg-[#6CC6CB]/20 text-[#6CC6CB] font-mono border border-[#6CC6CB]/30">Live</span>
+            <GitPullRequest className="w-3.5 h-3.5 text-[#6CC6CB]" />
+            <span>CI/CD Actions</span>
           </button>
           <button
             onClick={() => setActiveTab("sdk")}
@@ -669,6 +685,75 @@ jobs:
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "cicd" && (
+            <div className="space-y-4 text-xs">
+              <div className="text-zinc-300 leading-relaxed">
+                Run RippleCI automatically on every pull request. Add this workflow to your repository to gate untested regressions and post evidence comments to PRs.
+              </div>
+
+              {/* 3-Step Walkthrough */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 font-mono text-[11px]">
+                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] space-y-1">
+                  <div className="text-[#6CC6CB] font-bold">1. Workflow File</div>
+                  <div className="text-zinc-400">Create <code className="text-zinc-200">.github/workflows/rippleci.yml</code></div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] space-y-1">
+                  <div className="text-[#6CC6CB] font-bold">2. Paste YAML</div>
+                  <div className="text-zinc-400">Copy the verified configuration below</div>
+                </div>
+                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] space-y-1">
+                  <div className="text-[#6CC6CB] font-bold">3. Gated Merge</div>
+                  <div className="text-zinc-400">PRs get automated blast radius verification</div>
+                </div>
+              </div>
+
+              {/* Workflow YAML Viewer */}
+              <div className="relative rounded-xl bg-black/70 border border-[#6CC6CB]/20 p-4 font-mono text-[11px] overflow-x-auto text-zinc-300">
+                <button
+                  onClick={copyGithubWorkflow}
+                  className="absolute top-3 right-3 flex items-center gap-1 text-[10px] px-2.5 py-1 rounded-lg bg-[#6CC6CB]/20 hover:bg-[#6CC6CB]/30 text-[#EAE5C9] border border-[#6CC6CB]/30 transition-colors"
+                >
+                  {copiedAction ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  <span>{copiedAction ? "Copied to Clipboard!" : "Copy YAML"}</span>
+                </button>
+                <pre>{`name: RippleCI Blast Radius Gate
+on:
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  rippleci-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install RippleCI & Pytest
+        run: pip install rippleci pytest
+
+      - name: Index & Verify Blast Radius
+        env:
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ripple index .
+          ripple impact origin/\${{ github.base_ref }}..HEAD
+          ripple plan --budget 180
+          ripple verify --mutations 3`}</pre>
               </div>
             </div>
           )}

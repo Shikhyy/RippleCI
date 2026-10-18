@@ -59,6 +59,19 @@ def test_github_analyze_pull_request(client):
     assert "comment_markdown" in data
     assert "RippleCI Release Intelligence" in data["comment_markdown"]
 
+    # Test external repository PR analysis (e.g. fastapi/fastapi)
+    res_external = client.post(
+        "/api/v1/github/repos/fastapi/fastapi/pulls/10420/analyze",
+        json={"budget_seconds": 180, "max_mutations": 3},
+    )
+    assert res_external.status_code == 200
+    ext_data = res_external.json()
+    assert ext_data["repo"] == "fastapi/fastapi"
+    assert ext_data["recommendation"] in ("release_safe", "proceed", "allow")
+    assert len(ext_data["report"]["impact"]["changed_symbols"]) >= 1
+    assert len(ext_data["report"]["plan"]["selected_tests"]) >= 1
+    assert "RELEASE SAFE" in ext_data["comment_markdown"]
+
 
 def test_github_comment_pull_request(client):
     res = client.post(

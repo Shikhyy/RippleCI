@@ -335,6 +335,12 @@ export interface ConnectedRepository {
   test_cases_count?: number;
   edges_count?: number;
   duration_ms?: number;
+  is_github?: boolean;
+  owner?: string;
+  repo?: string;
+  stars?: number;
+  html_url?: string;
+  open_prs_count?: number;
 }
 
 export async function fetchRepositories(): Promise<ConnectedRepository[]> {
