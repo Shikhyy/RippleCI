@@ -28,9 +28,16 @@ function GraphExplorerContent() {
   }, [runId, repoName]);
 
   return (
-    <div className="min-h-screen bg-[#080c0e] text-zinc-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#080c0e] text-zinc-100 flex flex-col font-sans relative">
+      {/* Ambient Glassmorphic Background Glow Orbs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-[#6CC6CB]/[0.08] blur-[140px]" />
+        <div className="absolute top-[40%] right-[5%] w-[550px] h-[550px] rounded-full bg-[#EAE5C9]/[0.05] blur-[150px]" />
+        <div className="absolute bottom-[-10%] left-[30%] w-[650px] h-[500px] rounded-full bg-[#6CC6CB]/[0.07] blur-[150px]" />
+      </div>
+
       {/* Top Header */}
-      <header className="h-14 border-b border-[#6CC6CB]/20 px-6 flex items-center justify-between glass-header">
+      <header className="h-14 border-b border-[#6CC6CB]/20 px-6 flex items-center justify-between glass-header z-10">
         <div className="flex items-center gap-3">
           <Link
             href="/app"
@@ -59,7 +66,7 @@ function GraphExplorerContent() {
           <button
             onClick={reloadGraph}
             disabled={loading}
-            className="flex items-center gap-1.5 text-xs text-[#EAE5C9] hover:text-white bg-[#0d1417] hover:bg-[#121b1f] border border-[#6CC6CB]/30 hover:border-[#6CC6CB]/60 px-3 py-1.5 rounded-lg transition-all shadow-sm active:scale-[0.98]"
+            className="flex items-center gap-1.5 text-xs text-[#EAE5C9] hover:text-white bg-[#0d1417]/80 hover:bg-[#121b1f] border border-[#6CC6CB]/30 hover:border-[#6CC6CB]/60 px-3 py-1.5 rounded-lg transition-all shadow-sm active:scale-[0.98] backdrop-blur-md"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#6CC6CB]" : ""}`} />
             <span>Refresh Subgraph</span>
@@ -68,8 +75,8 @@ function GraphExplorerContent() {
       </header>
 
       {/* Main Canvas View */}
-      <main className="flex-1 p-6 md:p-8 flex flex-col space-y-4 max-w-7xl mx-auto w-full">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-zinc-400 gap-3 p-4 rounded-xl border border-[#6CC6CB]/25 bg-[#0d1417]/90 backdrop-blur-md shadow-card">
+      <main className="flex-1 p-6 md:p-8 flex flex-col space-y-4 max-w-7xl mx-auto w-full z-10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-zinc-400 gap-3 p-4 rounded-xl border border-[#6CC6CB]/25 bg-[#0d1417]/80 backdrop-blur-xl shadow-card glass-panel">
           <div className="flex items-center gap-2 flex-wrap">
             <Database className="w-3.5 h-3.5 text-[#6CC6CB]" />
             <span>Active Subgraph:</span>

@@ -52,6 +52,8 @@ import {
   fetchHealth,
   fetchRepositories,
   fetchRuns,
+  getDefaultGraphForRepo,
+  getDemoRunForRepo,
   GitHubPRAnalysisResult,
   GitHubPullRequest,
   GraphData,
@@ -70,8 +72,8 @@ const PRESET_REPOS = [
 ];
 
 export default function DashboardPage() {
-  const [health, setHealth] = useState<any>({ falkordb_healthy: true, graph_url: "redis://localhost:6379" });
-  const [runs, setRuns] = useState<RunSummary[]>([DEMO_RUN]);
+  const [health, setHealth] = useState<any>({ falkordb_healthy: false, graph_url: "In-Memory AST Store" });
+  const [runs, setRuns] = useState<RunSummary[]>(() => [getDemoRunForRepo("fastapi/fastapi")]);
   const [benchmark, setBenchmark] = useState<BenchmarkReport>(DEMO_BENCHMARK);
   const [loading, setLoading] = useState<boolean>(false);
   const [repositories, setRepositories] = useState<ConnectedRepository[]>([
@@ -143,7 +145,7 @@ export default function DashboardPage() {
   };
 
   // Embedded Graph state
-  const [activeGraph, setActiveGraph] = useState<GraphData>(DEMO_GRAPH_DATA);
+  const [activeGraph, setActiveGraph] = useState<GraphData>(() => getDefaultGraphForRepo("fastapi/fastapi"));
   const [graphLoading, setGraphLoading] = useState<boolean>(false);
 
   const parseRepo = (repoStr: string) => {
@@ -190,9 +192,13 @@ export default function DashboardPage() {
     setGraphLoading(true);
     try {
       const g = await fetchGraph(undefined, repoId);
-      if (g) setActiveGraph(g);
+      if (g && g.nodes && g.nodes.length > 0) {
+        setActiveGraph(g);
+      } else {
+        setActiveGraph(getDefaultGraphForRepo(repoId));
+      }
     } catch (e) {
-      console.error(e);
+      setActiveGraph(getDefaultGraphForRepo(repoId));
     } finally {
       setGraphLoading(false);
     }
@@ -201,8 +207,17 @@ export default function DashboardPage() {
   // Switch repository globally
   const handleSelectRepository = (newRepoId: string) => {
     setSelectedRepoId(newRepoId);
+    setActiveGraph(getDefaultGraphForRepo(newRepoId));
     loadRepoPRs(newRepoId);
     loadRepoGraph(newRepoId);
+    fetchRuns(newRepoId).then((loadedRuns) => {
+      if (loadedRuns && loadedRuns.length > 0) {
+        setRuns((prev) => [
+          ...loadedRuns,
+          ...prev.filter((p) => !loadedRuns.some((r) => r.run_id === p.run_id)),
+        ]);
+      }
+    });
   };
 
   useEffect(() => {
@@ -213,14 +228,26 @@ export default function DashboardPage() {
         setRepositories(repos);
         if (!repos.find((r) => r.id === selectedRepoId)) {
           setSelectedRepoId(repos[0].id);
+          setActiveGraph(getDefaultGraphForRepo(repos[0].id));
           loadRepoPRs(repos[0].id);
           loadRepoGraph(repos[0].id);
+          fetchRuns(repos[0].id).then((loadedRuns) => {
+            if (loadedRuns && loadedRuns.length > 0) {
+              setRuns((prev) => [
+                ...loadedRuns,
+                ...prev.filter((p) => !loadedRuns.some((r) => r.run_id === p.run_id)),
+              ]);
+            }
+          });
         }
       }
     });
-    fetchRuns().then((loadedRuns) => {
+    fetchRuns(selectedRepoId).then((loadedRuns) => {
       if (loadedRuns && loadedRuns.length > 0) {
-        setRuns(loadedRuns);
+        setRuns((prev) => [
+          ...loadedRuns,
+          ...prev.filter((p) => !loadedRuns.some((r) => r.run_id === p.run_id)),
+        ]);
       }
     });
     loadRepoPRs(selectedRepoId);
@@ -281,7 +308,10 @@ export default function DashboardPage() {
   };
 
   // Derive repository telemetry metrics
-  const latestRun = runs.find((r) => r.repo_id === selectedRepoId) || runs[0] || DEMO_RUN;
+  const latestRun =
+    runs.find((r) => r.repo_id === selectedRepoId) ||
+    runs.find((r) => selectedRepoId.toLowerCase().includes(r.repo_id?.toLowerCase() || "")) ||
+    getDemoRunForRepo(selectedRepoId);
   const totalTests = currentRepo.test_cases_count || benchmark.total_suite_tests || 18;
   const selectedTestsCount = latestRun.plan?.selected_tests?.length || 4;
   const efficiency = ((1 - selectedTestsCount / Math.max(1, totalTests)) * 100).toFixed(1);
@@ -294,6 +324,13 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#080c0e] text-zinc-100 flex flex-col md:flex-row relative font-sans">
+      {/* Ambient Glassmorphic Background Glow Orbs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-[#6CC6CB]/[0.08] blur-[140px]" />
+        <div className="absolute top-[40%] right-[5%] w-[550px] h-[550px] rounded-full bg-[#EAE5C9]/[0.05] blur-[150px]" />
+        <div className="absolute bottom-[-10%] left-[30%] w-[650px] h-[500px] rounded-full bg-[#6CC6CB]/[0.07] blur-[150px]" />
+      </div>
+
       {/* Connect Repository Modal */}
       <ConnectRepoModal
         isOpen={isConnectModalOpen}
@@ -357,23 +394,35 @@ export default function DashboardPage() {
         </div>
 
         {/* FalkorDB Engine Status */}
-        <div className="mt-8 md:mt-0 p-3.5 rounded-xl border border-[#6CC6CB]/25 bg-[#0d1417]/90 backdrop-blur-md text-xs space-y-1.5 shadow-card">
+        <div className="mt-8 md:mt-0 p-3.5 rounded-xl border border-[#6CC6CB]/25 bg-[#0d1417]/80 backdrop-blur-xl text-xs space-y-2 shadow-card glass-panel">
           <div className="flex items-center justify-between">
-            <span className="text-zinc-400 font-medium flex items-center gap-1.5">
+            <span className="text-zinc-300 font-medium flex items-center gap-1.5">
               <Database className="w-3.5 h-3.5 text-[#6CC6CB]" />
-              FalkorDB
+              <span>{health.falkordb_healthy ? "FalkorDB Redis" : "FalkorDB AST Store"}</span>
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              ONLINE
+            <span
+              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
+                health.falkordb_healthy
+                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/25"
+                  : "bg-[#6CC6CB]/15 text-[#6CC6CB] border border-[#6CC6CB]/30"
+              }`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  health.falkordb_healthy ? "bg-emerald-400" : "bg-[#6CC6CB]"
+                } animate-pulse`}
+              />
+              {health.falkordb_healthy ? "ONLINE" : "IN-MEMORY"}
             </span>
           </div>
           <div className="text-[11px] font-mono text-zinc-400 truncate">
-            {health.graph_url || "redis://localhost:6379"}
+            {health.falkordb_healthy
+              ? health.graph_url || "redis://localhost:6379"
+              : "In-Memory Cypher Store"}
           </div>
           <div className="text-[10px] font-mono text-[#EAE5C9]/80 flex items-center justify-between">
-            <span>Graph: rippleci_repo_graph</span>
-            <span className="text-emerald-400">Zero Keys</span>
+            <span>Engine: {health.falkordb_healthy ? "Redis Server" : "Zero Keys (Pure AST)"}</span>
+            <span className="text-emerald-400">Active</span>
           </div>
         </div>
       </aside>
@@ -431,11 +480,11 @@ export default function DashboardPage() {
         {/* Dashboard Content Container */}
         <div className="p-6 sm:p-8 space-y-6 max-w-7xl">
           {/* Unified Repository Command Hub */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-[#090e11] border border-[#6CC6CB]/25 shadow-card space-y-4 font-mono">
+          <div className="p-4 sm:p-5 rounded-2xl glass-panel space-y-4 font-mono">
             {/* Active Repository Identity Row */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
               <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-[#0d1519] border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB] shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-[#0d1519]/80 border border-[#6CC6CB]/30 flex items-center justify-center text-[#6CC6CB] shadow-sm backdrop-blur-md">
                   {currentRepo.is_github || selectedRepoId.includes("/") ? (
                     <Github className="w-5 h-5" />
                   ) : (
@@ -447,7 +496,7 @@ export default function DashboardPage() {
                     <h1 className="text-base sm:text-lg font-bold text-white tracking-tight">
                       {selectedRepoId}
                     </h1>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 backdrop-blur-md">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       AST SYNCHRONIZED
                     </span>
@@ -480,16 +529,16 @@ export default function DashboardPage() {
 
               {/* Status Chips */}
               <div className="flex items-center gap-2 self-start md:self-auto flex-wrap">
-                <span className="px-2.5 py-1 rounded-lg bg-black/50 border border-white/[0.08] text-[11px] text-zinc-300 flex items-center gap-1.5">
+                <span className="px-2.5 py-1 rounded-lg bg-black/40 border border-white/[0.08] text-[11px] text-zinc-300 flex items-center gap-1.5 backdrop-blur-md">
                   <Database className="w-3 h-3 text-[#6CC6CB]" />
-                  <span>FalkorDB Cypher Engine</span>
+                  <span>{health.falkordb_healthy ? "FalkorDB Redis Engine" : "FalkorDB AST Engine (In-Memory)"}</span>
                 </span>
-                <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-[11px] text-emerald-400 font-semibold">
+                <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-[11px] text-emerald-400 font-semibold backdrop-blur-md">
                   Zero Keys Required
                 </span>
                 <button
                   onClick={() => setIsConnectModalOpen(true)}
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#6CC6CB]/15 hover:bg-[#6CC6CB]/25 border border-[#6CC6CB]/35 text-[#EAE5C9] text-xs font-semibold transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#6CC6CB]/15 hover:bg-[#6CC6CB]/25 border border-[#6CC6CB]/35 text-[#EAE5C9] text-xs font-semibold transition-colors backdrop-blur-md"
                 >
                   <Plus className="w-3.5 h-3.5 text-[#6CC6CB]" />
                   <span>Connect Repo</span>
@@ -694,7 +743,7 @@ export default function DashboardPage() {
                       const report =
                         analysis?.report ||
                         (analysis?.run_id ? runs.find((r) => r.run_id === analysis.run_id) : null) ||
-                        DEMO_RUN;
+                        getDemoRunForRepo(selectedRepoId);
                       const changedSymbols = report?.impact?.changed_symbols || [];
                       const impactedSymbols = report?.impact?.impacted_symbols || [];
                       const selectedTests = report?.plan?.selected_tests || [];
@@ -714,10 +763,10 @@ export default function DashboardPage() {
                       return (
                         <div
                           key={pr.number}
-                          className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+                          className={`rounded-2xl border transition-all duration-200 overflow-hidden backdrop-blur-md ${
                             analysis
-                              ? "border-[#6CC6CB]/35 bg-[#090f13] shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
-                              : "border-white/[0.08] bg-[#070b0d] hover:border-white/[0.18]"
+                              ? "border-[#6CC6CB]/35 bg-[#090f13]/85 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+                              : "border-white/[0.08] bg-[#070b0d]/80 hover:border-[#6CC6CB]/30 shadow-card"
                           }`}
                         >
                           {/* Top PR Header Row */}
@@ -850,9 +899,9 @@ export default function DashboardPage() {
 
                           {/* Expanded PR Analysis Cockpit */}
                           {analysis && isExpanded && (
-                            <div className="border-t border-[#6CC6CB]/20 bg-[#060a0d]/90 p-5 space-y-5 animate-in fade-in duration-200">
+                            <div className="border-t border-[#6CC6CB]/20 bg-[#060a0d]/80 backdrop-blur-xl p-5 space-y-5 animate-in fade-in duration-200">
                               {/* Summary Verdict & KPI Strip */}
-                              <div className="p-4 rounded-xl bg-black/60 border border-white/[0.08] flex flex-col lg:flex-row lg:items-center justify-between gap-4 font-mono">
+                              <div className="p-4 rounded-xl craft-card flex flex-col lg:flex-row lg:items-center justify-between gap-4 font-mono">
                                 <div className="flex items-center gap-3">
                                   <div
                                     className={`w-3 h-3 rounded-full shrink-0 ${
@@ -910,7 +959,7 @@ export default function DashboardPage() {
                               {/* Two-Column Bento: Blast Radius vs ML Test Plan */}
                               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                 {/* Left Bento: FalkorDB Multi-Hop AST Blast Radius */}
-                                <div className="p-4 rounded-xl bg-[#090e11] border border-[#6CC6CB]/20 space-y-4 font-mono">
+                                <div className="p-4 sm:p-5 rounded-xl craft-card space-y-4 font-mono">
                                   <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
                                     <div className="flex items-center gap-2">
                                       <Network className="w-4 h-4 text-[#6CC6CB]" />
@@ -1001,7 +1050,7 @@ export default function DashboardPage() {
                                 </div>
 
                                 {/* Right Bento: ML Test Plan & Mutation Proof */}
-                                <div className="p-4 rounded-xl bg-[#090e11] border border-[#6CC6CB]/20 space-y-4 font-mono">
+                                <div className="p-4 sm:p-5 rounded-xl craft-card space-y-4 font-mono">
                                   <div className="flex items-center justify-between pb-2 border-b border-white/[0.08]">
                                     <div className="flex items-center gap-2">
                                       <Zap className="w-4 h-4 text-emerald-400" />

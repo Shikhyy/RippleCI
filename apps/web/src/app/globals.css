@@ -47,24 +47,64 @@ body {
 
 /* Glassmorphism & Sculpted Craft Surfaces */
 .glass-header {
-  background: rgba(8, 12, 14, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(108, 198, 203, 0.18);
+  background: rgba(8, 12, 14, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(108, 198, 203, 0.20);
+  box-shadow: inset 0 -1px 0 0 rgba(234, 229, 201, 0.08), 0 4px 24px rgba(0, 0, 0, 0.45);
 }
 
 .craft-card {
-  background-color: #0d1417;
-  border: 1px solid rgba(108, 198, 203, 0.20);
-  box-shadow: inset 0 1px 0 0 rgba(234, 229, 201, 0.20), 0 8px 30px rgba(0, 0, 0, 0.45);
-  border-radius: 0.75rem;
+  background: rgba(13, 20, 23, 0.65);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(108, 198, 203, 0.22);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(234, 229, 201, 0.22),
+    inset 0 -1px 0 0 rgba(108, 198, 203, 0.08),
+    0 8px 32px 0 rgba(0, 0, 0, 0.50),
+    0 0 20px -6px rgba(108, 198, 203, 0.12);
+  border-radius: 1rem;
 }
 
 .craft-card-subtle {
-  background-color: rgba(13, 20, 23, 0.7);
-  border: 1px solid rgba(108, 198, 203, 0.14);
-  box-shadow: inset 0 1px 0 0 rgba(234, 229, 201, 0.10);
-  border-radius: 0.75rem;
+  background: rgba(10, 16, 19, 0.55);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(108, 198, 203, 0.16);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(234, 229, 201, 0.12),
+    0 4px 20px rgba(0, 0, 0, 0.35);
+  border-radius: 0.875rem;
+}
+
+.glass-panel {
+  background: rgba(11, 17, 20, 0.70);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(108, 198, 203, 0.25);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(234, 229, 201, 0.25),
+    inset 0 -1px 0 0 rgba(108, 198, 203, 0.10),
+    0 16px 48px -8px rgba(0, 0, 0, 0.60),
+    0 0 24px -4px rgba(108, 198, 203, 0.15);
+  border-radius: 1.25rem;
+}
+
+.glass-pill {
+  background: rgba(108, 198, 203, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(108, 198, 203, 0.32);
+  box-shadow: inset 0 1px 0 0 rgba(234, 229, 201, 0.25);
+}
+
+.glass-pill-gold {
+  background: rgba(234, 229, 201, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(234, 229, 201, 0.25);
+  box-shadow: inset 0 1px 0 0 rgba(234, 229, 201, 0.20);
 }
 
 /* React Flow customizations */

@@ -184,6 +184,293 @@ export const DEMO_RUN: RunSummary = {
   },
 };
 
+export function getDefaultGraphForRepo(repoId: string): GraphData {
+  const lower = (repoId || "").toLowerCase();
+  if (lower.includes("fastapi")) {
+    return {
+      nodes: [
+        { id: "fastapi.routing:setup_lifespan", label: "setup_lifespan", kind: "changed", data: { file_path: "fastapi/routing.py", lines: "42-78", kind: "function", status: "MODIFIED" } },
+        { id: "fastapi.routing:APIRouter.include_router", label: "APIRouter.include_router", kind: "impacted", data: { file_path: "fastapi/routing.py", lines: "110-155", kind: "function", hops: 1 } },
+        { id: "fastapi.applications:FastAPI.setup", label: "FastAPI.setup", kind: "impacted", data: { file_path: "fastapi/applications.py", lines: "90-130", kind: "function", hops: 2 } },
+        { id: "fastapi.dependencies.utils:solve_dependencies", label: "solve_dependencies", kind: "symbol", data: { file_path: "fastapi/dependencies/utils.py", lines: "500-610", kind: "function" } },
+        { id: "fastapi.routing:get_dependant", label: "get_dependant", kind: "symbol", data: { file_path: "fastapi/dependencies/models.py", lines: "80-140", kind: "function" } },
+        { id: "test_router_lifespan_state_propagation", label: "test_router_lifespan_state_propagation", kind: "test", data: { file_path: "tests/test_routing.py", score: 0.98, rank: 1 } },
+        { id: "test_dependency_injection_scope", label: "test_dependency_injection_scope", kind: "test", data: { file_path: "tests/test_dependencies.py", score: 0.94, rank: 2 } },
+        { id: "test_fastapi_sub_application_mount", label: "test_fastapi_sub_application_mount", kind: "test", data: { file_path: "tests/test_sub_apps.py", score: 0.91, rank: 3 } },
+      ],
+      edges: [
+        { id: "e1", source: "fastapi.routing:APIRouter.include_router", target: "fastapi.routing:setup_lifespan", type: "calls", data: { label: "CALLS (Hop 1)" } },
+        { id: "e2", source: "fastapi.applications:FastAPI.setup", target: "fastapi.routing:APIRouter.include_router", type: "calls", data: { label: "CALLS (Hop 2)" } },
+        { id: "e3", source: "fastapi.routing:setup_lifespan", target: "fastapi.dependencies.utils:solve_dependencies", type: "calls", data: { label: "CALLS" } },
+        { id: "e4", source: "fastapi.dependencies.utils:solve_dependencies", target: "fastapi.routing:get_dependant", type: "calls", data: { label: "CALLS" } },
+        { id: "e5", source: "test_router_lifespan_state_propagation", target: "fastapi.routing:setup_lifespan", type: "covers", data: { label: "COVERS (Verified)" } },
+        { id: "e6", source: "test_dependency_injection_scope", target: "fastapi.dependencies.utils:solve_dependencies", type: "covers", data: { label: "COVERS" } },
+        { id: "e7", source: "test_fastapi_sub_application_mount", target: "fastapi.applications:FastAPI.setup", type: "covers", data: { label: "COVERS" } },
+      ],
+    };
+  }
+  if (lower.includes("flask")) {
+    return {
+      nodes: [
+        { id: "flask.blueprints:Blueprint.register", label: "Blueprint.register", kind: "changed", data: { file_path: "src/flask/blueprints.py", lines: "120-165", kind: "function", status: "MODIFIED" } },
+        { id: "flask.app:Flask.register_blueprint", label: "Flask.register_blueprint", kind: "impacted", data: { file_path: "src/flask/app.py", lines: "850-910", kind: "function", hops: 1 } },
+        { id: "flask.app:Flask.dispatch_request", label: "Flask.dispatch_request", kind: "impacted", data: { file_path: "src/flask/app.py", lines: "1420-1480", kind: "function", hops: 2 } },
+        { id: "flask.ctx:RequestContext.push", label: "RequestContext.push", kind: "symbol", data: { file_path: "src/flask/ctx.py", lines: "280-340", kind: "function" } },
+        { id: "test_blueprint_nested_prefix", label: "test_blueprint_nested_prefix", kind: "test", data: { file_path: "tests/test_blueprints.py", score: 0.97, rank: 1 } },
+        { id: "test_url_prefix_dispatch", label: "test_url_prefix_dispatch", kind: "test", data: { file_path: "tests/test_blueprints.py", score: 0.93, rank: 2 } },
+        { id: "test_request_context_teardown", label: "test_request_context_teardown", kind: "test", data: { file_path: "tests/test_ctx.py", score: 0.89, rank: 3 } },
+      ],
+      edges: [
+        { id: "e1", source: "flask.app:Flask.register_blueprint", target: "flask.blueprints:Blueprint.register", type: "calls", data: { label: "CALLS (Hop 1)" } },
+        { id: "e2", source: "flask.app:Flask.dispatch_request", target: "flask.app:Flask.register_blueprint", type: "calls", data: { label: "CALLS (Hop 2)" } },
+        { id: "e3", source: "flask.app:Flask.dispatch_request", target: "flask.ctx:RequestContext.push", type: "calls", data: { label: "CALLS" } },
+        { id: "e4", source: "test_blueprint_nested_prefix", target: "flask.blueprints:Blueprint.register", type: "covers", data: { label: "COVERS (Verified)" } },
+        { id: "e5", source: "test_url_prefix_dispatch", target: "flask.app:Flask.register_blueprint", type: "covers", data: { label: "COVERS" } },
+        { id: "e6", source: "test_request_context_teardown", target: "flask.ctx:RequestContext.push", type: "covers", data: { label: "COVERS" } },
+      ],
+    };
+  }
+  if (lower.includes("requests")) {
+    return {
+      nodes: [
+        { id: "requests.adapters:HTTPAdapter.send", label: "HTTPAdapter.send", kind: "changed", data: { file_path: "requests/adapters.py", lines: "410-480", kind: "function", status: "MODIFIED" } },
+        { id: "requests.sessions:Session.send", label: "Session.send", kind: "impacted", data: { file_path: "requests/sessions.py", lines: "620-690", kind: "function", hops: 1 } },
+        { id: "requests.sessions:Session.request", label: "Session.request", kind: "impacted", data: { file_path: "requests/sessions.py", lines: "510-580", kind: "function", hops: 2 } },
+        { id: "requests.api:request", label: "requests.api:request", kind: "symbol", data: { file_path: "requests/api.py", lines: "20-60", kind: "function" } },
+        { id: "test_connection_pool_timeout", label: "test_connection_pool_timeout", kind: "test", data: { file_path: "tests/test_requests.py", score: 0.98, rank: 1 } },
+        { id: "test_retry_exponential_backoff", label: "test_retry_exponential_backoff", kind: "test", data: { file_path: "tests/test_requests.py", score: 0.95, rank: 2 } },
+        { id: "test_ssl_hostname_verification", label: "test_ssl_hostname_verification", kind: "test", data: { file_path: "tests/test_ssl.py", score: 0.92, rank: 3 } },
+      ],
+      edges: [
+        { id: "e1", source: "requests.sessions:Session.send", target: "requests.adapters:HTTPAdapter.send", type: "calls", data: { label: "CALLS (Hop 1)" } },
+        { id: "e2", source: "requests.sessions:Session.request", target: "requests.sessions:Session.send", type: "calls", data: { label: "CALLS (Hop 2)" } },
+        { id: "e3", source: "requests.api:request", target: "requests.sessions:Session.request", type: "calls", data: { label: "CALLS" } },
+        { id: "e4", source: "test_connection_pool_timeout", target: "requests.adapters:HTTPAdapter.send", type: "covers", data: { label: "COVERS (Verified)" } },
+        { id: "e5", source: "test_retry_exponential_backoff", target: "requests.sessions:Session.send", type: "covers", data: { label: "COVERS" } },
+        { id: "e6", source: "test_ssl_hostname_verification", target: "requests.sessions:Session.request", type: "covers", data: { label: "COVERS" } },
+      ],
+    };
+  }
+  if (lower.includes("rippleci")) {
+    return {
+      nodes: [
+        { id: "rippleci.graph:CypherGraphStore.query_multi_hop_callers", label: "CypherGraphStore.query_multi_hop_callers", kind: "changed", data: { file_path: "packages/graph/rippleci/graph/store.py", lines: "65-112", kind: "function", status: "MODIFIED" } },
+        { id: "rippleci.core:ImpactAnalyzer.analyze_blast_radius", label: "ImpactAnalyzer.analyze_blast_radius", kind: "impacted", data: { file_path: "packages/core/rippleci/core/analyzer.py", lines: "45-88", kind: "function", hops: 1 } },
+        { id: "rippleci.ml:TestPlanner.plan_regression_suite", label: "TestPlanner.plan_regression_suite", kind: "impacted", data: { file_path: "packages/ml/rippleci/ranking/planner.py", lines: "50-95", kind: "function", hops: 2 } },
+        { id: "rippleci.verification:MutationVerifier.verify", label: "MutationVerifier.verify", kind: "symbol", data: { file_path: "packages/verification/rippleci/verification/engine.py", lines: "40-90", kind: "function" } },
+        { id: "test_cypher_multi_hop_traversal", label: "test_cypher_multi_hop_traversal", kind: "test", data: { file_path: "tests/unit/test_indexer.py", score: 0.99, rank: 1 } },
+        { id: "test_impact_analysis_on_changed_function", label: "test_impact_analysis_on_changed_function", kind: "test", data: { file_path: "tests/unit/test_impact.py", score: 0.96, rank: 2 } },
+        { id: "test_test_planner_budget_constraint", label: "test_test_planner_budget_constraint", kind: "test", data: { file_path: "tests/unit/test_ranking.py", score: 0.93, rank: 3 } },
+      ],
+      edges: [
+        { id: "e1", source: "rippleci.core:ImpactAnalyzer.analyze_blast_radius", target: "rippleci.graph:CypherGraphStore.query_multi_hop_callers", type: "calls", data: { label: "CALLS (Hop 1)" } },
+        { id: "e2", source: "rippleci.ml:TestPlanner.plan_regression_suite", target: "rippleci.core:ImpactAnalyzer.analyze_blast_radius", type: "calls", data: { label: "CALLS (Hop 2)" } },
+        { id: "e3", source: "rippleci.verification:MutationVerifier.verify", target: "rippleci.ml:TestPlanner.plan_regression_suite", type: "calls", data: { label: "CALLS" } },
+        { id: "e4", source: "test_cypher_multi_hop_traversal", target: "rippleci.graph:CypherGraphStore.query_multi_hop_callers", type: "covers", data: { label: "COVERS (Verified)" } },
+        { id: "e5", source: "test_impact_analysis_on_changed_function", target: "rippleci.core:ImpactAnalyzer.analyze_blast_radius", type: "covers", data: { label: "COVERS" } },
+        { id: "e6", source: "test_test_planner_budget_constraint", target: "rippleci.ml:TestPlanner.plan_regression_suite", type: "covers", data: { label: "COVERS" } },
+      ],
+    };
+  }
+  return DEMO_GRAPH_DATA;
+}
+
+export function getDemoRunForRepo(repoId: string): RunSummary {
+  const lower = (repoId || "").toLowerCase();
+  if (lower.includes("fastapi")) {
+    return {
+      run_id: "run_fa_10425",
+      repo_id: repoId || "fastapi/fastapi",
+      base_ref: "master",
+      head_ref: "refs/pull/10425/head",
+      created_at: new Date().toISOString(),
+      recommendation: "RELEASE_SAFE",
+      impact: {
+        changed_symbols: [
+          { name: "setup_lifespan", file_path: "fastapi/routing.py", start_line: 42, end_line: 78 }
+        ],
+        impacted_symbols: [
+          { symbol: { name: "APIRouter.include_router", file_path: "fastapi/routing.py" }, hops_from_change: 1, path_to_change: ["APIRouter.include_router", "setup_lifespan"] },
+          { symbol: { name: "FastAPI.setup", file_path: "fastapi/applications.py" }, hops_from_change: 2, path_to_change: ["FastAPI.setup", "APIRouter.include_router", "setup_lifespan"] },
+        ],
+        candidate_tests: [
+          { test_case: { name: "test_router_lifespan_state_propagation", node_id: "tests/test_routing.py::test_router_lifespan_state_propagation" }, direct_coverage: true, shortest_hops: 1 },
+          { test_case: { name: "test_dependency_injection_scope", node_id: "tests/test_dependencies.py::test_dependency_injection_scope" }, direct_coverage: false, shortest_hops: 2 },
+          { test_case: { name: "test_fastapi_sub_application_mount", node_id: "tests/test_sub_apps.py::test_fastapi_sub_application_mount" }, direct_coverage: false, shortest_hops: 2 },
+        ],
+        warnings: [],
+      },
+      plan: {
+        budget_seconds: 180,
+        estimated_total_seconds: 3.2,
+        ranker_type: "MLRanker (GBDT)",
+        selected_tests: [
+          { rank: 1, name: "test_router_lifespan_state_propagation", rank_score: 0.98, reasons: ["Direct coverage of setup_lifespan", "Lifespan state propagation"], estimated_duration_seconds: 0.9 },
+          { rank: 2, name: "test_dependency_injection_scope", rank_score: 0.92, reasons: ["Immediate caller APIRouter.include_router", "Scope isolation test"], estimated_duration_seconds: 1.1 },
+          { rank: 3, name: "test_fastapi_sub_application_mount", rank_score: 0.86, reasons: ["Transitive caller FastAPI.setup", "Mount point lifespan verification"], estimated_duration_seconds: 1.2 },
+        ],
+      },
+      verification: {
+        all_passed: true,
+        tests_passed_count: 3,
+        tests_executed_count: 3,
+        mutations_tested_count: 3,
+        killed_mutations_count: 3,
+        survived_mutations_count: 0,
+        mutation_score: 1.0,
+        total_wall_time_seconds: 3.2,
+        recommendation: "RELEASE_SAFE",
+        surviving_mutants: [],
+      },
+    };
+  }
+  if (lower.includes("flask")) {
+    return {
+      run_id: "run_fl_5432",
+      repo_id: repoId || "pallets/flask",
+      base_ref: "main",
+      head_ref: "refs/pull/5432/head",
+      created_at: new Date().toISOString(),
+      recommendation: "RELEASE_SAFE",
+      impact: {
+        changed_symbols: [
+          { name: "Blueprint.register", file_path: "src/flask/blueprints.py", start_line: 120, end_line: 165 }
+        ],
+        impacted_symbols: [
+          { symbol: { name: "Flask.register_blueprint", file_path: "src/flask/app.py" }, hops_from_change: 1, path_to_change: ["Flask.register_blueprint", "Blueprint.register"] },
+          { symbol: { name: "Flask.dispatch_request", file_path: "src/flask/app.py" }, hops_from_change: 2, path_to_change: ["Flask.dispatch_request", "Flask.register_blueprint", "Blueprint.register"] },
+        ],
+        candidate_tests: [
+          { test_case: { name: "test_blueprint_nested_prefix", node_id: "tests/test_blueprints.py::test_blueprint_nested_prefix" }, direct_coverage: true, shortest_hops: 1 },
+          { test_case: { name: "test_url_prefix_dispatch", node_id: "tests/test_blueprints.py::test_url_prefix_dispatch" }, direct_coverage: false, shortest_hops: 2 },
+          { test_case: { name: "test_request_context_teardown", node_id: "tests/test_ctx.py::test_request_context_teardown" }, direct_coverage: false, shortest_hops: 2 },
+        ],
+        warnings: [],
+      },
+      plan: {
+        budget_seconds: 180,
+        estimated_total_seconds: 2.8,
+        ranker_type: "MLRanker (GBDT)",
+        selected_tests: [
+          { rank: 1, name: "test_blueprint_nested_prefix", rank_score: 0.97, reasons: ["Direct coverage of Blueprint.register", "URL prefix composition"], estimated_duration_seconds: 0.8 },
+          { rank: 2, name: "test_url_prefix_dispatch", rank_score: 0.91, reasons: ["Immediate caller Flask.register_blueprint", "Route registration test"], estimated_duration_seconds: 1.0 },
+          { rank: 3, name: "test_request_context_teardown", rank_score: 0.84, reasons: ["Transitive caller Flask.dispatch_request", "Context teardown validation"], estimated_duration_seconds: 1.0 },
+        ],
+      },
+      verification: {
+        all_passed: true,
+        tests_passed_count: 3,
+        tests_executed_count: 3,
+        mutations_tested_count: 3,
+        killed_mutations_count: 3,
+        survived_mutations_count: 0,
+        mutation_score: 1.0,
+        total_wall_time_seconds: 2.8,
+        recommendation: "RELEASE_SAFE",
+        surviving_mutants: [],
+      },
+    };
+  }
+  if (lower.includes("requests")) {
+    return {
+      run_id: "run_req_6712",
+      repo_id: repoId || "psf/requests",
+      base_ref: "main",
+      head_ref: "refs/pull/6712/head",
+      created_at: new Date().toISOString(),
+      recommendation: "RELEASE_SAFE",
+      impact: {
+        changed_symbols: [
+          { name: "HTTPAdapter.send", file_path: "requests/adapters.py", start_line: 410, end_line: 480 }
+        ],
+        impacted_symbols: [
+          { symbol: { name: "Session.send", file_path: "requests/sessions.py" }, hops_from_change: 1, path_to_change: ["Session.send", "HTTPAdapter.send"] },
+          { symbol: { name: "Session.request", file_path: "requests/sessions.py" }, hops_from_change: 2, path_to_change: ["Session.request", "Session.send", "HTTPAdapter.send"] },
+        ],
+        candidate_tests: [
+          { test_case: { name: "test_connection_pool_timeout", node_id: "tests/test_requests.py::test_connection_pool_timeout" }, direct_coverage: true, shortest_hops: 1 },
+          { test_case: { name: "test_retry_exponential_backoff", node_id: "tests/test_requests.py::test_retry_exponential_backoff" }, direct_coverage: false, shortest_hops: 1 },
+          { test_case: { name: "test_ssl_hostname_verification", node_id: "tests/test_ssl.py::test_ssl_hostname_verification" }, direct_coverage: false, shortest_hops: 2 },
+        ],
+        warnings: [],
+      },
+      plan: {
+        budget_seconds: 180,
+        estimated_total_seconds: 4.0,
+        ranker_type: "MLRanker (GBDT)",
+        selected_tests: [
+          { rank: 1, name: "test_connection_pool_timeout", rank_score: 0.98, reasons: ["Direct coverage of HTTPAdapter.send", "Socket timeout recovery"], estimated_duration_seconds: 1.1 },
+          { rank: 2, name: "test_retry_exponential_backoff", rank_score: 0.93, reasons: ["Immediate caller Session.send", "Exponential backoff test"], estimated_duration_seconds: 1.3 },
+          { rank: 3, name: "test_ssl_hostname_verification", rank_score: 0.88, reasons: ["Transitive caller Session.request", "TLS certificate verification"], estimated_duration_seconds: 1.6 },
+        ],
+      },
+      verification: {
+        all_passed: true,
+        tests_passed_count: 3,
+        tests_executed_count: 3,
+        mutations_tested_count: 3,
+        killed_mutations_count: 3,
+        survived_mutations_count: 0,
+        mutation_score: 1.0,
+        total_wall_time_seconds: 4.0,
+        recommendation: "RELEASE_SAFE",
+        surviving_mutants: [],
+      },
+    };
+  }
+  if (lower.includes("rippleci")) {
+    return {
+      run_id: "run_rip_042",
+      repo_id: repoId || "Shikhyy/RippleCI",
+      base_ref: "main",
+      head_ref: "refs/pull/42/head",
+      created_at: new Date().toISOString(),
+      recommendation: "RELEASE_SAFE",
+      impact: {
+        changed_symbols: [
+          { name: "CypherGraphStore.query_multi_hop_callers", file_path: "packages/graph/rippleci/graph/store.py", start_line: 65, end_line: 112 }
+        ],
+        impacted_symbols: [
+          { symbol: { name: "ImpactAnalyzer.analyze_blast_radius", file_path: "packages/core/rippleci/core/analyzer.py" }, hops_from_change: 1, path_to_change: ["ImpactAnalyzer.analyze_blast_radius", "CypherGraphStore.query_multi_hop_callers"] },
+          { symbol: { name: "TestPlanner.plan_regression_suite", file_path: "packages/ml/rippleci/ranking/planner.py" }, hops_from_change: 2, path_to_change: ["TestPlanner.plan_regression_suite", "ImpactAnalyzer.analyze_blast_radius", "CypherGraphStore.query_multi_hop_callers"] },
+        ],
+        candidate_tests: [
+          { test_case: { name: "test_cypher_multi_hop_traversal", node_id: "tests/unit/test_indexer.py::test_index_sample_repository" }, direct_coverage: true, shortest_hops: 1 },
+          { test_case: { name: "test_impact_analysis_on_changed_function", node_id: "tests/unit/test_impact.py::test_impact_analysis_on_changed_function" }, direct_coverage: false, shortest_hops: 1 },
+          { test_case: { name: "test_test_planner_budget_constraint", node_id: "tests/unit/test_ranking.py::test_test_planner_budget_constraint" }, direct_coverage: false, shortest_hops: 2 },
+        ],
+        warnings: [],
+      },
+      plan: {
+        budget_seconds: 180,
+        estimated_total_seconds: 2.1,
+        ranker_type: "MLRanker (GBDT)",
+        selected_tests: [
+          { rank: 1, name: "test_cypher_multi_hop_traversal", rank_score: 0.99, reasons: ["Direct coverage of CypherGraphStore", "Multi-hop graph index"], estimated_duration_seconds: 0.4 },
+          { rank: 2, name: "test_impact_analysis_on_changed_function", rank_score: 0.95, reasons: ["Immediate caller ImpactAnalyzer", "Blast radius calculation"], estimated_duration_seconds: 0.8 },
+          { rank: 3, name: "test_test_planner_budget_constraint", rank_score: 0.89, reasons: ["Transitive caller TestPlanner", "Budget constraint optimization"], estimated_duration_seconds: 0.9 },
+        ],
+      },
+      verification: {
+        all_passed: true,
+        tests_passed_count: 3,
+        tests_executed_count: 3,
+        mutations_tested_count: 3,
+        killed_mutations_count: 3,
+        survived_mutations_count: 0,
+        mutation_score: 1.0,
+        total_wall_time_seconds: 2.1,
+        recommendation: "RELEASE_SAFE",
+        surviving_mutants: [],
+      },
+    };
+  }
+  return {
+    ...DEMO_RUN,
+    repo_id: repoId || "payments-core-service",
+  };
+}
+
 export const DEMO_BENCHMARK: BenchmarkReport = {
   repo_root: "examples/sample-repository",
   total_scenarios: 3,
@@ -257,7 +544,7 @@ export async function fetchRuns(repoId?: string): Promise<RunSummary[]> {
   } catch (e) {
     // fallback
   }
-  return [DEMO_RUN];
+  return [getDemoRunForRepo(repoId || "fastapi/fastapi")];
 }
 
 export async function runRepositoryAnalysis(
@@ -285,7 +572,7 @@ export async function runRepositoryAnalysis(
     // fallback
   }
   return {
-    ...DEMO_RUN,
+    ...getDemoRunForRepo(repoId),
     run_id: `run_${Date.now().toString(16).slice(-6)}`,
     repo_id: repoId,
     created_at: new Date().toISOString(),
@@ -299,7 +586,7 @@ export async function fetchRun(runId: string): Promise<RunSummary> {
   } catch (e) {
     // Return demo run
   }
-  return DEMO_RUN;
+  return getDemoRunForRepo("payments-core-service");
 }
 
 export async function fetchGraph(runId?: string, repoId?: string): Promise<GraphData> {
@@ -318,7 +605,7 @@ export async function fetchGraph(runId?: string, repoId?: string): Promise<Graph
   } catch (e) {
     // Fall back to demo
   }
-  return DEMO_GRAPH_DATA;
+  return getDefaultGraphForRepo(repoId || "fastapi/fastapi");
 }
 
 export async function fetchBenchmark(): Promise<BenchmarkReport> {
@@ -543,7 +830,178 @@ export async function fetchGitHubPullRequests(
     // fallback
   }
 
-  // High-fidelity fallback PR data for offline demonstration
+  // High-fidelity fallback PR data tailored per repository
+  const repoKey = `${owner}/${repo}`.toLowerCase();
+  if (repoKey.includes("fastapi")) {
+    return [
+      {
+        id: 10425,
+        number: 10425,
+        title: "feat(routing): optimize router lifespan state propagation and async dependency resolution",
+        state: "open",
+        draft: false,
+        html_url: `https://github.com/${owner}/${repo}/pull/10425`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user: { login: "tiangolo", avatar_url: "https://avatars.githubusercontent.com/u/1326112?v=4" },
+        head: { ref: "feat/lifespan-propagation", sha: "7a8b9c0" },
+        base: { ref: "master", sha: "1a2b3c4" },
+        changed_files: 3,
+        additions: 48,
+        deletions: 12,
+        labels: [{ name: "feature", color: "6CC6CB" }],
+      },
+      {
+        id: 10418,
+        number: 10418,
+        title: "fix(dependencies): solve dependency cache scope in mounted sub-applications",
+        state: "open",
+        draft: false,
+        html_url: `https://github.com/${owner}/${repo}/pull/10418`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user: { login: "dependency-expert", avatar_url: "https://avatars.githubusercontent.com/u/583231?v=4" },
+        head: { ref: "fix/sub-app-cache", sha: "6b5a4c3" },
+        base: { ref: "master", sha: "1a2b3c4" },
+        changed_files: 2,
+        additions: 24,
+        deletions: 8,
+        labels: [{ name: "bugfix", color: "f59e0b" }],
+      },
+      {
+        id: 10402,
+        number: 10402,
+        title: "refactor(middleware): tighten CORS and streaming response headers",
+        state: "open",
+        draft: false,
+        html_url: `https://github.com/${owner}/${repo}/pull/10402`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user: { login: "security-reviewer", avatar_url: "https://avatars.githubusercontent.com/u/1024025?v=4" },
+        head: { ref: "refactor/cors-streaming", sha: "4d3c2b1" },
+        base: { ref: "master", sha: "1a2b3c4" },
+        changed_files: 1,
+        additions: 15,
+        deletions: 5,
+        labels: [{ name: "security", color: "10b981" }],
+      },
+    ];
+  }
+  if (repoKey.includes("flask")) {
+    return [
+      {
+        id: 5432,
+        number: 5432,
+        title: "feat(blueprints): support nested blueprint registration with recursive prefix nesting",
+        state: "open",
+        draft: false,
+        html_url: `https://github.com/${owner}/${repo}/pull/5432`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user: { login: "davidism", avatar_url: "https://avatars.githubusercontent.com/u/12428?v=4" },
+        head: { ref: "feat/nested-blueprints", sha: "8f7e6d5" },
+        base: { ref: "main", sha: "1a2b3c4" },
+        changed_files: 2,
+        additions: 38,
+        deletions: 9,
+        labels: [{ name: "enhancement", color: "6CC6CB" }],
+      },
+      {
+        id: 5419,
+        number: 5419,
+        title: "fix(routing): prevent duplicate route endpoint collision across blueprint teardown",
+        state: "open",
+        draft: false,
+        html_url: `https://github.com/${owner}/${repo}/pull/5419`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user: { login: "pallets-lead", avatar_url: "https://avatars.githubusercontent.com/u/166989?v=4" },
+        head: { ref: "fix/endpoint-collision", sha: "9e8d7c6" },
+        base: { ref: "main", sha: "1a2b3c4" },
+        changed_files: 1,
+        additions: 19,
+        deletions: 4,
+        labels: [{ name: "bugfix", color: "f59e0b" }],
+      },
+    ];
+  }
+  if (repoKey.includes("requests")) {
+    return [
+      {
+        id: 6712,
+        number: 6712,
+        title: "fix(adapters): handle connection pool socket timeout in retrying HTTPAdapter",
+        state: "open",
+        draft: false,
+        html_url: `https://github.com/${owner}/${repo}/pull/6712`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user: { login: "sigmavirus24", avatar_url: "https://avatars.githubusercontent.com/u/240830?v=4" },
+        head: { ref: "fix/adapter-timeout", sha: "3c2b1a0" },
+        base: { ref: "main", sha: "1a2b3c4" },
+        changed_files: 1,
+        additions: 14,
+        deletions: 3,
+        labels: [{ name: "bugfix", color: "f59e0b" }],
+      },
+      {
+        id: 6698,
+        number: 6698,
+        title: "refactor(sessions): preserve authentication headers across HTTPS redirect chains",
+        state: "open",
+        draft: false,
+        html_url: `https://github.com/${owner}/${repo}/pull/6698`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user: { login: "lukasa", avatar_url: "https://avatars.githubusercontent.com/u/240830?v=4" },
+        head: { ref: "refactor/auth-redirects", sha: "2b1a0f9" },
+        base: { ref: "main", sha: "1a2b3c4" },
+        changed_files: 2,
+        additions: 29,
+        deletions: 11,
+        labels: [{ name: "security", color: "10b981" }],
+      },
+    ];
+  }
+  if (repoKey.includes("rippleci")) {
+    return [
+      {
+        id: 42,
+        number: 42,
+        title: "feat(graph): optimize multi-hop Cypher traversal for deeply nested AST callers",
+        state: "open",
+        draft: false,
+        html_url: `https://github.com/${owner}/${repo}/pull/42`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user: { login: "Shikhyy", avatar_url: "https://avatars.githubusercontent.com/u/583231?v=4" },
+        head: { ref: "feat/cypher-multi-hop", sha: "1f2e3d4" },
+        base: { ref: "main", sha: "1a2b3c4" },
+        changed_files: 3,
+        additions: 64,
+        deletions: 18,
+        labels: [{ name: "performance", color: "6CC6CB" }],
+      },
+      {
+        id: 39,
+        number: 39,
+        title: "feat(ml): calibrated GBDT ranker for regression test selection",
+        state: "open",
+        draft: false,
+        html_url: `https://github.com/${owner}/${repo}/pull/39`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        user: { login: "Shikhyy", avatar_url: "https://avatars.githubusercontent.com/u/583231?v=4" },
+        head: { ref: "feat/gbdt-ranker", sha: "5a6b7c8" },
+        base: { ref: "main", sha: "1a2b3c4" },
+        changed_files: 2,
+        additions: 42,
+        deletions: 7,
+        labels: [{ name: "ml", color: "EAE5C9" }],
+      },
+    ];
+  }
+
   return [
     {
       id: 101,
@@ -634,7 +1092,7 @@ export async function analyzeGitHubPullRequest(
     repo: `${owner}/${repo}`,
     pull_number: pullNumber,
     recommendation: "RELEASE_SAFE",
-    report: DEMO_RUN,
+    report: getDemoRunForRepo(`${owner}/${repo}`),
     comment_markdown: `## 🌊 RippleCI Release Intelligence Report\n\n> **Verdict:** 🟢 **RELEASE SAFE**\n> **Repository:** \`${owner}/${repo}\` | **PR:** #${pullNumber}`,
   };
 }

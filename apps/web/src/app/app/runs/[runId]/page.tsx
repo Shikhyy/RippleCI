@@ -43,7 +43,14 @@ export default function RunDetailsPage() {
   }, [runId]);
 
   return (
-    <div className="min-h-screen bg-[#080c0e] text-zinc-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#080c0e] text-zinc-100 flex flex-col font-sans relative">
+      {/* Ambient Glassmorphic Background Glow Orbs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-[-10%] left-[20%] w-[600px] h-[600px] rounded-full bg-[#6CC6CB]/[0.08] blur-[140px]" />
+        <div className="absolute top-[40%] right-[5%] w-[550px] h-[550px] rounded-full bg-[#EAE5C9]/[0.05] blur-[150px]" />
+        <div className="absolute bottom-[-10%] left-[30%] w-[650px] h-[500px] rounded-full bg-[#6CC6CB]/[0.07] blur-[150px]" />
+      </div>
+
       {/* Top Header */}
       <header className="h-14 border-b border-[#6CC6CB]/20 px-4 md:px-6 flex items-center justify-between glass-header">
         <div className="flex items-center gap-3">
