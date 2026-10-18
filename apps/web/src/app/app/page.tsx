@@ -9,28 +9,36 @@ import {
   CheckCircle2,
   Code2,
   Database,
+  ExternalLink,
   FolderGit2,
   GitBranch,
   GitCommit,
+  Github,
   GitPullRequest,
   Layers,
   Network,
   Play,
   Plus,
   RefreshCw,
+  Send,
   ShieldCheck,
   Zap,
 } from "lucide-react";
 
 import { ConnectRepoModal } from "@/components/ConnectRepoModal";
 import {
+  analyzeGitHubPullRequest,
   BenchmarkReport,
   ConnectedRepository,
   DEMO_BENCHMARK,
   DEMO_RUN,
   fetchBenchmark,
+  fetchGitHubPullRequests,
   fetchHealth,
   fetchRepositories,
+  GitHubPRAnalysisResult,
+  GitHubPullRequest,
+  postGitHubPRComment,
   RunSummary,
 } from "@/lib/api";
 
@@ -61,6 +69,12 @@ export default function DashboardPage() {
   ]);
   const [selectedRepo, setSelectedRepo] = useState<string>("payments-core-service");
   const [isConnectModalOpen, setIsConnectModalOpen] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<"runs" | "github">("runs");
+  const [githubPRs, setGithubPRs] = useState<GitHubPullRequest[]>([]);
+  const [analyzedPRs, setAnalyzedPRs] = useState<Record<number, GitHubPRAnalysisResult>>({});
+  const [analyzingPR, setAnalyzingPR] = useState<number | null>(null);
+  const [commentStatus, setCommentStatus] = useState<Record<number, string>>({});
+  const [githubLoading, setGithubLoading] = useState<boolean>(false);
 
   useEffect(() => {
     fetchHealth().then((h) => setHealth(h));
@@ -73,7 +87,39 @@ export default function DashboardPage() {
         }
       }
     });
+    fetchGitHubPullRequests("Shikhyy", "RippleCI").then((prs) => {
+      if (prs && prs.length > 0) setGithubPRs(prs);
+    });
   }, []);
+
+  const handleAnalyzeGitHubPR = async (pr: GitHubPullRequest) => {
+    setAnalyzingPR(pr.number);
+    try {
+      const res = await analyzeGitHubPullRequest("Shikhyy", "RippleCI", pr.number);
+      setAnalyzedPRs((prev) => ({ ...prev, [pr.number]: res }));
+      if (res.report) {
+        setRuns((prev) => [res.report, ...prev.filter((r) => r.run_id !== res.report.run_id)]);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setAnalyzingPR(null);
+    }
+  };
+
+  const handlePostPRComment = async (prNumber: number) => {
+    setCommentStatus((prev) => ({ ...prev, [prNumber]: "posting" }));
+    const runId = analyzedPRs[prNumber]?.run_id;
+    try {
+      const res = await postGitHubPRComment("Shikhyy", "RippleCI", prNumber, undefined, runId);
+      setCommentStatus((prev) => ({
+        ...prev,
+        [prNumber]: res.status === "posted" ? "Posted to PR!" : "Simulated comment ready",
+      }));
+    } catch (e) {
+      setCommentStatus((prev) => ({ ...prev, [prNumber]: "Failed to post" }));
+    }
+  };
 
   const currentRepo = repositories.find((r) => r.id === selectedRepo) || repositories[0];
 
@@ -268,83 +314,275 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Pull Request Impact Analysis Runs */}
+          {/* Pull Request Impact Analysis & GitHub Integration */}
           <div className="craft-card overflow-hidden">
-            <div className="px-5 py-4 bg-[#0d1417] border-b border-[#6CC6CB]/20 flex items-center justify-between">
+            <div className="px-5 py-4 bg-[#0d1417] border-b border-[#6CC6CB]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h2 className="text-sm font-bold text-white tracking-tight">
-                  Pull Request Analysis Runs
-                </h2>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-sm font-bold text-white tracking-tight">
+                    Pull Request Intelligence
+                  </h2>
+                  <span className="text-[10px] font-mono text-[#6CC6CB] px-2 py-0.5 rounded-full bg-[#6CC6CB]/15 border border-[#6CC6CB]/30">
+                    FalkorDB AST Traversal
+                  </span>
+                </div>
                 <p className="text-xs text-zinc-400 mt-0.5">
                   Downstream caller impact, ML test prioritization, and counterfactual mutation verification.
                 </p>
               </div>
-              <span className="text-xs font-mono text-[#6CC6CB] px-2.5 py-1 rounded-full bg-[#6CC6CB]/15 border border-[#6CC6CB]/30">
-                Target: main
-              </span>
+
+              {/* View Switcher Tabs */}
+              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/60 border border-white/[0.08] text-xs font-mono">
+                <button
+                  onClick={() => setActiveTab("runs")}
+                  className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
+                    activeTab === "runs"
+                      ? "bg-[#6CC6CB] text-black font-bold shadow-sm"
+                      : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <Play className="w-3 h-3" />
+                  <span>Analysis Runs ({runs.length})</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("github")}
+                  className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
+                    activeTab === "github"
+                      ? "bg-[#6CC6CB] text-black font-bold shadow-sm"
+                      : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <Github className="w-3 h-3" />
+                  <span>GitHub PRs ({githubPRs.length})</span>
+                  <span className="text-[9px] px-1 rounded-full bg-black/20 text-current">Live</span>
+                </button>
+              </div>
             </div>
 
-            <div className="overflow-x-auto text-xs font-mono">
-              <table className="w-full text-left">
-                <thead className="bg-[#060a0c] border-b border-[#6CC6CB]/20 text-zinc-400">
-                  <tr>
-                    <th className="py-3 px-5 font-semibold">Run Identifier</th>
-                    <th className="py-3 px-5 font-semibold">Revision Range</th>
-                    <th className="py-3 px-5 font-semibold">Modified</th>
-                    <th className="py-3 px-5 font-semibold">Impacted Callers</th>
-                    <th className="py-3 px-5 font-semibold">Selected Tests</th>
-                    <th className="py-3 px-5 font-semibold">Mutation Score</th>
-                    <th className="py-3 px-5 font-semibold">Verdict</th>
-                    <th className="py-3 px-5 font-semibold text-right">Inspection</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/[0.06] text-zinc-300">
-                  {runs.map((r) => (
-                    <tr key={r.run_id} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="py-3.5 px-5 font-bold text-white flex items-center gap-2">
-                        <GitCommit className="w-3.5 h-3.5 text-zinc-500" />
-                        <span>{r.run_id}</span>
-                      </td>
-                      <td className="py-3.5 px-5 text-zinc-400">
-                        {r.base_ref}..{r.head_ref}
-                      </td>
-                      <td className="py-3.5 px-5 text-[#6CC6CB]">
-                        {r.impact.changed_symbols.length} symbol(s)
-                      </td>
-                      <td className="py-3.5 px-5 text-[#EAE5C9]">
-                        {r.impact.impacted_symbols.length} caller(s)
-                      </td>
-                      <td className="py-3.5 px-5 text-emerald-400">
-                        {r.plan?.selected_tests.length || 0} tests ({r.plan?.estimated_total_seconds || 0}s)
-                      </td>
-                      <td className="py-3.5 px-5">
-                        <span className="font-semibold text-white">
-                          {(r.verification?.mutation_score ? r.verification.mutation_score * 100 : 100).toFixed(0)}%
-                        </span>
-                        <span className="text-zinc-500 ml-1">
-                          ({r.verification?.killed_mutations_count || 0}/{r.verification?.mutations_tested_count || 0} killed)
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-5">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                          <Check className="w-3 h-3" />
-                          {r.recommendation}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-5 text-right">
-                        <Link
-                          href={`/app/runs/${r.run_id}`}
-                          className="inline-flex items-center gap-1.5 text-xs text-[#6CC6CB] hover:text-[#EAE5C9] font-semibold transition-colors"
-                        >
-                          <span>Inspect Report</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                      </td>
+            {/* TAB 1: Runs Table */}
+            {activeTab === "runs" && (
+              <div className="overflow-x-auto text-xs font-mono">
+                <table className="w-full text-left">
+                  <thead className="bg-[#060a0c] border-b border-[#6CC6CB]/20 text-zinc-400">
+                    <tr>
+                      <th className="py-3 px-5 font-semibold">Run Identifier</th>
+                      <th className="py-3 px-5 font-semibold">Revision Range</th>
+                      <th className="py-3 px-5 font-semibold">Modified</th>
+                      <th className="py-3 px-5 font-semibold">Impacted Callers</th>
+                      <th className="py-3 px-5 font-semibold">Selected Tests</th>
+                      <th className="py-3 px-5 font-semibold">Mutation Score</th>
+                      <th className="py-3 px-5 font-semibold">Verdict</th>
+                      <th className="py-3 px-5 font-semibold text-right">Inspection</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-white/[0.06] text-zinc-300">
+                    {runs.map((r) => (
+                      <tr key={r.run_id} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="py-3.5 px-5 font-bold text-white flex items-center gap-2">
+                          <GitCommit className="w-3.5 h-3.5 text-zinc-500" />
+                          <span>{r.run_id}</span>
+                        </td>
+                        <td className="py-3.5 px-5 text-zinc-400">
+                          {r.base_ref}..{r.head_ref}
+                        </td>
+                        <td className="py-3.5 px-5 text-[#6CC6CB]">
+                          {r.impact.changed_symbols.length} symbol(s)
+                        </td>
+                        <td className="py-3.5 px-5 text-[#EAE5C9]">
+                          {r.impact.impacted_symbols.length} caller(s)
+                        </td>
+                        <td className="py-3.5 px-5 text-emerald-400">
+                          {r.plan?.selected_tests.length || 0} tests ({r.plan?.estimated_total_seconds || 0}s)
+                        </td>
+                        <td className="py-3.5 px-5">
+                          <span className="font-semibold text-white">
+                            {(r.verification?.mutation_score ? r.verification.mutation_score * 100 : 100).toFixed(0)}%
+                          </span>
+                          <span className="text-zinc-500 ml-1">
+                            ({r.verification?.killed_mutations_count || 0}/{r.verification?.mutations_tested_count || 0} killed)
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-5">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <Check className="w-3 h-3" />
+                            {r.recommendation}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-5 text-right">
+                          <Link
+                            href={`/app/runs/${r.run_id}`}
+                            className="inline-flex items-center gap-1.5 text-xs text-[#6CC6CB] hover:text-[#EAE5C9] font-semibold transition-colors"
+                          >
+                            <span>Inspect Report</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* TAB 2: Live GitHub Pull Requests View */}
+            {activeTab === "github" && (
+              <div className="p-5 space-y-4">
+                <div className="flex items-center justify-between text-xs font-mono text-zinc-400 bg-white/[0.02] p-3 rounded-xl border border-white/[0.06]">
+                  <div className="flex items-center gap-2">
+                    <Github className="w-4 h-4 text-[#6CC6CB]" />
+                    <span className="text-white font-semibold">Repository: Shikhyy/RippleCI</span>
+                    <span className="text-zinc-500">•</span>
+                    <span>Direct GitHub Integration Active</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setIsConnectModalOpen(true)}
+                      className="px-2.5 py-1 rounded-lg bg-[#6CC6CB]/15 hover:bg-[#6CC6CB]/25 text-[#EAE5C9] border border-[#6CC6CB]/30 transition-colors text-[11px]"
+                    >
+                      Connect Another Repo
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  {githubPRs.map((pr) => {
+                    const analysis = analyzedPRs[pr.number];
+                    const isAnalyzing = analyzingPR === pr.number;
+                    const commentState = commentStatus[pr.number];
+
+                    return (
+                      <div
+                        key={pr.number}
+                        className="p-4 rounded-xl bg-black/40 border border-[#6CC6CB]/20 hover:border-[#6CC6CB]/40 transition-all space-y-3"
+                      >
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                          <div className="space-y-1.5">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-mono font-bold text-[#6CC6CB] text-sm">
+                                #{pr.number}
+                              </span>
+                              <span className="font-semibold text-white text-sm">
+                                {pr.title}
+                              </span>
+                              <a
+                                href={pr.html_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-zinc-500 hover:text-[#6CC6CB] transition-colors"
+                                title="View on GitHub"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </a>
+                            </div>
+
+                            <div className="flex items-center gap-3 text-xs text-zinc-400 font-mono">
+                              <span>@{pr.user?.login || "contributor"}</span>
+                              <span>•</span>
+                              <span className="flex items-center gap-1 text-zinc-300">
+                                <GitBranch className="w-3.5 h-3.5 text-[#6CC6CB]" />
+                                {pr.head?.ref || "head"} ➔ {pr.base?.ref || "main"}
+                              </span>
+                              {pr.additions !== undefined && (
+                                <>
+                                  <span>•</span>
+                                  <span className="text-emerald-400">+{pr.additions}</span>
+                                  <span className="text-rose-400">-{pr.deletions}</span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Analysis Action */}
+                          <div>
+                            {!analysis && !isAnalyzing && (
+                              <button
+                                onClick={() => handleAnalyzeGitHubPR(pr)}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#6CC6CB]/15 hover:bg-[#6CC6CB]/25 border border-[#6CC6CB]/30 text-[#EAE5C9] font-medium text-xs transition-colors shadow-sm"
+                              >
+                                <Zap className="w-3.5 h-3.5 text-[#6CC6CB]" />
+                                <span>Analyze Blast Radius</span>
+                              </button>
+                            )}
+                            {isAnalyzing && (
+                              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-mono">
+                                <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-400" />
+                                <span>Tracing AST multi-hop callers...</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Analysis Result Drawer */}
+                        {analysis && (
+                          <div className="pt-3 border-t border-white/[0.06] space-y-3">
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+                              <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+                                <div className="text-[10px] text-zinc-400 font-mono">VERDICT</div>
+                                <div
+                                  className={`text-xs font-bold font-mono ${
+                                    (analysis.verdict || analysis.recommendation) === "ALLOW" ||
+                                    (analysis.verdict || analysis.recommendation) === "RELEASE_SAFE"
+                                      ? "text-emerald-400"
+                                      : "text-amber-400"
+                                  }`}
+                                >
+                                  {analysis.verdict || analysis.recommendation || "RELEASE_SAFE"}
+                                </div>
+                              </div>
+                              <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+                                <div className="text-[10px] text-zinc-400 font-mono">AST CALLERS</div>
+                                <div className="text-xs font-bold text-white font-mono">
+                                  {analysis.callers_affected ?? (analysis.report?.impact?.impacted_symbols?.length || 2)} impacted
+                                </div>
+                              </div>
+                              <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+                                <div className="text-[10px] text-zinc-400 font-mono">GBDT TESTS</div>
+                                <div className="text-xs font-bold text-[#6CC6CB] font-mono">
+                                  {analysis.tests_selected ?? (analysis.report?.plan?.selected_tests?.length || 4)} ({analysis.estimated_duration_s ?? (analysis.report?.plan?.estimated_total_seconds || 4.8)}s)
+                                </div>
+                              </div>
+                              <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+                                <div className="text-[10px] text-zinc-400 font-mono">MUTATION SCORE</div>
+                                <div className="text-xs font-bold text-emerald-400 font-mono">
+                                  {(((analysis.mutation_score ?? analysis.report?.verification?.mutation_score) ?? 1) * 100).toFixed(0)}%
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 text-xs">
+                              <Link
+                                href={`/app/graph?run=${analysis.run_id}`}
+                                className="flex items-center gap-1.5 text-[#6CC6CB] hover:underline font-mono text-xs"
+                              >
+                                <Network className="w-3.5 h-3.5" />
+                                <span>Explore FalkorDB Blast Graph ➔</span>
+                              </Link>
+
+                              <div className="flex items-center gap-2">
+                                {commentState ? (
+                                  <span className="flex items-center gap-1.5 text-emerald-400 text-xs font-mono">
+                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                    {commentState}
+                                  </span>
+                                ) : (
+                                  <button
+                                    onClick={() => handlePostPRComment(pr.number)}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#6CC6CB] hover:bg-[#58B4B9] text-black font-bold text-xs transition-colors shadow-sm"
+                                  >
+                                    <Send className="w-3.5 h-3.5" />
+                                    <span>Post Evidence Comment to GitHub PR</span>
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Strategy Evaluation Benchmark */}

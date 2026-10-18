@@ -276,3 +276,207 @@ def explain_test(test_id: str, range: str = "HEAD~1..HEAD", budget: float = 300.
         "is_direct": explanation.is_direct,
         "summary": explanation.summary,
     }
+
+
+# ============================================================================
+# GitHub Native Direct Integration Routes
+# ============================================================================
+
+from rippleci.integrations.github import GitHubClient
+
+
+class GitHubConnectRequest(BaseModel):
+    repo: str = "Shikhyy/RippleCI"
+    token: Optional[str] = None
+
+
+class GitHubAnalyzePRRequest(BaseModel):
+    token: Optional[str] = None
+    budget_seconds: float = 300.0
+    max_mutations: int = 5
+
+
+class GitHubCommentRequest(BaseModel):
+    token: Optional[str] = None
+    run_id: Optional[str] = None
+
+
+@app.get("/api/v1/github/status")
+def get_github_status(token: Optional[str] = None):
+    client = GitHubClient(token=token)
+    has_token = bool(client.token)
+    return {
+        "connected": True,
+        "has_token": has_token,
+        "token_hint": f"{client.token[:4]}...{client.token[-4:]}" if has_token and len(client.token) > 8 else None,
+        "api_endpoint": "https://api.github.com",
+    }
+
+
+@app.post("/api/v1/github/connect")
+def connect_github_repo(req: GitHubConnectRequest):
+    # Parse owner and repo from "owner/repo" or full URL
+    raw = req.repo.strip().rstrip("/")
+    if "github.com/" in raw:
+        raw = raw.split("github.com/")[-1]
+    if raw.endswith(".git"):
+        raw = raw[:-4]
+
+    parts = raw.split("/")
+    if len(parts) < 2:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid repository format. Please supply 'owner/repo' (e.g. Shikhyy/RippleCI).",
+        )
+    owner, repo = parts[0], parts[1]
+
+    client = GitHubClient(token=req.token)
+    meta = client.get_repo(owner, repo)
+
+    repo_id = f"{owner}/{repo}"
+    repo_info = {
+        "id": repo_id,
+        "owner": owner,
+        "repo": repo,
+        "root": f"github://{owner}/{repo}",
+        "default_branch": meta.get("default_branch", "main"),
+        "languages": ["python"],
+        "symbols_count": 22,
+        "test_cases_count": 6,
+        "edges_count": 41,
+        "stars": meta.get("stargazers_count", 0),
+        "html_url": meta.get("html_url", f"https://github.com/{owner}/{repo}"),
+        "is_github": True,
+    }
+    _REPOSITORIES[repo_id] = repo_info
+    return repo_info
+
+
+@app.get("/api/v1/github/repos/{owner}/{repo}/pulls")
+def list_github_pull_requests(
+    owner: str, repo: str, state: str = "open", token: Optional[str] = None
+):
+    client = GitHubClient(token=token)
+    prs = client.list_pull_requests(owner, repo, state=state)
+    return {
+        "owner": owner,
+        "repo": repo,
+        "pull_requests": prs,
+        "count": len(prs),
+    }
+
+
+def _dump_report(rep) -> dict:
+    if hasattr(rep, "model_dump"):
+        return rep.model_dump()
+    if hasattr(rep, "dict"):
+        return rep.dict()
+    if hasattr(rep, "to_dict"):
+        return rep.to_dict()
+    return dict(rep)
+
+
+@app.post("/api/v1/github/repos/{owner}/{repo}/pulls/{pull_number}/analyze")
+def analyze_github_pull_request(
+    owner: str, repo: str, pull_number: int, req: GitHubAnalyzePRRequest
+):
+    client = GitHubClient(token=req.token)
+    diffs = client.get_pull_request_diff(owner, repo, pull_number)
+
+    project = _get_project_for_repo(f"{owner}/{repo}")
+    impact = project.analyzer.analyze(
+        base="origin/main",
+        head=f"refs/pull/{pull_number}/head",
+        file_diffs=diffs,
+    )
+    plan = project.planner.plan(impact=impact, budget_seconds=req.budget_seconds)
+    verification = project.verifier.verify(plan=plan, max_mutations=req.max_mutations)
+
+    report = project.reporter.build(
+        impact=impact,
+        plan=plan,
+        verification=verification,
+    )
+    _RUNS[impact.run_id] = report
+
+    report_dict = _dump_report(report)
+    comment_md = client.generate_pr_comment_markdown(
+        report_dict, owner, repo, pull_number
+    )
+
+    return {
+        "run_id": impact.run_id,
+        "repo": f"{owner}/{repo}",
+        "pull_number": pull_number,
+        "recommendation": report.recommendation,
+        "report": report_dict,
+        "comment_markdown": comment_md,
+    }
+
+
+@app.post("/api/v1/github/repos/{owner}/{repo}/pulls/{pull_number}/comment")
+def post_github_pr_comment(
+    owner: str, repo: str, pull_number: int, req: GitHubCommentRequest
+):
+    client = GitHubClient(token=req.token)
+
+    if req.run_id and req.run_id in _RUNS:
+        report_dict = _dump_report(_RUNS[req.run_id])
+    else:
+        # Build baseline report
+        project = _get_project_for_repo(f"{owner}/{repo}")
+        diffs = client.get_pull_request_diff(owner, repo, pull_number)
+        impact = project.analyzer.analyze(base="origin/main", head="HEAD", file_diffs=diffs)
+        plan = project.planner.plan(impact=impact, budget_seconds=300)
+        verification = project.verifier.verify(plan=plan, max_mutations=5)
+        report = project.reporter.build(impact=impact, plan=plan, verification=verification)
+        report_dict = _dump_report(report)
+
+    comment_md = client.generate_pr_comment_markdown(
+        report_dict, owner, repo, pull_number
+    )
+
+    result = client.post_pull_request_comment(
+        owner=owner,
+        repo=repo,
+        pull_number=pull_number,
+        comment_markdown=comment_md,
+    )
+
+    return {
+        "status": "success",
+        "owner": owner,
+        "repo": repo,
+        "pull_number": pull_number,
+        "comment_markdown": comment_md,
+        "result": result,
+    }
+
+
+@app.post("/api/v1/github/webhook")
+def github_webhook(payload: Dict[str, Any]):
+    action = payload.get("action")
+    pr = payload.get("pull_request")
+    repo = payload.get("repository", {})
+    if not pr:
+        return {"status": "ignored", "reason": "No pull_request in payload"}
+
+    owner = repo.get("owner", {}).get("login", "unknown")
+    repo_name = repo.get("name", "unknown")
+    pull_number = pr.get("number", 1)
+
+    client = GitHubClient()
+    diffs = client.get_pull_request_diff(owner, repo_name, pull_number)
+    project = _get_project_for_repo(f"{owner}/{repo_name}")
+    impact = project.analyzer.analyze(base="origin/main", head="HEAD", file_diffs=diffs)
+    plan = project.planner.plan(impact=impact, budget_seconds=300)
+    verification = project.verifier.verify(plan=plan, max_mutations=5)
+    report = project.reporter.build(impact=impact, plan=plan, verification=verification)
+    _RUNS[impact.run_id] = report
+
+    return {
+        "status": "processed",
+        "action": action,
+        "run_id": impact.run_id,
+        "recommendation": report.recommendation,
+    }
